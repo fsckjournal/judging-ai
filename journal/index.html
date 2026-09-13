@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Judging AI">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<title>Judging AI · Journal</title>
+<style>
+/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
+
+:root{
+  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
+  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
+  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+}
+:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
+
+/* l'en-tête d'une page : étiquette mono à gauche, boîte O·R·I·X à droite, filet orange */
+.top{position:relative;height:2px;background:var(--orange);margin-top:2.6em}
+.top .k{position:absolute;left:0;top:-1.9em;color:var(--sourd);font:500 13px/1 var(--mono);letter-spacing:.08em;padding:.5em 0}
+.top .tag{position:absolute;right:0;top:-2.05em;background:var(--orange);color:var(--sur-orange);font:700 14px/1 var(--serif);letter-spacing:.28em;padding:.55em .8em .55em 1em;white-space:nowrap}
+
+/* les voix */
+.big{font:400 clamp(30px,8vw,56px)/1.15 var(--serif);margin:0}
+.med{font:400 clamp(22px,5.4vw,34px)/1.3 var(--serif);margin:0}
+.l{font:400 clamp(17px,4.2vw,22px)/1.45 var(--sans);margin:0;color:var(--encre)}
+.q{font:italic 400 clamp(20px,5vw,30px)/1.3 var(--serif);margin:0}
+.s{font:400 14px/1.4 var(--sans);color:var(--sourd);margin:0}
+.m{font:400 14px/1.5 var(--mono);margin:0;padding:.35em .7em;border-left:2px solid var(--orange);background:var(--boite);white-space:pre-wrap;word-break:break-word}
+
+/* une ligne : la lettre en mono orange, le texte */
+.ln{display:grid;grid-template-columns:1.6em 1fr;gap:.7em;margin:0 0 .6em;word-break:break-word}
+.ln .meta{color:var(--orange);font:500 14px/1.9 var(--mono)}
+.ln .txt{font:400 clamp(17px,4.2vw,22px)/1.45 var(--sans)}
+.ln .txt b{font-weight:700}
+
+/* la lettre dans le texte */
+.chip{display:inline-block;min-width:1.55em;text-align:center;font:600 .95em/1.5 var(--serif);border:2px solid var(--encre);border-radius:6px;padding:0 .3em;vertical-align:baseline}
+.chip.x{border-color:var(--orange);color:var(--orange)}
+
+hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
+.draw{width:min(46vw,220px);height:auto}
+.help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
+
+button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
+.hd{max-width:760px;margin:0 auto;padding:10px 18px 0;display:flex;gap:14px;align-items:center;font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
+.hd .sp{flex:1}
+.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px}
+.save.err{color:var(--orange)}
+main{max-width:760px;margin:0 auto;padding:0 18px calc(96px + env(safe-area-inset-bottom,0px))}
+.page{display:flex;flex-direction:column;gap:.9em;padding-top:1.6em}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--fond);border-top:1px solid var(--trait);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav button{background:none;border:0;border-top:2px solid transparent;min-height:56px;color:var(--sourd);font:500 11px/1 var(--mono);letter-spacing:.04em;padding:0 2px}
+.grid{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.grid table{border-collapse:collapse;min-width:100%;font:400 13px/1.35 var(--mono)}
+.grid th,.grid td{border-bottom:1px solid var(--trait);padding:7px 10px 7px 0;text-align:left;vertical-align:top;white-space:nowrap}
+.grid th{color:var(--sourd);font-weight:500}
+.grid td b{font:400 20px/1 var(--serif)}
+.cell{background:none;border:0;border-bottom:1px solid var(--trait);color:var(--encre);font:500 13px/1 var(--mono);min-height:40px;padding:0}
+.cell.vide{color:var(--orange)}
+nav button[aria-current=true]{color:var(--encre);border-top-color:var(--orange)}
+label{display:block;color:var(--sourd);font:500 12px/1 var(--mono);letter-spacing:.08em;margin:1.1em 0 .5em}
+input[type=text],input[type=date],textarea{width:100%;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}
+textarea{min-height:64px;resize:vertical}
+textarea.raw,pre.raw{font:400 14px/1.5 var(--mono)}
+textarea.raw{border:0;border-left:2px solid var(--orange);background:var(--boite);padding:.5em .7em;min-height:110px}
+input:focus,textarea:focus{outline:0;border-bottom-color:var(--orange)}
+textarea.raw:focus{border-left-color:var(--encre)}
+.act{background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 14px/1 var(--serif);letter-spacing:.2em;padding:0 1.1em;min-height:46px;align-self:flex-start}
+.txtbtn{background:none;border:0;border-bottom:1px solid var(--trait);border-radius:0;color:var(--encre);font:500 13px/1 var(--mono);letter-spacing:.06em;padding:0 0 4px;min-height:40px;align-self:flex-start}
+.txtbtn.quiet{color:var(--sourd)}
+.txtbtn:disabled{opacity:.4}
+.row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;gap:14px;flex-wrap:wrap}
+.opt{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;color:var(--sourd);font:400 16px/1.3 var(--sans);padding:6px 0;min-height:44px;text-align:left}
+.opt[aria-pressed=true]{color:var(--encre);border-bottom-color:var(--orange)}
+.letters{display:flex;gap:10px}
+.letters button{width:54px;height:54px;background:none;border:2px solid var(--encre);border-radius:6px;color:var(--encre);font:600 26px/1 var(--serif)}
+.letters button.x{border-color:var(--orange);color:var(--orange)}
+.letters button[aria-pressed=true]{background:var(--encre);color:var(--fond)}
+.letters button.x[aria-pressed=true]{background:var(--orange);color:var(--sur-orange)}
+.entry{border-top:1px solid var(--trait);padding:.8em 0}
+.entry summary{list-style:none;cursor:pointer}
+.entry summary::-webkit-details-marker{display:none}
+.entry .ln{margin:0}
+.entry .sub{font:400 12px/1.5 var(--mono);color:var(--sourd)}
+.clock{font:400 22px var(--mono);min-width:76px}
+.timer{display:flex;gap:18px;align-items:center}
+.timer.on .clock{color:var(--orange)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid var(--trait);border-bottom:1px solid var(--trait)}
+.stats div{padding:.6em 0}
+.stats b{display:block;font:400 30px/1.1 var(--serif)}
+.stats span{font:500 11px/1.3 var(--mono);letter-spacing:.06em;color:var(--sourd)}
+.tour{border-top:1px solid var(--trait);padding:.6em 0}
+.tour>summary{list-style:none;cursor:pointer}
+.tour>summary::-webkit-details-marker{display:none}
+.tour .sub{font:400 12px/1.5 var(--mono);color:var(--sourd)}
+.ln .sub{font:400 12px/1.5 var(--mono);color:var(--sourd);word-break:break-word}
+pre.raw{white-space:pre-wrap;word-break:break-word;margin:0;padding:.5em .7em;border-left:2px solid var(--trait);background:var(--boite);max-height:300px;overflow:auto}
+.item{display:block;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--trait);border-radius:0;color:var(--encre);padding:.8em 0;font:400 18px/1.35 var(--serif)}
+.item small{display:block;font:400 12px/1.6 var(--mono);color:var(--sourd)}
+.banner{background:var(--orange);color:var(--sur-orange);padding:9px 18px;font:400 14px/1.4 var(--sans)}
+.empty{color:var(--sourd);font:italic 400 18px/1.4 var(--serif);padding:.6em 0}
+pre.out{white-space:pre-wrap;word-break:break-word;font:400 12px/1.5 var(--mono);border-left:2px solid var(--trait);background:var(--boite);padding:.6em .8em;max-height:300px;overflow:auto;margin:0}
+dialog{background:var(--fond);color:var(--encre);border:0;border-top:2px solid var(--orange);border-radius:0;max-width:520px;width:calc(100% - 36px);padding:1.2em}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+.toast{position:fixed;left:18px;right:18px;bottom:calc(66px + env(safe-area-inset-bottom,0px));background:var(--encre);color:var(--fond);padding:10px 14px;font:400 13px/1.4 var(--mono);opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media print{.hd,nav,button,.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<div id="banner" class="banner" hidden></div>
+<div class="hd"><span>judging ai</span><span class="sp"></span><span id="save" class="save"></span><button id="lang" aria-label="langue">en</button><button id="theme" aria-label="thème">◐</button></div>
+<main id="app"></main>
+<nav class="noprint"><div class="in" id="tabs"></div></nav>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><form method="dialog" id="dlgf"></form></dialog>
+<input type="file" id="fileIn" accept=".json,application/json" hidden>
+<script id="carte" type="application/json">{"categorie": {"fr": "statut", "en": "standing"}, "titre": {"fr": "O·R·I·X : le {categorie} d'une affirmation, jamais sa vérité", "en": "O·R·I·X: the {categorie} of a claim, never its truth"}, "lettres": [{"l": "O", "nom": "Observation", "fr": {"def": "directement vu, mesuré, enregistré, par qui, quand", "question": "qui l'a constaté, à quelle date ?", "piege": "une phrase peut imiter la forme d'un relevé sans relevé"}, "en": {"def": "directly seen, measured, recorded, by whom, when", "question": "who observed it, on what date?", "piege": "a sentence can imitate the form of a survey without a survey"}}, {"l": "R", "nom": "Retrieval", "fr": {"def": "tiré d'une source externe identifiable, qui le dit réellement", "question": "quelle source, et dit-elle cela ?", "piege": "la source existe mais ne dit pas cela : le mal attribué"}, "en": {"def": "taken from an identifiable external source that actually says it", "question": "which source, and does it say that?", "piege": "the source exists but does not say that: the misattributed"}}, {"l": "I", "nom": "Inference", "fr": {"def": "déduit de O et de R, en le disant", "question": "depuis quelles prémisses ?", "piege": "l'inférence déguisée en observation"}, "en": {"def": "deduced from O and R, and saying so", "question": "from which premises?", "piege": "inference disguised as observation"}}, {"l": "X", "nom": "Invention", "fr": {"def": "la forme d'un fait, aucun fondement dans les sources disponibles", "question": "qu'est-ce qui le porte ? rien", "piege": "une invention peut être vraie par hasard ; elle reste une invention"}, "en": {"def": "the form of a fact, no basis in the available sources", "question": "what carries it? nothing", "piege": "an invention can be true by chance; it remains an invention"}}], "regles": {"fr": ["{Categorie} ≠ vérité. Une affirmation vraie peut être une invention ; une fausse peut être un retrieval correct d'une source qui se trompe.", "Scinder les clauses composées. « Érigé en 1932, l'un des mieux conservés » = deux affirmations.", "Une absence est une affirmation sur l'espace cherché. « Introuvable » s'écrit avec ce qui a été cherché, ou ne s'écrit pas."], "en": ["{Categorie} ≠ truth. A true claim can be an invention; a false one can be a correct retrieval from a source that is wrong.", "Split compound clauses. “Built in 1932, one of the best preserved” = two claims.", "An absence is a claim about the space searched. “Not found” is written with what was searched, or not written at all."]}, "actions": ["Classify", "Verify", "Bound", "Decide and defend"], "cours": {"fr": "Juger l'IA : preuves et autorité", "en": "Judging AI: Evidence and Authority"}}</script>
+<script>/* Judging AI · analyse d'une réponse collée.
+   Découpe une réponse de modèle en affirmations et y repère ce qui se vérifie : références,
+   dates, chiffres précis, réserves, « vérifié » dit par le modèle, offres. Interroge ensuite
+   les registres publics (jamais un modèle). Ne décide ni du statut ni du verdict. */
+var ANALYSE = (function () {
+  "use strict";
+
+  var ABBR = /(?:^|[\s(])(?:p|pp|n°|no|vol|éd|ed|eds|dir|coll|cf|env|av|apr|J\.-C|M|Mme|Mlle|Dr|St|Ste|Mt|et al|fig|ch|chap|op|cit|ibid|vs|etc|i\.e|e\.g|sept|oct|nov|déc|janv|févr|avr|juil|Jr|Sr|Inc|Ltd|Co|av\. J\.-C)\.$/i;
+  var INITIAL = /(?:^|\s)[A-ZÀ-Ö]\.$/;
+
+  var HEDGE = [
+    /non vérifi/i, /pas vérifi/i, /pas pu (?:vérifier|confirmer|ouvrir)/i, /je ne (?:peux|pourrais|suis) pas/i,
+    /pas (?:certain|sûr)/i, /probablement/i, /vraisemblabl/i, /plausible/i, /de seconde main/i, /de mémoire/i,
+    /non garanti/i, /à confirmer/i, /incertain/i, /il semble/i, /aurait été/i, /serait\b/i,
+    /not verified/i, /unverified/i, /\bcould ?n[o']t (?:verify|confirm|access)/i, /\bcannot (?:verify|confirm)/i,
+    /\bprobably\b/i, /\blikely\b/i, /second-hand/i, /from memory/i, /not guaranteed/i, /\bunclear\b/i, /\bappears to\b/i,
+    /\b40[34]\b/
+  ];
+  var SELF = [
+    /\bvérifi(?:é|ée|és|ées)\b/i, /j'ai (?:vérifié|consulté|confirmé)/i, /\bje confirme\b/i, /réellement consulté/i,
+    /\bverified\b/i, /\bi (?:have )?(?:checked|confirmed|consulted)\b/i, /\bconfirmed\b/i
+  ];
+  var OFFER = /^(?:veux-tu|voulez-vous|souhaites?-tu|souhaitez-vous|tu veux|si tu (?:veux|le souhaites)|dis-moi si|je peux (?:aussi|également|te|vous)|would you like|do you want|want me to|shall i|should i|let me know if|i can also)\b/i;
+  var NEGSELF = /(?:\bpas\b|\bnon\b|\bnot\b|n't\b|\bnever\b|\bjamais\b)\W+(?:\w+\W+){0,2}(?:vérifi|verif|confirm|consult)/i;
+  var REFWORD = /\b(?:monographie|livre|ouvrage|revue|article|thèse|mémoire|rapport|plan|coupe|relevé|photo(?:graphie)?|archives?|registre|fonds|cote|book|monograph|journal|paper|thesis|report|survey|photograph|archive|register)\b/i;
+  var SELFTALK = /^(?:je |j'|voici|voilà|laisse-moi|honnêtement|par honnêteté|i |i'm |i've |here (?:is|are)|let me|to be honest)/i;
+
+  var RX = {
+    md: /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+    url: /https?:\/\/[^\s)\]>»"'<]+/g,
+    doi: /\b10\.\d{4,9}\/[^\s"'<>»)\]]+/gi,
+    arxiv: /\barXiv[:\s]*(\d{4}\.\d{4,5})(?:v\d+)?/gi,
+    isbn: /\bISBN(?:-1[03])?[:\s]*((?:97[89][\s-]?)?(?:\d[\s-]?){9}[\dXx])/gi,
+    year: /\b(1[5-9]\d\d|20\d\d)\b/g,
+    page: /\bpp?\.\s?\d+(?:\s?[-–]\s?\d+)?/gi,
+    num: /\b\d{1,3}(?:[  .,]\d{3})*(?:[.,]\d+)?\s?(?:%|‰|m²|m2|m³|km²|km|cm|mm|m\b|ha\b|kg|t\b|W\b|kW|MW|kWh|€|\$|USD|LBP|£|étages?|floors?|storeys?|niveaux?|chambres?|rooms?|places?|mètres|meters|metres|ans\b|years?\b)/gi,
+    dim: /\b\d+(?:[.,]\d+)?\s?[×x]\s?\d+(?:[.,]\d+)?(?:\s?m)?\b/g,
+    title: /«\s*([^»]{4,160}?)\s*»|“([^”]{4,160}?)”|"([^"]{4,160}?)"|\*([^*\n]{4,120}?)\*/g
+  };
+
+  function uniq(a) { var s = {}, o = []; a.forEach(function (x) { var k = String(x).toLowerCase(); if (!s[k]) { s[k] = 1; o.push(x); } }); return o; }
+  function trimPunct(s) { return s.replace(/[.,;:!?»”"')\]]+$/, ""); }
+  function all(rx, s, g) { var out = [], m; rx.lastIndex = 0; while ((m = rx.exec(s))) out.push(g === undefined ? m[0] : (m[g] || "")); return out; }
+
+  function plain(line) {
+    return line
+      .replace(RX.md, function (_, t, u) { return t + " (" + u + ")"; })
+      .replace(/\*\*([^*]+)\*\*/g, "$1").replace(/__([^_]+)__/g, "$1")
+      .replace(/^\s{0,3}#{1,6}\s+/, "")
+      .replace(/^\s*(?:[-*•·◦▪]|\d+[.)])\s+/, "")
+      .replace(/`([^`]+)`/g, "$1")
+      .trim();
+  }
+
+  function splitSentences(line) {
+    var out = [], start = 0;
+    for (var i = 0; i < line.length; i++) {
+      var c = line[i];
+      if (c !== "." && c !== "!" && c !== "?" && c !== "…") continue;
+      var next = line.slice(i + 1);
+      var m = next.match(/^([»”")\]]*)\s+(?=[A-ZÀ-ÖØ-Þ«“"(\d])/);
+      if (!m) continue;
+      var head = line.slice(start, i + 1);
+      if (c === "." && (ABBR.test(head) || INITIAL.test(head) || /\d\.$/.test(head) && /^\s*\d/.test(next))) continue;
+      if (c === "." && /https?:\/\/\S*$/.test(head)) continue;
+      out.push(line.slice(start, i + 1 + m[1].length).trim());
+      start = i + 1 + m[0].length;
+      i = start - 1;
+    }
+    var rest = line.slice(start).trim();
+    if (rest) out.push(rest);
+    return out;
+  }
+
+  function detect(text) {
+    var urls = [];
+    text.replace(RX.md, function (_, t, u) { urls.push(u); return ""; });
+    urls = uniq(urls.concat(all(RX.url, text).map(trimPunct)));
+    var dois = uniq(all(RX.doi, text).map(trimPunct).concat(
+      urls.map(function (u) { var m = u.match(/doi\.org\/(10\.\d{4,9}\/.+)$/i); return m ? decodeURIComponent(m[1]) : null; }).filter(Boolean)));
+    var arxiv = uniq(all(RX.arxiv, text, 1).concat(
+      urls.map(function (u) { var m = u.match(/arxiv\.org\/(?:abs|pdf)\/(\d{4}\.\d{4,5})/i); return m ? m[1] : null; }).filter(Boolean)));
+    var isbns = uniq(all(RX.isbn, text, 1).map(function (s) { return s.replace(/[\s-]/g, "").toUpperCase(); }));
+    var titles = [], m; RX.title.lastIndex = 0;
+    while ((m = RX.title.exec(text))) { var tt = (m[1] || m[2] || m[3] || m[4] || "").trim(); if (tt && !/^https?:/.test(tt)) titles.push(tt); }
+    var nums = uniq(all(RX.dim, text).concat(all(RX.num, text)).map(function (s) { return s.trim(); }));
+    nums = nums.filter(function (n) { return !nums.some(function (o) { return o !== n && o.length > n.length && o.indexOf(n) >= 0; }); });
+    return {
+      urls: urls, dois: dois, arxiv: arxiv, isbns: isbns, titles: uniq(titles),
+      years: uniq(all(RX.year, text, 1)), pages: uniq(all(RX.page, text)), numbers: nums,
+      hedge: HEDGE.some(function (r) { return r.test(text); }),
+      self: SELF.some(function (r) { return r.test(text); }) && !NEGSELF.test(text),
+      refword: REFWORD.test(text),
+      offer: OFFER.test(text) || (/\?\s*$/.test(text) && /\b(tu|vous|te|you)\b/i.test(text)),
+      selftalk: SELFTALK.test(text)
+    };
+  }
+
+  /* Réponse au format demandé par l'app : une affirmation, sa référence, ce qui reste non vérifié.
+     Quatre écritures acceptées (lignes à barres, blocs, JSON, liste numérotée). Retourne null si
+     la réponse n'est pas au format ; l'analyse générale prend alors le relais. */
+  function structured(raw) {
+    var s = String(raw || "").trim(), recs = [], extra = 0;
+    var ls = s.split(/\r?\n/).filter(function (l) { return l.trim(); });
+    if (!ls.length) return null;
+    var j = s.replace(/^```(?:json)?\s*|\s*```$/g, "");
+    if (/^\s*\[/.test(j)) {
+      try { var d = JSON.parse(j); if (Array.isArray(d)) { d.forEach(function (x) { if (x && typeof x === "object") recs.push({ affirmation: String(x.affirmation || x.claim || ""), reference: String(x.reference || x.référence || ""), reste: String(x.non_verifie || x.non_vérifié || x.unverified || "") }); }); return recs.length ? { format: "json", recs: recs, extra: 0 } : null; } } catch (e) {}
+    }
+    var pipes = ls.map(function (l) { return l.trim().replace(/^\||\|$/g, "").split("|").map(function (x) { return x.trim(); }); });
+    var okPipes = pipes.filter(function (p) { return p.length === 3 && !/^affirmation$/i.test(p[0]) && !/^[-: ]+$/.test(p.join("")); });
+    if (okPipes.length && okPipes.length >= ls.length - 2) {
+      return { format: "barres", recs: okPipes.map(function (p) { return { affirmation: p[0], reference: p[1], reste: p[2] }; }), extra: ls.length - okPipes.length };
+    }
+    var num = ls.map(function (l) { return l.match(/^\s*\d+[.)]\s*(.+?)\s+[—–-]\s*r[ée]f(?:[ée]rence)?\s*:\s*(.+?)\s+[—–-]\s*(?:non v[ée]rifi[ée]|unverified)\s*:\s*(.+)$/i); }).filter(Boolean);
+    if (num.length && num.length >= ls.length - 2) {
+      return { format: "numéros", recs: num.map(function (m) { return { affirmation: m[1].replace(/^\[|\]$/g, ""), reference: m[2].replace(/^\[|\]$/g, ""), reste: m[3].replace(/^\[|\]$/g, "") }; }), extra: ls.length - num.length };
+    }
+    var cur = null;
+    ls.forEach(function (l) {
+      var m;
+      if ((m = l.match(/^\s*[-*•]?\s*(?:Affirmation|Claim)\s*:\s*(.+)$/i))) { cur = { affirmation: m[1].trim(), reference: "", reste: "" }; recs.push(cur); }
+      else if (cur && (m = l.match(/^\s*R[ée]f[ée]rence\s*:\s*(.+)$/i))) cur.reference = m[1].trim();
+      else if (cur && (m = l.match(/^\s*(?:Non v[ée]rifi[ée]|Unverified)\s*:\s*(.+)$/i))) cur.reste = m[1].trim();
+      else extra++;
+    });
+    if (recs.length && extra <= 2) return { format: "blocs", recs: recs, extra: extra };
+    return null;
+  }
+
+  function analyse(raw) {
+    var st = structured(raw);
+    if (st) {
+      var its = st.recs.map(function (r) {
+        var d = detect(r.affirmation + " " + r.reference);
+        d.hedge = d.hedge || !/^\s*(rien|nothing|none|aucun)\s*\.?\s*$/i.test(r.reste);
+        return { kind: "claim", text: r.affirmation, reference: r.reference, reste: r.reste, section: "", bullet: true, d: d };
+      });
+      var refsN = 0; its.forEach(function (c) { refsN += c.d.urls.length + c.d.dois.length + c.d.arxiv.length + c.d.isbns.length; });
+      return { format: st.format, horsFormat: st.extra, items: its, stats: {
+        mots: String(raw || "").split(/\s+/).filter(Boolean).length, affirmations: its.length, surLuiMeme: 0, offres: 0,
+        references: refsN, reserves: its.filter(function (c) { return !/^\s*(rien|nothing|none)\s*\.?\s*$/i.test(c.reste); }).length,
+        verifieDit: 0, chiffres: its.reduce(function (n, c) { return n + c.d.numbers.length; }, 0) } };
+    }
+    var lines = String(raw || "").replace(/\r\n?/g, "\n").split("\n");
+    var items = [], section = "", inCode = false;
+    lines.forEach(function (ln) {
+      if (/^\s*```/.test(ln)) { inCode = !inCode; return; }
+      if (!ln.trim() || /^\s*[-*_]{3,}\s*$/.test(ln)) return;
+      var bullet = /^\s*(?:[-*•·◦▪]|\d+[.)])\s+/.test(ln);
+      var p = plain(ln);
+      if (!p) return;
+      var words = p.split(/\s+/).length;
+      RX.url.lastIndex = 0;
+      var isHeading = !inCode && (/^\s{0,3}#{1,6}\s/.test(ln) || (!/[.!?…»”]$/.test(p) && words <= 10 && !/https?:\/\//.test(p) && !/\d{3,}/.test(p) && !/ : \S/.test(p)) || (/:\s*$/.test(p) && words <= 10));
+      if (isHeading) { section = p.replace(/:\s*$/, ""); items.push({ kind: "heading", text: section }); return; }
+      (inCode ? [p] : splitSentences(p)).forEach(function (s) {
+        var d = detect(s);
+        var kind = d.offer ? "offer" : d.selftalk ? "self" : "claim";
+        items.push({ kind: kind, text: s, section: section, bullet: bullet, d: d });
+      });
+    });
+    var claims = items.filter(function (x) { return x.kind !== "heading"; });
+    var refs = 0;
+    claims.forEach(function (c) { refs += c.d.urls.length + c.d.dois.length + c.d.arxiv.length + c.d.isbns.length + c.d.titles.length; });
+    return {
+      items: items,
+      stats: {
+        mots: String(raw || "").split(/\s+/).filter(Boolean).length,
+        affirmations: claims.filter(function (c) { return c.kind === "claim"; }).length,
+        surLuiMeme: claims.filter(function (c) { return c.kind === "self"; }).length,
+        offres: claims.filter(function (c) { return c.kind === "offer"; }).length,
+        references: refs,
+        reserves: claims.filter(function (c) { return c.d.hedge; }).length,
+        verifieDit: claims.filter(function (c) { return c.d.self && c.kind !== "offer"; }).length,
+        chiffres: claims.reduce(function (n, c) { return n + c.d.numbers.length + c.d.pages.length; }, 0)
+      }
+    };
+  }
+
+  /* ---------- registres ---------- */
+  function timed(url, ms) {
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctl) ctl.abort(); }, ms || 9000);
+    return fetch(url, ctl ? { signal: ctl.signal, headers: { Accept: "application/json" } } : {}).then(function (r) { clearTimeout(t); return r; }, function (e) { clearTimeout(t); throw e; });
+  }
+  function doiPath(doi) { return doi.split("/").map(encodeURIComponent).join("/"); }
+  function authors(list) { return (list || []).slice(0, 3).map(function (a) { return a.family || a.name || ""; }).filter(Boolean).join(", ") + ((list || []).length > 3 ? " et al." : ""); }
+  function res(registre, statut, detail, lien) { return { registre: registre, statut: statut, detail: detail || "", lien: lien || "", quand: new Date().toISOString() }; }
+
+  function viaDataCite(doi) {
+    return timed("https://api.datacite.org/dois/" + doiPath(doi)).then(function (r) {
+      if (r.status === 404) return res("DataCite", "absent", "", "https://doi.org/" + doi);
+      if (!r.ok) throw new Error(r.status);
+      return r.json().then(function (j) { var a = j.data.attributes;
+        return res("DataCite", "trouve", [(a.titles && a.titles[0] && a.titles[0].title) || "", (a.creators || []).slice(0, 3).map(function (c) { return c.familyName || c.name; }).join(", "), a.publicationYear, a.publisher].filter(Boolean).join(" · "), "https://doi.org/" + doi); });
+    });
+  }
+  function checkDoi(doi) {
+    return timed("https://api.crossref.org/works/" + doiPath(doi)).then(function (r) {
+      if (r.status === 404) return viaDataCite(doi).then(function (x) { return x.statut === "absent" ? res("Crossref + DataCite", "absent", "", "https://doi.org/" + doi) : x; });
+      if (!r.ok) throw new Error(r.status);
+      return r.json().then(function (j) { var m = j.message, y = m.issued && m.issued["date-parts"] && m.issued["date-parts"][0] && m.issued["date-parts"][0][0];
+        return res("Crossref", "trouve", [(m.title || [])[0], authors(m.author), y, (m["container-title"] || [])[0]].filter(Boolean).join(" · "), "https://doi.org/" + doi); });
+    }).catch(function () { return res("Crossref", "injoignable", "", "https://doi.org/" + doi); });
+  }
+  function checkArxiv(id) {
+    return viaDataCite("10.48550/arXiv." + id).then(function (x) { x.registre = "arXiv (DataCite)"; x.lien = "https://arxiv.org/abs/" + id; return x; })
+      .catch(function () { return res("arXiv", "injoignable", "", "https://arxiv.org/abs/" + id); });
+  }
+  function checkIsbn(isbn) {
+    return timed("https://openlibrary.org/isbn/" + encodeURIComponent(isbn) + ".json").then(function (r) {
+      if (r.status === 404) return res("Open Library", "absent", "absent d'Open Library, ce qui ne prouve pas que le livre n'existe pas", "https://search.worldcat.org/search?q=bn:" + isbn);
+      if (!r.ok) throw new Error(r.status);
+      return r.json().then(function (j) { return res("Open Library", "trouve", [j.title, j.publish_date, (j.publishers || [])[0]].filter(Boolean).join(" · "), "https://openlibrary.org/isbn/" + isbn); });
+    }).catch(function () { return res("Open Library", "injoignable", "", "https://search.worldcat.org/search?q=bn:" + isbn); });
+  }
+  function checkTitle(q) {
+    return timed("https://api.crossref.org/works?rows=3&select=DOI,title,author,issued,container-title&query.bibliographic=" + encodeURIComponent(q)).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      return r.json().then(function (j) { var it = (j.message && j.message.items) || [];
+        if (!it.length) return res("Crossref · recherche", "absent", "aucun candidat", "");
+        return res("Crossref · recherche", "candidats", it.map(function (m) { var y = m.issued && m.issued["date-parts"] && m.issued["date-parts"][0] && m.issued["date-parts"][0][0];
+          return [(m.title || [])[0], authors(m.author), y, m.DOI].filter(Boolean).join(" · "); }).join("\n"), "");
+      });
+    }).catch(function () { return res("Crossref · recherche", "injoignable", "", ""); });
+  }
+  function checkUrl(u) {
+    var w = u.match(/^https?:\/\/([a-z-]+)\.(?:m\.)?wikipedia\.org\/wiki\/([^#?\s]+)/i);
+    var archive = "https://web.archive.org/web/*/" + u;
+    if (!w) return Promise.resolve(res("lien", "a-ouvrir", "à ouvrir soi-même ; archive : " + archive, u));
+    return timed("https://" + w[1] + ".wikipedia.org/api/rest_v1/page/summary/" + w[2]).then(function (r) {
+      if (r.status === 404) return res("Wikipédia", "absent", "page inexistante", u);
+      if (!r.ok) throw new Error(r.status);
+      return r.json().then(function (j) { return res("Wikipédia", "trouve", (j.title || "") + " · " + (j.extract || "").slice(0, 400), u); });
+    }).catch(function () { return res("Wikipédia", "injoignable", "", u); });
+  }
+
+  /* Interroge les registres pour chaque identifiant repéré. cache : { clé: résultat } ; onEach(clé, résultat). */
+  function registres(items, cache, onEach) {
+    var jobs = [];
+    items.forEach(function (c) {
+      if (!c.d) return;
+      c.d.dois.forEach(function (x) { jobs.push(["doi:" + x.toLowerCase(), function () { return checkDoi(x); }]); });
+      c.d.arxiv.forEach(function (x) { jobs.push(["arxiv:" + x, function () { return checkArxiv(x); }]); });
+      c.d.isbns.forEach(function (x) { jobs.push(["isbn:" + x, function () { return checkIsbn(x); }]); });
+      c.d.urls.forEach(function (x) { if (!/doi\.org|arxiv\.org/i.test(x)) jobs.push(["url:" + x, function () { return checkUrl(x); }]); });
+      if (!c.d.dois.length && !c.d.arxiv.length && !c.d.isbns.length)
+        c.d.titles.forEach(function (x) { if (x.split(/\s+/).length >= 3) jobs.push(["titre:" + x.toLowerCase(), function () { return checkTitle(x); }]); });
+    });
+    var seen = {};
+    jobs = jobs.filter(function (j) { if (seen[j[0]] || (cache && cache[j[0]] && cache[j[0]].statut !== "injoignable")) return false; seen[j[0]] = 1; return true; });
+    var i = 0;
+    function next() {
+      if (i >= jobs.length) return Promise.resolve(jobs.length);
+      var j = jobs[i++];
+      return j[1]().then(function (r) { if (cache) cache[j[0]] = r; if (onEach) onEach(j[0], r); return new Promise(function (ok) { setTimeout(ok, 250); }); }).then(next);
+    }
+    return next();
+  }
+  function cles(c) {
+    if (!c.d) return [];
+    var k = [];
+    c.d.dois.forEach(function (x) { k.push("doi:" + x.toLowerCase()); });
+    c.d.arxiv.forEach(function (x) { k.push("arxiv:" + x); });
+    c.d.isbns.forEach(function (x) { k.push("isbn:" + x); });
+    c.d.urls.forEach(function (x) { if (!/doi\.org|arxiv\.org/i.test(x)) k.push("url:" + x); });
+    if (!c.d.dois.length && !c.d.arxiv.length && !c.d.isbns.length) c.d.titles.forEach(function (x) { if (x.split(/\s+/).length >= 3) k.push("titre:" + x.toLowerCase()); });
+    return k;
+  }
+
+  /* ---------- le prochain tour ----------
+     Propose des prompts à recoller dans la conversation, un geste chacun, à partir de l'analyse
+     et des réponses des registres. Un prompt transmet ce que dit le registre ; il ne demande
+     jamais au modèle si sa propre référence existe. */
+  var FORMAT_FR = "Réponds uniquement par des blocs de ce format exact, un bloc par affirmation, rien avant ni après :\n- Affirmation : …\n  Référence : DOI, ISBN, URL ou cote exacte, ou « aucune »\n  Non vérifié : ce que tu n'as pas pu confirmer, ou « rien »\nAu plus 5 blocs. Pas de titre, pas de commentaire, pas de proposition.";
+  var FORMAT_EN = "Answer only with blocks in this exact format, one block per claim, nothing before or after:\n- Claim: …\n  Reference: exact DOI, ISBN, URL or call number, or “none”\n  Unverified: what you could not confirm, or “nothing”\nAt most 5 blocks. No title, no comment, no offer.";
+  var P = {
+    fr: {
+      resserrer: "Réponds seulement à ma question, en 3 puces au plus. Rien d'autre.",
+      source: "Pour chaque puce, donne la référence exacte : DOI, ISBN, URL ou cote d'archive. Si tu n'en as pas, écris « aucune ».",
+      remplissage: "Sans phrase d'introduction, sans commentaire sur toi-même, sans proposition à la fin.",
+      forme: FORMAT_FR,
+      reserves: "Sépare en deux listes : ce qui vient d'une source que tu nommes, et le reste.",
+      verifie: "N'écris pas « vérifié ». Pour chaque affirmation, dis seulement d'où elle vient.",
+      absent: function (k) { return "Le registre ne contient pas " + k + ". Retire cette référence, ou remplace-la par une référence que je peux retrouver."; },
+      chiffres: function (n) { return "Pour " + n + ", donne la source exacte du chiffre, ou retire-le."; },
+      unique: "Ma question : ",
+      g: { resserrer: "Resserrer", source: "Exiger la source", remplissage: "Retirer le remplissage", forme: "Imposer la forme", corriger: "Corriger le modèle", unique: "Tout dire en une fois" }
+    },
+    en: {
+      resserrer: "Answer only my question, in 3 bullets at most. Nothing else.",
+      source: "For each bullet, give the exact reference: DOI, ISBN, URL or archive call number. If you have none, write “none”.",
+      remplissage: "No introduction, no comments about yourself, no offer at the end.",
+      forme: FORMAT_EN,
+      reserves: "Split into two lists: what comes from a source you name, and the rest.",
+      verifie: "Don't write “verified”. For each claim, just say where it comes from.",
+      absent: function (k) { return "The registry has no record of " + k + ". Remove that reference, or replace it with one I can find."; },
+      chiffres: function (n) { return "For " + n + ", give the exact source of the figure, or remove it."; },
+      unique: "My question: ",
+      g: { resserrer: "Narrow", source: "Ask for the source", remplissage: "Remove filler", forme: "Set the format", corriger: "Correct the model", unique: "Say it all at once" }
+    }
+  };
+  var GESTE_INDEX = { resserrer: 0, source: 1, remplissage: 2, forme: 3, corriger: 4, unique: -1 };
+
+  function suggest(a, cache, lang, question) {
+    var L = P[lang] || P.fr, s = a.stats, out = [];
+    var claims = a.items.filter(function (x) { return x.kind === "claim"; });
+    function add(g, text, why) { out.push({ geste: g, gesteIndex: GESTE_INDEX[g], label: L.g[g], prompt: text, pourquoi: why }); }
+
+    var absent = [];
+    claims.forEach(function (c) { cles(c).forEach(function (k) { var r = cache && cache[k]; if (r && r.statut === "absent" && !/^url:/.test(k)) absent.push(k.replace(/^(doi|arxiv|isbn|titre):/, "")); }); });
+    uniq(absent).slice(0, 3).forEach(function (k) { add("corriger", L.absent(k), "registre : absent"); });
+
+    if (s.affirmations > 4 || s.mots > 120) add("resserrer", L.resserrer, s.affirmations + " · " + s.mots);
+    var noId = claims.filter(function (c) { return (c.d.titles.length || c.d.refword) && !c.d.urls.length && !c.d.dois.length && !c.d.isbns.length && !c.d.arxiv.length; }).length;
+    var bare = claims.filter(function (c) { return !c.d.urls.length && !c.d.dois.length && !c.d.isbns.length && !c.d.arxiv.length; }).length;
+    if (noId || (bare && s.references === 0)) add("source", L.source, (noId || bare) + "");
+    if (s.affirmations <= 4 && s.mots <= 120 && !out.length && !noId) {}
+    if (s.offres || s.surLuiMeme) add("remplissage", L.remplissage, (s.offres + s.surLuiMeme) + "");
+    var bullets = claims.filter(function (c) { return c.bullet; }).length;
+    if (claims.length > 3 && bullets < claims.length / 2) add("forme", L.forme, "");
+    if (s.verifieDit) add("corriger", L.verifie, s.verifieDit + "");
+    if (s.reserves >= 2) add("corriger", L.reserves, s.reserves + "");
+    var nums = [];
+    claims.forEach(function (c) { if (!c.d.urls.length && !c.d.dois.length) nums = nums.concat(c.d.numbers); });
+    if (nums.length) add("source", L.chiffres(uniq(nums).slice(0, 3).join(", ")), "");
+
+    if (out.length > 1) {
+      var parts = uniq(out.filter(function (x) { return x.geste !== "unique"; }).map(function (x) { return x.prompt; }));
+      add("unique", (question ? L.unique + question.trim() + "\n" : "") + parts.join("\n"), "");
+    }
+    return out;
+  }
+
+  return { analyse: analyse, registres: registres, cles: cles, suggest: suggest, format: { fr: FORMAT_FR, en: FORMAT_EN }, _detect: detect, _split: splitSentences };
+})();
+if (typeof module !== "undefined") module.exports = ANALYSE;
+</script>
+<script>
+(function(){
+"use strict";
+var CARTE=JSON.parse(document.getElementById("carte").textContent);
+var KEY="judging-ai-journal", SCHEMA=1;
+/* Suggestions du prochain tour : présentes dans le code, invisibles dans l'interface tant que
+   SUGGESTIONS vaut false. Quand elles sont activées, l'élève choisit d'abord son geste et écrit
+   son prompt ; la suggestion de l'app ne s'affiche qu'ensuite, à côté, sur le tour ajouté. */
+var SUGGESTIONS=false;
+
+/* ---------- langue ---------- */
+var T={
+fr:{journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Garder",saved:"enregistré",notsaved:"non enregistré",
+ banc:"Banc",bIntro:"Les mêmes prompts, sans puis avec votre Skill, version après version. L'app compare ce qui revient ; c'est vous qui décidez ce que ça veut dire.",
+ tests:"les prompts d'essai",addTest:"AJOUTER LE PROMPT",testPh:"Un prompt d'essai, par exemple une question qui a fait inventer le modèle",
+ versions:"les versions",sans:"sans Skill",addVersion:"NOUVELLE VERSION",vName:"Nom de la version",skillText:"Le texte de la Skill (les instructions données au modèle)",copySkill:"copier la Skill",
+ essais:"les essais",pasteFor:"Réponse pour",coller:"coller",modifier:"modifier",compare:"la comparaison",
+ M:{faits:"essais collés",affirmations:"affirmations",identifiants:"identifiants",trouves:"trouvés au registre",absents:"absents du registre",aucune:"« aucune » référence",reserves:"réserves",mots:"mots",format:"au format"},
+ askAll:"interroger les registres pour tous les essais",delVersionQ:"Supprimer cette version et ses essais ?",delTestQ:"Supprimer ce prompt et ses essais ?",
+ jIntro:"Une ligne par affirmation portée : date · affirmation · {cat} · vérifié, par quelle opération · résultat · reste non vérifié.",
+ newLine:"+ Nouvelle ligne",noLines:"Aucune ligne. La première : une observation datée sur votre lieu.",
+ lines:"lignes",dit:"« existe, et dit cela »",time:"temps de vérification",
+ date:"Date",aff:"L'affirmation",op:"Vérifié, par quelle opération",res:"Résultat",rest:"Reste non vérifié",
+ chrono:"▶ Chrono",stop:"■ Arrêter",plus1:"+1 min",del:"Supprimer",delQ:"Supprimer cette ligne ?",cancel:"Annuler",close:"Fermer",
+ R:{dit:"existe, et dit cela",nedit:"existe, mais ne dit pas cela",perime:"périmé",nexiste:"n'existe pas",npv:"pas pu vérifier"},
+ mIntro:"Collez chaque tour tel quel : votre prompt, sa réponse. Resserrez jusqu'à une réponse assez petite pour être vérifiée, puis envoyez la dernière réponse au journal.",
+ newEnq:"+ Nouvelle enquête",noEnq:"Aucune enquête.",back:"← Enquêtes",title:"Titre",modelName:"Modèle (et version)",
+ turns:"tours",turn:"Tour",gesture:"Le geste de ce tour",prompt:"Prompt",answer:"Réponse",addTurn:"Ajouter le tour",needBoth:"Le prompt et la réponse, les deux",
+ G:["Resserrer","Exiger la source","Retirer le remplissage","Imposer la forme","Corriger le modèle","Autre"],
+ toJournal:"Au journal",toJournalHint:"Seulement la dernière réponse, une affirmation par ligne. On vérifie sans le modèle, jamais en lui redemandant.",
+ split:"Découper la dernière réponse en lignes du journal",splitDone:"lignes ajoutées au journal",
+ single:"Le prompt unique",singleHint:"Le prompt qui aurait obtenu la dernière réponse du premier coup. Lancez-le dans une conversation neuve.",
+ singleAns:"Réponse en conversation neuve",same:"La même que le dernier tour ?",yes:"oui",close2:"proche",no:"non",delTurnQ:"Supprimer ce tour ?",delEnqQ:"Supprimer cette enquête et ses tours ?",
+ lieuHint:"Réel, petit, documentable, sans exposer personne.",name:"Nom",addr:"Adresse",why:"Pourquoi ce lieu",
+ gIntro:"Tout reste sur ce téléphone ; rien n'est envoyé. Exportez après chaque séance : le JSON se réimporte, le Markdown va dans votre dossier.",
+ exJson:"Sauvegarde (JSON)",exMd:"Pour le dossier (Markdown)",copy:"Copier le Markdown",imp:"Réimporter…",copied:"Copié",
+ imported:"importé : {a} lignes, {b} enquêtes",bad:"Fichier illisible",
+ ios:"iPhone : Partager → « Sur l'écran d'accueil ». Sinon Safari peut effacer ces données après 7 jours sans visite.",
+ old:"Pas d'export depuis plus de 6 jours : onglet Garder.",privateMode:"Ce navigateur n'enregistre pas. Exportez avant de fermer.",
+ rules:"Trois règles",actions:"Quatre actions",question:"question",trap:"piège",missing:"Manque : l'affirmation",
+ an:"analyse",st:{affirmations:"affirmations",references:"références",reserves:"réserves",verifieDit:"« vérifié » dit par le modèle",surLuiMeme:"sur lui-même",offres:"offres",mots:"mots",chiffres:"chiffres précis"},
+ kind:{self:"le modèle parle de lui-même",offer:"offre"},hedgeTag:"réserve",selfTag:"dit « vérifié »",numTag:"chiffre",
+ ask:"interroger les registres",asking:"registres…",askHint:"Envoie seulement les identifiants trouvés (DOI, ISBN, titres, liens Wikipédia) à Crossref, DataCite, Open Library, Wikipédia. Aucun modèle.",
+ S:{trouve:"trouvé",absent:"absent du registre",candidats:"candidats, pas une confirmation","a-ouvrir":"à ouvrir",injoignable:"registre injoignable"},
+ sent:"au journal ✓",send:"au journal",next:"le prochain tour",nextHint:"Des prompts à recoller dans votre conversation. Modifiez-les avant de copier.",
+ copyPrompt:"copier",useTurn:"coller sa réponse comme tour suivant",noSuggest:"Rien à proposer : la réponse est courte, sourcée, en puces. Vérifiez-la.",
+ cmpHint:"Votre choix pour ce tour, puis ce que l'app aurait proposé à partir de la réponse précédente.",yours:"votre geste et votre prompt",apps:"proposé par l'app",
+ vsPrev:"au tour précédent",paste:"Collez la réponse du modèle",refL:"référence",fmtOk:"au format",fmtNo:"texte libre",offFmt:"lignes hors format"},
+en:{journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",saved:"saved",notsaved:"not saved",
+ banc:"Bench",bIntro:"The same prompts, without and then with your Skill, version after version. The app compares what comes back; you decide what it means.",
+ tests:"test prompts",addTest:"ADD PROMPT",testPh:"A test prompt, for example a question that made the model invent",
+ versions:"versions",sans:"without Skill",addVersion:"NEW VERSION",vName:"Version name",skillText:"The Skill text (the instructions given to the model)",copySkill:"copy the Skill",
+ essais:"runs",pasteFor:"Answer for",coller:"paste",modifier:"edit",compare:"comparison",
+ M:{faits:"runs pasted",affirmations:"claims",identifiants:"identifiers",trouves:"found in registry",absents:"not in registry",aucune:"“none” reference",reserves:"hedges",mots:"words",format:"in format"},
+ askAll:"ask the registries for all runs",delVersionQ:"Delete this version and its runs?",delTestQ:"Delete this prompt and its runs?",
+ jIntro:"One line per claim you carry: date · claim · {cat} · verified, by which operation · result · still unverified.",
+ newLine:"+ New line",noLines:"No lines yet. The first: a dated observation of your place.",
+ lines:"lines",dit:"“exists, and says that”",time:"verification time",
+ date:"Date",aff:"The claim",op:"Verified, by which operation",res:"Result",rest:"Still unverified",
+ chrono:"▶ Timer",stop:"■ Stop",plus1:"+1 min",del:"Delete",delQ:"Delete this line?",cancel:"Cancel",close:"Close",
+ R:{dit:"exists, and says that",nedit:"exists, but doesn't say that",perime:"outdated",nexiste:"doesn't exist",npv:"couldn't verify"},
+ mIntro:"Paste each turn as is: your prompt, its answer. Narrow until the answer is small enough to verify, then send the last answer to the journal.",
+ newEnq:"+ New inquiry",noEnq:"No inquiries.",back:"← Inquiries",title:"Title",modelName:"Model (and version)",
+ turns:"turns",turn:"Turn",gesture:"This turn's move",prompt:"Prompt",answer:"Answer",addTurn:"Add turn",needBoth:"Both the prompt and the answer",
+ G:["Narrow","Ask for the source","Remove filler","Set the format","Correct the model","Other"],
+ toJournal:"To the journal",toJournalHint:"Only the last answer, one claim per line. Verify without the model, never by asking it again.",
+ split:"Split the last answer into journal lines",splitDone:"lines added to the journal",
+ single:"The single prompt",singleHint:"The prompt that would have got the last answer first time. Run it in a fresh conversation.",
+ singleAns:"Answer in a fresh conversation",same:"Same as the last turn?",yes:"yes",close2:"close",no:"no",delTurnQ:"Delete this turn?",delEnqQ:"Delete this inquiry and its turns?",
+ lieuHint:"Real, small, documentable, exposing no one.",name:"Name",addr:"Address",why:"Why this place",
+ gIntro:"Everything stays on this phone; nothing is sent. Export after each session: the JSON re-imports, the Markdown goes into your dossier.",
+ exJson:"Backup (JSON)",exMd:"For the dossier (Markdown)",copy:"Copy Markdown",imp:"Re-import…",copied:"Copied",
+ imported:"imported: {a} lines, {b} inquiries",bad:"Unreadable file",
+ ios:"iPhone: Share → “Add to Home Screen”. Otherwise Safari may erase this data after 7 days without a visit.",
+ old:"No export for over 6 days: Keep tab.",privateMode:"This browser isn't saving. Export before closing.",
+ rules:"Three rules",actions:"Four actions",question:"question",trap:"pitfall",missing:"Missing: the claim",
+ an:"analysis",st:{affirmations:"claims",references:"references",reserves:"hedges",verifieDit:"“verified” said by the model",surLuiMeme:"about itself",offres:"offers",mots:"words",chiffres:"precise figures"},
+ kind:{self:"the model talking about itself",offer:"offer"},hedgeTag:"hedge",selfTag:"says “verified”",numTag:"figure",
+ ask:"ask the registries",asking:"registries…",askHint:"Sends only the identifiers found (DOI, ISBN, titles, Wikipedia links) to Crossref, DataCite, Open Library, Wikipedia. No model.",
+ S:{trouve:"found",absent:"not in the registry",candidats:"candidates, not a confirmation","a-ouvrir":"to open",injoignable:"registry unreachable"},
+ sent:"in journal ✓",send:"to journal",next:"the next turn",nextHint:"Prompts to paste back into your conversation. Edit them before copying.",
+ copyPrompt:"copy",useTurn:"paste its answer as the next turn",noSuggest:"Nothing to suggest: the answer is short, sourced, in bullets. Verify it.",
+ cmpHint:"Your choice for this turn, then what the app would have suggested from the previous answer.",yours:"your move and prompt",apps:"suggested by the app",
+ vsPrev:"previous turn",paste:"Paste the model's answer",refL:"reference",fmtOk:"in format",fmtNo:"free text",offFmt:"lines off format"}
+};
+var lang="fr"; try{lang=localStorage.getItem(KEY+"-lang")||((navigator.language||"fr").slice(0,2)==="en"?"en":"fr");}catch(e){}
+function t(k){return T[lang][k];}
+function cat(cap){var c=CARTE.categorie[lang];return cap?c.charAt(0).toUpperCase()+c.slice(1):c;}
+function fill(s){return s.replace("{categorie}",cat()).replace("{Categorie}",cat(true)).replace("{cat}",cat());}
+
+/* ---------- données ---------- */
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+function now(){return new Date().toISOString();}
+function S(v){return typeof v==="string"?v:"";}
+function N(v){v=Number(v);return isFinite(v)&&v>=0?v:0;}
+function blank(){return {schema:SCHEMA,lieu:{nom:"",adresse:"",note:""},lignes:[],enquetes:[],banc:blankBanc()};}
+function blankBanc(){return {prompts:[],versions:[{id:"sans",nom:"",skill:"",cree:now()}],essais:{}};}
+function newLigne(src){return {id:uid(),cree:now(),date:new Date().toISOString().slice(0,10),affirmation:"",statut:"",operation:"",resultat:"",reste:"",ms:0,depuis:null,enquete:src||""};}
+function newEnq(){return {id:uid(),cree:now(),titre:"",modele:"",tours:[],promptUnique:"",reponseUnique:"",meme:""};}
+function clean(d){
+  var o=blank(); if(!d||typeof d!=="object")return o;
+  var l=d.lieu||{}; o.lieu={nom:S(l.nom),adresse:S(l.adresse),note:S(l.note)};
+  o.lignes=(Array.isArray(d.lignes)?d.lignes:[]).map(function(x){x=x||{};var b=newLigne();
+    ["id","cree","date","affirmation","statut","operation","resultat","reste","enquete"].forEach(function(k){if(S(x[k]))b[k]=S(x[k]);});
+    b.ms=N(x.ms);b.depuis=typeof x.depuis==="number"?x.depuis:null;return b;});
+  var bc=d.banc||{}; o.banc=blankBanc();
+  o.banc.prompts=(Array.isArray(bc.prompts)?bc.prompts:[]).map(function(x){x=x||{};return {id:S(x.id)||uid(),texte:S(x.texte)};});
+  var vs=(Array.isArray(bc.versions)?bc.versions:[]).map(function(x){x=x||{};return {id:S(x.id)||uid(),nom:S(x.nom),skill:S(x.skill),cree:S(x.cree)||now()};});
+  if(!vs.some(function(v){return v.id==="sans";}))vs.unshift({id:"sans",nom:"",skill:"",cree:now()});
+  o.banc.versions=vs;
+  var es=bc.essais&&typeof bc.essais==="object"?bc.essais:{};
+  Object.keys(es).forEach(function(k){var x=es[k]||{};o.banc.essais[k]={reponse:S(x.reponse),cree:S(x.cree)||now(),registres:x.registres&&typeof x.registres==="object"?x.registres:{}};});
+  o.enquetes=(Array.isArray(d.enquetes)?d.enquetes:[]).map(function(x){x=x||{};var b=newEnq();
+    ["id","cree","titre","modele","promptUnique","reponseUnique","meme"].forEach(function(k){if(S(x[k]))b[k]=S(x[k]);});
+    b.tours=(Array.isArray(x.tours)?x.tours:[]).map(function(y){y=y||{};function obj(o){return o&&typeof o==="object"&&!Array.isArray(o)?o:{};}
+    return {id:S(y.id)||uid(),cree:S(y.cree)||now(),geste:typeof y.geste==="number"?y.geste:-1,prompt:S(y.prompt),reponse:S(y.reponse),registres:obj(y.registres),lettres:obj(y.lettres),envoyes:obj(y.envoyes),suggestion:Array.isArray(y.suggestion)?y.suggestion.map(function(s){s=s||{};return {label:S(s.label),prompt:S(s.prompt)};}):null};});
+    return b;});
+  return o;
+}
+
+/* ---------- stockage ---------- */
+var ok=true,data,st=null;
+function load(){try{var r=localStorage.getItem(KEY);data=r?clean(JSON.parse(r)):blank();}catch(e){ok=false;data=blank();banner(t("privateMode"));}}
+function save(){clearTimeout(st);st=setTimeout(flush,250);}
+function flush(){var el=document.getElementById("save");
+  if(!ok){el.textContent=t("notsaved");el.className="save err";return;}
+  try{localStorage.setItem(KEY,JSON.stringify(data));el.textContent=t("saved");el.className="save";}
+  catch(e){el.textContent=t("notsaved");el.className="save err";banner(t("privateMode"));}}
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="hidden"){clearTimeout(st);flush();}});
+window.addEventListener("pagehide",function(){clearTimeout(st);flush();});
+function banner(s){var b=document.getElementById("banner");b.textContent=s;b.hidden=false;}
+
+/* ---------- outils ---------- */
+function h(tag,a,kids){var e=document.createElement(tag);
+  if(a)for(var k in a){var v=a[k];if(k==="on")for(var ev in v)e.addEventListener(ev,v[ev]);else if(k==="text")e.textContent=v;else if(v===true)e.setAttribute(k,"");else if(v!==false&&v!=null)e.setAttribute(k,v);}
+  (kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==="string"?document.createTextNode(c):c);});return e;}
+function fld(lbl,type,val,set,ex){var i=type==="textarea"?h("textarea",ex):h("input",Object.assign({type:type},ex||{}));i.value=val||"";i.addEventListener("input",function(){set(i.value);save();});return h("div",null,[h("label",{text:lbl}),i]);}
+function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},1900);}
+function fmt(ms){var s=Math.round(ms/1000),m=Math.floor(s/60);s%=60;return m+":"+(s<10?"0":"")+s;}
+function msOf(l){return l.ms+(l.depuis?Date.now()-l.depuis:0);}
+function day(iso){try{return new Date(iso).toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"numeric",month:"short"});}catch(e){return iso;}}
+function enq(id){for(var i=0;i<data.enquetes.length;i++)if(data.enquetes[i].id===id)return data.enquetes[i];return null;}
+function confirmDel(msg,cb){var f=document.getElementById("dlgf");f.innerHTML="";
+  f.appendChild(h("p",{text:msg,style:"font-family:var(--sans)"}));
+  f.appendChild(h("div",{class:"row",style:"justify-content:flex-end"},[h("button",{class:"txtbtn quiet",value:"n",text:t("cancel")}),h("button",{class:"act",value:"y",text:t("del")})]));
+  var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
+
+/* ---------- vues ---------- */
+var app=document.getElementById("app"),view={tab:"journal",enq:null,open:null};
+(function(){var x=location.hash.slice(1);var q=x.split(":");if(["journal","model","banc","carte","garder"].indexOf(q[0])>=0){view.tab=q[0];if(q[1])view.enq=q[1];}})();
+var TABS=[["journal","✎"],["model","⌨"],["banc","⚖"],["carte","O"],["garder","⇪"]];
+function go(tab,id){view={tab:tab,enq:id||null,open:null,g:-1,nextPrompt:""};render();window.scrollTo(0,0);}
+function render(){
+  document.documentElement.lang=lang; document.getElementById("lang").textContent=lang==="fr"?"en":"fr";
+  app.innerHTML=""; app.className="page"; var tb=document.getElementById("tabs"); tb.innerHTML="";
+  TABS.forEach(function(x){tb.appendChild(h("button",{"aria-current":String(view.tab===x[0]),on:{click:function(){go(x[0]);}}},[t(x[0]).toLowerCase()]));});
+  ({journal:vJournal,model:view.enq&&enq(view.enq)?vEnq:vEnqs,banc:vBanc,carte:vCarte,garder:vGarder})[view.tab]();
+}
+
+function vJournal(){
+  app.appendChild(top(t("journal")));
+  app.appendChild(h("p",{class:"s",text:fill(t("jIntro"))}));
+  var ms=0,dit=0; data.lignes.forEach(function(l){ms+=msOf(l);if(l.resultat==="dit")dit++;});
+  app.appendChild(h("div",{class:"stats"},[stat(data.lignes.length,t("lines")),stat(dit,t("dit")),stat(fmt(ms),t("time"))]));
+  app.appendChild(h("button",{class:"act",text:t("newLine").replace("+ ","").toUpperCase(),on:{click:function(){var l=newLigne();data.lignes.push(l);view.open=l.id;save();render();var a=app.querySelector("details[open] textarea");if(a)a.focus();}}}));
+  if(!data.lignes.length)app.appendChild(h("div",{class:"empty",text:t("noLines")}));
+  data.lignes.slice().reverse().forEach(function(l){app.appendChild(entry(l));});
+}
+function top(label){return h("div",{class:"top"},[h("span",{class:"k",text:label.toLowerCase()}),h("span",{class:"tag",text:"O · R · I · X"})]);}
+function stat(v,s){return h("div",null,[h("b",{text:String(v)}),h("span",{text:s})]);}
+function entry(l){
+  var d=h("details",{class:"entry",open:view.open===l.id});
+  d.addEventListener("toggle",function(){if(d.open)view.open=l.id;else if(view.open===l.id)view.open=null;});
+  var e=l.enquete&&enq(l.enquete);
+  d.appendChild(h("summary",null,[h("div",{class:"ln"},[h("span",{class:"meta",text:l.statut||"·"}),h("span",null,[
+    h("span",{class:"txt aff",text:l.affirmation||"…"}),
+    h("div",{class:"sub",text:[l.date,l.resultat?t("R")[l.resultat]:"",(l.ms||l.depuis)?fmt(msOf(l)):"",e?(e.titre||t("model")):""].filter(Boolean).join(" · ")})])])]));
+  d.appendChild(fld(t("date"),"date",l.date,function(v){l.date=v;}));
+  d.appendChild(fld(t("aff"),"textarea",l.affirmation,function(v){l.affirmation=v;var a=d.querySelector(".aff");if(a)a.textContent=v||"…";}));
+  d.appendChild(h("label",{text:cat(true)}));
+  d.appendChild(h("div",{class:"letters"},CARTE.lettres.map(function(L){return h("button",{class:L.l==="X"?"x":"","aria-pressed":String(l.statut===L.l),title:L.nom,text:L.l,on:{click:function(){l.statut=l.statut===L.l?"":L.l;view.open=l.id;save();render();}}});})));
+  d.appendChild(fld(t("op"),"textarea",l.operation,function(v){l.operation=v;}));
+  d.appendChild(h("label",{text:t("res")}));
+  d.appendChild(h("div",{class:"seg"},Object.keys(t("R")).map(function(k){return h("button",{class:"opt","aria-pressed":String(l.resultat===k),text:t("R")[k],on:{click:function(){l.resultat=l.resultat===k?"":k;view.open=l.id;save();render();}}});})));
+  d.appendChild(fld(t("rest"),"textarea",l.reste,function(v){l.reste=v;}));
+  d.appendChild(h("label",{text:t("time")}));
+  var c=h("span",{class:"clock","data-id":l.id,text:fmt(msOf(l))});
+  d.appendChild(h("div",{class:"timer"+(l.depuis?" on":"")},[c,
+    h("button",{class:"txtbtn",text:l.depuis?t("stop"):t("chrono"),on:{click:function(){if(l.depuis){l.ms+=Date.now()-l.depuis;l.depuis=null;}else l.depuis=Date.now();view.open=l.id;save();render();}}}),
+    h("button",{class:"txtbtn quiet",text:t("plus1"),on:{click:function(){l.ms+=60000;view.open=l.id;save();render();}}})]));
+  d.appendChild(h("div",{class:"row",style:"margin-top:14px;justify-content:space-between"},[
+    h("button",{class:"txtbtn",text:t("close"),on:{click:function(){view.open=null;render();}}}),
+    h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delQ"),function(){data.lignes=data.lignes.filter(function(x){return x.id!==l.id;});save();render();});}}})]));
+  return d;
+}
+setInterval(function(){if(!data)return;data.lignes.forEach(function(l){if(!l.depuis)return;var c=app.querySelector('.clock[data-id="'+l.id+'"]');if(c)c.textContent=fmt(msOf(l));});},1000);
+
+function vEnqs(){
+  app.appendChild(top(t("model")));
+  app.appendChild(h("p",{class:"s",text:t("mIntro")}));
+  var fp=h("pre",{class:"raw",text:ANALYSE.format[lang]});
+  app.appendChild(h("label",{text:t("fmtPrompt")}));app.appendChild(fp);
+  app.appendChild(h("button",{class:"txtbtn",text:t("copyPrompt"),on:{click:function(){copy(ANALYSE.format[lang]);}}}));
+  app.appendChild(h("p",{class:"s",text:t("fmtHint")}));
+  app.appendChild(h("button",{class:"act",text:t("newEnq").replace("+ ","").toUpperCase(),on:{click:function(){var e=newEnq();data.enquetes.push(e);save();go("model",e.id);}}}));
+  if(!data.enquetes.length)app.appendChild(h("div",{class:"empty",text:t("noEnq")}));
+  data.enquetes.slice().reverse().forEach(function(e){
+    var n=data.lignes.filter(function(l){return l.enquete===e.id;}).length;
+    app.appendChild(h("button",{class:"item",on:{click:function(){go("model",e.id);}}},[e.titre||"…",h("small",{text:(e.modele||"—")+" · "+e.tours.length+" "+t("turns")+" · "+n+" "+t("lines")+" · "+day(e.cree)})]));
+  });
+}
+function vEnq(){
+  var e=enq(view.enq);
+  app.appendChild(top(t("model")));
+  app.appendChild(h("button",{class:"txtbtn quiet",text:t("back"),on:{click:function(){go("model");}}}));
+  app.appendChild(fld(t("title"),"text",e.titre,function(v){e.titre=v;}));
+  app.appendChild(fld(t("modelName"),"text",e.modele,function(v){e.modele=v;},{placeholder:"Claude, ChatGPT, Gemini…"}));
+  var prev=null;
+  e.tours.forEach(function(x,i){
+    var a=ANALYSE.analyse(x.reponse), isLast=i===e.tours.length-1;
+    var box=h("details",{class:"tour",open:isLast});
+    var sum=h("summary",null,[h("span",{class:"help",text:(t("turn")+" "+(i+1)+(x.geste>=0?" · "+t("G")[x.geste]:"")).toLowerCase()}),
+      h("div",{class:"sub",text:a.stats.affirmations+" "+t("st").affirmations+" · "+a.stats.references+" "+t("st").references+" · "+a.stats.mots+" "+t("st").mots+(prev?"  ("+t("vsPrev")+" : "+prev.stats.affirmations+" · "+prev.stats.references+" · "+prev.stats.mots+")":"")})]);
+    box.appendChild(sum);
+    box.appendChild(h("label",{text:t("prompt")}));box.appendChild(h("pre",{class:"raw",text:x.prompt}));
+    box.appendChild(h("label",{text:t("answer")}));box.appendChild(h("pre",{class:"raw",text:x.reponse}));
+    box.appendChild(analysePanel(e,x,a,isLast));
+    box.appendChild(h("div",{class:"row",style:"margin-top:10px"},[h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delTurnQ"),function(){e.tours.splice(i,1);save();render();});}}})]));
+    app.appendChild(box); prev=a;
+  });
+  var nb=h("div",{class:"page",id:"newturn"});
+  nb.appendChild(h("p",{class:"med",text:t("turn")+" "+(e.tours.length+1)}));
+  nb.appendChild(h("label",{text:t("gesture")}));
+  var seg=h("div",{class:"seg"});
+  function paint(){seg.innerHTML="";t("G").forEach(function(s,k){seg.appendChild(h("button",{class:"opt","aria-pressed":String(view.g===k),text:s,on:{click:function(){view.g=view.g===k?-1:k;paint();}}}));});}
+  if(view.g===undefined)view.g=-1; paint(); nb.appendChild(seg);
+  var tp=h("textarea",{class:"raw"}),tr=h("textarea",{class:"raw",placeholder:t("paste")});
+  tp.value=view.nextPrompt||(e.tours.length?"":"");
+  nb.appendChild(h("label",{text:t("prompt")}));nb.appendChild(tp);nb.appendChild(h("label",{text:t("answer")}));nb.appendChild(tr);
+  nb.appendChild(h("button",{class:"act",text:t("addTurn").toUpperCase(),on:{click:function(){
+    if(!tp.value.trim()||!tr.value.trim()){toast(t("needBoth"));return;}
+    var prevT=e.tours.length?e.tours[e.tours.length-1]:null, sug=null;
+    if(prevT){try{sug=ANALYSE.suggest(ANALYSE.analyse(prevT.reponse),prevT.registres,lang,e.tours[0].prompt).map(function(s){return {label:s.label,prompt:s.prompt};});}catch(err){sug=null;}}
+    e.tours.push({id:uid(),cree:now(),geste:view.g,prompt:tp.value,reponse:tr.value,registres:{},lettres:{},envoyes:{},suggestion:sug});view.g=-1;view.nextPrompt="";save();render();
+    var d=app.querySelectorAll("details.tour");if(d.length)d[d.length-1].scrollIntoView({behavior:"smooth"});}}}));
+  app.appendChild(nb);
+  var u=h("div",{class:"page"});
+  u.appendChild(h("hr",{class:"r"}));u.appendChild(h("p",{class:"med",text:t("single")}));u.appendChild(h("p",{class:"s",text:t("singleHint")}));
+  u.appendChild(fld(t("prompt"),"textarea",e.promptUnique,function(v){e.promptUnique=v;},{class:"raw"}));
+  u.appendChild(fld(t("singleAns"),"textarea",e.reponseUnique,function(v){e.reponseUnique=v;},{class:"raw"}));
+  u.appendChild(h("label",{text:t("same")}));
+  u.appendChild(h("div",{class:"seg"},[["oui","yes"],["proche","close2"],["non","no"]].map(function(o){return h("button",{class:"opt","aria-pressed":String(e.meme===o[0]),text:t(o[1]),on:{click:function(){e.meme=e.meme===o[0]?"":o[0];save();render();}}});})));
+  app.appendChild(u);
+  app.appendChild(h("div",{class:"row",style:"margin-top:18px"},[h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delEnqQ"),function(){data.enquetes=data.enquetes.filter(function(x){return x.id!==e.id;});data.lignes.forEach(function(l){if(l.enquete===e.id)l.enquete="";});save();go("model");});}}})]));
+}
+
+function analysePanel(e,x,a,isLast){
+  var p=h("div",{class:"page",style:"padding-top:.6em"});
+  p.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("an")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+  var S=a.stats, st=t("st");
+  p.appendChild(h("div",{class:"stats"},[stat(S.affirmations,st.affirmations),stat(S.references,st.references),stat(S.reserves,st.reserves)]));
+  p.appendChild(h("p",{class:"help",text:(a.format?[t("fmtOk")+" ("+a.format+(a.horsFormat?", "+a.horsFormat+" "+t("offFmt"):"")+")"]:[t("fmtNo")]).concat([S.mots+" "+st.mots,S.chiffres+" "+st.chiffres,S.verifieDit+" "+st.verifieDit,S.surLuiMeme+" "+st.surLuiMeme,S.offres+" "+st.offres]).join(" · ")}));
+  var hasIds=a.items.some(function(c){return ANALYSE.cles(c).length;});
+  if(hasIds){
+    var b=h("button",{class:"txtbtn",text:t("ask"),on:{click:function(){
+      b.disabled=true;b.textContent=t("asking");
+      ANALYSE.registres(a.items,x.registres,function(){save();}).then(function(){save();render();},function(){b.disabled=false;b.textContent=t("ask");});}}});
+    p.appendChild(b); p.appendChild(h("p",{class:"s",text:t("askHint")}));
+  }
+  a.items.forEach(function(c,i){
+    if(c.kind==="heading"){p.appendChild(h("p",{class:"help",text:c.text.toLowerCase()}));return;}
+    var tags=[];
+    if(c.kind!=="claim")tags.push(t("kind")[c.kind]);
+    c.d.dois.forEach(function(v){tags.push("doi "+v);});c.d.arxiv.forEach(function(v){tags.push("arXiv "+v);});c.d.isbns.forEach(function(v){tags.push("isbn "+v);});
+    c.d.urls.forEach(function(v){tags.push(v.replace(/^https?:\/\/(www\.)?/,"").split("/")[0]);});
+    c.d.titles.forEach(function(v){tags.push("« "+v.slice(0,50)+" »");});
+    c.d.years.forEach(function(v){tags.push(v);});c.d.pages.forEach(function(v){tags.push(v);});
+    c.d.numbers.forEach(function(v){tags.push(t("numTag")+" "+v);});
+    if(c.d.hedge)tags.push(t("hedgeTag"));if(c.d.self&&c.kind!=="offer")tags.push(t("selfTag"));
+    var letter=x.lettres[i]||"";
+    var row=h("div",{class:"ln",style:c.kind==="claim"?"":"opacity:.62"},[h("span",{class:"meta",text:letter||"·"}),h("div",null,[
+      h("div",{class:"txt",text:c.text}),
+      c.reference!==undefined?h("div",{class:"sub",text:t("refL")+" : "+(c.reference||"—")}):null,
+      c.reste!==undefined?h("div",{class:"sub",text:t("rest")+" : "+(c.reste||"—")}):null,
+      tags.length?h("div",{class:"sub",text:tags.join(" · ")}):null])]);
+    p.appendChild(row);
+    ANALYSE.cles(c).forEach(function(k){var r=x.registres[k];if(!r)return;
+      var line=h("div",{class:"m",style:"font-size:12px;margin:0 0 .4em 2.3em"},[(r.registre+" · "+(t("S")[r.statut]||r.statut)+(r.detail?"\n"+r.detail:""))]);
+      if(r.lien)line.appendChild(h("div",null,[h("a",{href:r.lien,target:"_blank",rel:"noopener",text:r.lien.replace(/^https?:\/\//,"").slice(0,60)})]));
+      p.appendChild(line);});
+    if(isLast&&c.kind==="claim"){
+      var ctl=h("div",{class:"row",style:"margin:0 0 .9em 2.3em;gap:10px"});
+      var lt=h("div",{class:"letters",style:"gap:6px"},CARTE.lettres.map(function(L){return h("button",{class:L.l==="X"?"x":"",style:"width:40px;height:40px;font-size:19px","aria-pressed":String(letter===L.l),text:L.l,on:{click:function(){x.lettres[i]=letter===L.l?"":L.l;save();render();}}});}));
+      ctl.appendChild(lt);
+      if(x.envoyes[i])ctl.appendChild(h("span",{class:"help",text:t("sent")}));
+      else ctl.appendChild(h("button",{class:"txtbtn",text:t("send"),on:{click:function(){
+        var l=newLigne(e.id);l.affirmation=c.text;l.statut=x.lettres[i]||"";if(c.reste)l.reste=c.reste;
+        l.operation=ANALYSE.cles(c).map(function(k){var r=x.registres[k];return r?(r.registre+", "+r.quand.slice(0,16).replace("T"," ")+" : "+(t("S")[r.statut]||r.statut)+(r.detail?" · "+r.detail.split("\n")[0]:"")):"";}).filter(Boolean).join(" ; ");
+        data.lignes.push(l);x.envoyes[i]=l.id;save();render();toast(t("sent"));}}}));
+      p.appendChild(ctl);
+    }
+  });
+  if(SUGGESTIONS&&x.suggestion){
+    p.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("next")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+    p.appendChild(h("p",{class:"s",text:t("cmpHint")}));
+    p.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:"↳"}),h("div",null,[h("div",{class:"sub",text:t("yours")}),h("div",{class:"txt",text:(x.geste>=0?t("G")[x.geste]:"—")}),h("pre",{class:"raw",text:x.prompt})])]));
+    (x.suggestion.length?x.suggestion:[{label:"—",prompt:t("noSuggest")}]).forEach(function(s){
+      p.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:"·"}),h("div",null,[h("div",{class:"sub",text:t("apps")}),h("div",{class:"txt",text:s.label}),h("pre",{class:"raw",text:s.prompt})])]));
+    });
+  }
+  return p;
+}
+
+function vname(v,i){return v.id==="sans"?t("sans"):(v.nom||("v"+(i-1)));}
+function metrics(vid){
+  var B=data.banc, m={faits:0,affirmations:0,identifiants:0,trouves:0,absents:0,aucune:0,reserves:0,mots:0,format:0};
+  B.prompts.forEach(function(pr){var es=B.essais[pr.id+"|"+vid];if(!es||!es.reponse.trim())return;
+    var a=ANALYSE.analyse(es.reponse);m.faits++;m.affirmations+=a.stats.affirmations;m.reserves+=a.stats.reserves;m.mots+=a.stats.mots;if(a.format)m.format++;
+    a.items.forEach(function(c){ANALYSE.cles(c).forEach(function(k){m.identifiants++;var r=es.registres[k];if(r&&r.statut==="trouve")m.trouves++;if(r&&r.statut==="absent")m.absents++;});
+      if(c.reference!==undefined&&/^\s*(aucune?|none|—|-)\s*\.?\s*$/i.test(c.reference))m.aucune++;});});
+  return m;
+}
+function vBanc(){
+  var B=data.banc;
+  app.appendChild(top(t("banc")));
+  app.appendChild(h("p",{class:"s",text:t("bIntro")}));
+  // comparaison
+  if(B.prompts.length){
+    app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("compare")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+    var tb=h("table"),hr=h("tr",null,[h("th",{text:""})]);
+    B.versions.forEach(function(v,i){hr.appendChild(h("th",{text:vname(v,i)}));});tb.appendChild(hr);
+    var ms=B.versions.map(function(v){return metrics(v.id);});
+    Object.keys(t("M")).forEach(function(k){var tr=h("tr",null,[h("th",{text:t("M")[k]})]);ms.forEach(function(m){tr.appendChild(h("td",null,[h("b",{text:String(m[k])})]));});tb.appendChild(tr);});
+    app.appendChild(h("div",{class:"grid"},[tb]));
+    var ask=h("button",{class:"txtbtn",text:t("askAll"),on:{click:function(){
+      ask.disabled=true;ask.textContent=t("asking");
+      var jobs=[];Object.keys(B.essais).forEach(function(k){var es=B.essais[k];if(es.reponse.trim())jobs.push(es);});
+      var i=0;(function next(){if(i>=jobs.length){save();render();return;}var es=jobs[i++];ANALYSE.registres(ANALYSE.analyse(es.reponse).items,es.registres,function(){save();}).then(next,next);})();}}});
+    app.appendChild(ask);
+  }
+  // prompts
+  app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("tests")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+  B.prompts.forEach(function(pr,pi){
+    var box=h("div",{class:"tour"});
+    box.appendChild(h("div",{class:"row",style:"justify-content:space-between"},[h("span",{class:"help",text:"#"+(pi+1)}),
+      h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delTestQ"),function(){B.prompts.splice(pi,1);Object.keys(B.essais).forEach(function(k){if(k.indexOf(pr.id+"|")===0)delete B.essais[k];});save();render();});}}})]));
+    box.appendChild(h("pre",{class:"raw",text:pr.texte}));
+    box.appendChild(h("div",{class:"row",style:"margin-top:6px"},[h("button",{class:"txtbtn quiet",text:t("copyPrompt"),on:{click:function(){copy(pr.texte);}}})].concat(
+      B.versions.map(function(v,vi){var k=pr.id+"|"+v.id,es=B.essais[k],done=es&&es.reponse.trim();
+        return h("button",{class:"cell"+(done?"":" vide"),text:vname(v,vi)+(done?" ✓":" · "+t("coller")),on:{click:function(){view.cell=view.cell===k?null:k;render();}}});}))));
+    if(view.cell&&view.cell.indexOf(pr.id+"|")===0){
+      var vid=view.cell.split("|")[1],vi=0,vv=B.versions.filter(function(v,i){if(v.id===vid)vi=i;return v.id===vid;})[0];
+      if(vv){var k2=view.cell,cur=B.essais[k2]||{reponse:"",cree:now(),registres:{}};
+        var ta=h("textarea",{class:"raw",placeholder:t("paste")});ta.value=cur.reponse;
+        ta.addEventListener("input",function(){cur.reponse=ta.value;cur.cree=now();cur.registres={};B.essais[k2]=cur;save();});
+        box.appendChild(h("label",{text:t("pasteFor")+" "+vname(vv,vi)}));box.appendChild(ta);
+        box.appendChild(h("button",{class:"txtbtn",text:t("close"),on:{click:function(){view.cell=null;render();}}}));}
+    }
+    app.appendChild(box);
+  });
+  var np=h("textarea",{class:"raw",placeholder:t("testPh")});
+  app.appendChild(np);
+  app.appendChild(h("button",{class:"act",text:t("addTest"),on:{click:function(){if(!np.value.trim())return;B.prompts.push({id:uid(),texte:np.value.trim()});save();render();}}}));
+  // versions
+  app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("versions")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+  B.versions.forEach(function(v,vi){
+    if(v.id==="sans"){app.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:"∅"}),h("span",{class:"txt",text:t("sans")})]));return;}
+    var box=h("details",{class:"tour",open:vi===B.versions.length-1});
+    box.appendChild(h("summary",null,[h("span",{class:"help",text:vname(v,vi)+" · "+day(v.cree)})]));
+    box.appendChild(fld(t("vName"),"text",v.nom,function(x){v.nom=x;},{placeholder:"v"+(vi-1)}));
+    box.appendChild(fld(t("skillText"),"textarea",v.skill,function(x){v.skill=x;},{class:"raw"}));
+    box.appendChild(h("div",{class:"row",style:"margin-top:6px"},[h("button",{class:"txtbtn",text:t("copySkill"),on:{click:function(){copy(v.skill);}}}),
+      h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delVersionQ"),function(){B.versions.splice(vi,1);Object.keys(B.essais).forEach(function(k){if(k.split("|")[1]===v.id)delete B.essais[k];});save();render();});}}})]));
+    app.appendChild(box);
+  });
+  app.appendChild(h("button",{class:"act",text:t("addVersion"),on:{click:function(){var last=B.versions[B.versions.length-1];B.versions.push({id:uid(),nom:"",skill:last&&last.id!=="sans"?last.skill:"",cree:now()});save();render();}}}));
+}
+
+function vCarte(){
+  app.appendChild(top(t("carte")));
+  var ns="http://www.w3.org/2000/svg", svg=document.createElementNS(ns,"svg");
+  svg.setAttribute("viewBox","0 0 320 320");svg.setAttribute("class","draw");svg.setAttribute("aria-label","O R I X");
+  svg.innerHTML='<g fill="none" stroke="currentColor" stroke-width="2.5"><rect x="20" y="20" width="280" height="280" rx="4"/><line x1="160" y1="20" x2="160" y2="300"/><line x1="20" y1="160" x2="300" y2="160"/></g><g fill="currentColor" font-family="Georgia,serif" font-size="88" text-anchor="middle"><text x="90" y="122">O</text><text x="230" y="122">R</text><text x="90" y="262">I</text><text x="230" y="262" style="fill:var(--orange)">X</text></g>';
+  app.appendChild(svg);
+  CARTE.lettres.forEach(function(L){var x=L[lang];
+    app.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:L.l}),h("span",{class:"txt"},[h("b",{text:L.nom}),document.createTextNode(" · "+x.def+"."),h("div",{class:"s",text:x.question+" · "+x.piege})])]));});
+  app.appendChild(h("p",{class:"l",text:fill(CARTE.titre[lang]).replace(/^O·R·I·X ?: ?/,"")}));
+  app.appendChild(top(t("rules")));
+  CARTE.regles[lang].forEach(function(r){app.appendChild(h("p",{class:"med",text:fill(r).split(". ")[0]}));app.appendChild(h("p",{class:"s",text:fill(r).split(". ").slice(1).join(". ")}));});
+  app.appendChild(h("p",{class:"help",text:CARTE.actions.join(" · ")}));
+  app.appendChild(top(t("lieu")));
+  app.appendChild(h("p",{class:"s",text:t("lieuHint")}));
+  app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;}));
+  app.appendChild(fld(t("addr"),"text",data.lieu.adresse,function(v){data.lieu.adresse=v;}));
+  app.appendChild(fld(t("why"),"textarea",data.lieu.note,function(v){data.lieu.note=v;}));
+}
+
+function vGarder(){
+  app.appendChild(top(t("garder")));
+  app.appendChild(h("p",{class:"s",text:t("gIntro")}));
+  app.appendChild(h("div",{class:"row"},[
+    h("button",{class:"act",text:t("exJson").toUpperCase(),on:{click:function(){share(JSON.stringify(data,null,2),fname()+".json","application/json");}}}),
+    h("button",{class:"txtbtn",text:t("exMd"),on:{click:function(){share(md(),fname()+".md","text/markdown");}}}),
+    h("button",{class:"txtbtn",text:t("copy"),on:{click:function(){copy(md());}}}),
+    h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})]));
+  app.appendChild(h("pre",{class:"out",text:md()}));
+}
+function fname(){return "judging-ai-"+(data.lieu.nom||"journal").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w-]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+new Date().toISOString().slice(0,10);}
+function fence(s){s=s||"";var f="```";while(s.indexOf(f)>=0)f+="`";return f+"\n"+s+"\n"+f;}
+function md(){
+  var L=["# "+(data.lieu.nom||t("lieu")),""]; if(data.lieu.adresse)L.push(data.lieu.adresse,""); if(data.lieu.note)L.push(data.lieu.note,"");
+  function cell(s){return String(s||"").replace(/\|/g,"\\|").replace(/\r?\n/g," ");}
+  L.push("## "+t("journal"),"","| "+[t("date"),t("aff"),cat(true),t("op"),t("res"),t("rest"),t("time")].join(" | ")+" |","|---|---|---|---|---|---|---|");
+  data.lignes.forEach(function(l){L.push("| "+[l.date,l.affirmation,l.statut,l.operation,l.resultat?t("R")[l.resultat]:"",l.reste,fmt(msOf(l))].map(cell).join(" | ")+" |");});
+  data.enquetes.forEach(function(e){
+    L.push("","## "+t("model")+" · "+(e.titre||"…"),"",t("modelName")+" : "+(e.modele||"—"),"");
+    e.tours.forEach(function(x,i){L.push("### "+t("turn")+" "+(i+1)+(x.geste>=0?" · "+t("G")[x.geste]:""),"",fence(x.prompt),"",fence(x.reponse),"");});
+    if(e.promptUnique)L.push("### "+t("single"),"",fence(e.promptUnique),"",fence(e.reponseUnique),"");
+  });
+  var B=data.banc;
+  if(B&&B.prompts.length){
+    L.push("","## "+t("banc"),"");
+    var head=["",].concat(B.versions.map(function(v,i){return vname(v,i);}));
+    L.push("| "+head.join(" | ")+" |","|"+head.map(function(){return "---";}).join("|")+"|");
+    var ms=B.versions.map(function(v){return metrics(v.id);});
+    Object.keys(t("M")).forEach(function(k){L.push("| "+[t("M")[k]].concat(ms.map(function(m){return String(m[k]);})).join(" | ")+" |");});
+    B.versions.forEach(function(v,i){if(v.id!=="sans")L.push("","### "+vname(v,i)+" · "+v.cree.slice(0,10),"",fence(v.skill));});
+    B.prompts.forEach(function(pr,pi){L.push("","### #"+(pi+1),"",fence(pr.texte));B.versions.forEach(function(v,i){var es=B.essais[pr.id+"|"+v.id];if(es&&es.reponse.trim())L.push("","**"+vname(v,i)+"**","",fence(es.reponse));});});
+  }
+  return L.join("\n");
+}
+function markExport(){try{localStorage.setItem(KEY+"-export",String(Date.now()));}catch(e){}}
+function share(text,name,type){
+  try{if(navigator.canShare&&typeof File==="function"){var f=new File([text],name,{type:type});
+    if(navigator.canShare({files:[f]})){navigator.share({files:[f],title:name}).then(markExport).catch(function(err){if(!err||err.name!=="AbortError")dl(text,name,type);});return;}}}catch(e){}
+  dl(text,name,type);
+}
+function dl(text,name,type){try{var u=URL.createObjectURL(new Blob([text],{type:type+";charset=utf-8"})),a=h("a",{href:u,download:name});document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(u);a.remove();},2000);markExport();}catch(e){copy(text);}}
+function copy(text){function fb(){var x=h("textarea",{style:"position:fixed;top:0;opacity:0"});x.value=text;document.body.appendChild(x);x.select();try{document.execCommand("copy");toast(t("copied"));}catch(e){}x.remove();}
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(text).then(function(){toast(t("copied"));},fb);else fb();}
+document.getElementById("fileIn").addEventListener("change",function(ev){
+  var f=ev.target.files&&ev.target.files[0];ev.target.value="";if(!f)return;var r=new FileReader();
+  r.onload=function(){var inc;try{inc=clean(JSON.parse(r.result));}catch(e){toast(t("bad"));return;}
+    var have={};data.lignes.concat(data.enquetes).forEach(function(x){have[x.id]=1;});var a=0,b=0;
+    inc.lignes.forEach(function(x){if(!have[x.id]){data.lignes.push(x);a++;}});inc.enquetes.forEach(function(x){if(!have[x.id]){data.enquetes.push(x);b++;}});
+    if(!data.lieu.nom&&inc.lieu.nom)data.lieu=inc.lieu;
+    if(!data.banc.prompts.length&&inc.banc.prompts.length)data.banc=inc.banc;save();render();toast(t("imported").replace("{a}",a).replace("{b}",b));};
+  r.readAsText(f);
+});
+
+/* ---------- thème, langue, démarrage ---------- */
+var theme=""; try{theme=localStorage.getItem(KEY+"-theme")||"";}catch(e){}
+function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}
+applyTheme();
+document.getElementById("theme").addEventListener("click",function(){
+  var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  theme=dark?"light":"dark";applyTheme();try{localStorage.setItem(KEY+"-theme",theme);}catch(e){}});
+document.getElementById("lang").addEventListener("click",function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem(KEY+"-lang",lang);}catch(e){}render();});
+
+load();
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+(function(){
+  if(!ok)return;
+  var standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  var last=0;try{last=Number(localStorage.getItem(KEY+"-export"))||0;}catch(e){}
+  if(ios&&!standalone)banner(t("ios"));else if(data.lignes.length&&Date.now()-last>6*864e5)banner(t("old"));
+})();
+render();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0){navigator.serviceWorker.register("../sw.js").catch(function(){});}
+})();
+</script>
+</body>
+</html>
