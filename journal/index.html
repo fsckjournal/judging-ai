@@ -509,9 +509,9 @@ fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",
  cond:"les conditions",attendu:"La différence attendue (écrite avant le banc)",condModel:"Modèle affiché (et version, sinon « non indiquée »)",condDate:"Date",condWeb:"Accès web",condOrder:"Ordre des deux essais",web:{oui:"oui",non:"non"},order:{sans:"sans, puis avec",avec:"avec, puis sans"},
  lecture:"la lecture",LE:{etaye:"étayées",contredit:"contredites",nonres:"non résolues",utilisable:"utilisables pour le lieu",minutes:"minutes"},autoCounts:"comptes automatiques",
  reg:{wiki:"Wikipédia",lien:"lien",recherche:"recherche"},D:{olAbsent:"absent d'Open Library, ce qui ne prouve pas que le livre n'existe pas",aucunCand:"aucun candidat",aOuvrir:"à ouvrir soi-même ; archive : ",pageAbs:"page inexistante"},
- one:{affirmations:"affirmation",references:"référence",mots:"mot"},col:" : ",
+ one:{affirmations:"affirmation",references:"référence",mots:"mot",turns:"tour",lines:"ligne"},col:" : ",
  banc:"Banc",bIntro:"Les mêmes prompts, sans puis avec votre Skill, version après version. L'app compare ce qui revient ; c'est vous qui décidez ce que ça veut dire.",
- tests:"les prompts d'essai",addTest:"AJOUTER LE PROMPT",testPh:"Un prompt d'essai, par exemple une question qui a fait inventer le modèle",
+ tests:"les prompts d'essai",addTest:"AJOUTER LE PROMPT",testPh:"Un prompt d'essai, par exemple une question qui a fait inventer le modèle",noTests:"Aucun prompt d'essai.",
  versions:"les versions",sans:"sans Skill",addVersion:"NOUVELLE VERSION",vName:"Nom de la version",skillText:"Le texte de la Skill (les instructions données au modèle)",copySkill:"copier la Skill",
  pasteFor:"Réponse pour",coller:"coller",compare:"la comparaison",
  M:{faits:"essais collés",affirmations:"affirmations",identifiants:"identifiants",trouves:"trouvés au registre",absents:"absents du registre",aucune:"« aucune » référence",reserves:"réserves",mots:"mots",format:"au format"},
@@ -534,7 +534,7 @@ fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",
  imported:"importé : {a} lignes, {b} enquêtes",bad:"Fichier illisible",
  ios:"iPhone : Partager → « Sur l'écran d'accueil ». Sinon Safari peut effacer ces données après 7 jours sans visite.",
  old:"Pas d'export depuis plus de 6 jours : onglet Garder.",privateMode:"Ce navigateur n'enregistre pas. Exportez avant de fermer.",
- rules:"Trois règles",
+ rules:"Trois repères",
  an:"analyse",st:{affirmations:"affirmations",references:"références",reserves:"réserves",verifieDit:"« vérifié » dit par le modèle",surLuiMeme:"sur lui-même",offres:"offres",mots:"mots",chiffres:"chiffres précis"},
  kind:{self:"le modèle parle de lui-même",offer:"offre"},hedgeTag:"réserve",selfTag:"dit « vérifié »",numTag:"chiffre",
  ask:"interroger les registres",asking:"registres…",askHint:"Envoie seulement les identifiants trouvés (DOI, ISBN, titres, liens Wikipédia) à Crossref, DataCite, Open Library, Wikipédia. Aucun modèle.",
@@ -549,9 +549,9 @@ en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",gar
  cond:"the conditions",attendu:"The expected difference (written before the bench)",condModel:"Displayed model (and version, otherwise “not shown”)",condDate:"Date",condWeb:"Web access",condOrder:"Order of the two runs",web:{oui:"yes",non:"no"},order:{sans:"without, then with",avec:"with, then without"},
  lecture:"the reading",LE:{etaye:"supported",contredit:"contradicted",nonres:"unresolved",utilisable:"usable for the place",minutes:"minutes"},autoCounts:"automatic counts",
  reg:{wiki:"Wikipedia",lien:"link",recherche:"search"},D:{olAbsent:"not in Open Library, which does not prove the book does not exist",aucunCand:"no candidate",aOuvrir:"open it yourself; archive: ",pageAbs:"no such page"},
- one:{affirmations:"claim",references:"reference",mots:"word"},col:": ",
+ one:{affirmations:"claim",references:"reference",mots:"word",turns:"turn",lines:"line"},col:": ",
  banc:"Bench",bIntro:"The same prompts, without and then with your Skill, version after version. The app compares what comes back; you decide what it means.",
- tests:"test prompts",addTest:"ADD PROMPT",testPh:"A test prompt, for example a question that made the model invent",
+ tests:"test prompts",addTest:"ADD PROMPT",testPh:"A test prompt, for example a question that made the model invent",noTests:"No test prompts.",
  versions:"versions",sans:"without Skill",addVersion:"NEW VERSION",vName:"Version name",skillText:"The Skill text (the instructions given to the model)",copySkill:"copy the Skill",
  pasteFor:"Answer for",coller:"paste",compare:"comparison",
  M:{faits:"runs pasted",affirmations:"claims",identifiants:"identifiers",trouves:"found in registry",absents:"not in registry",aucune:"“none” reference",reserves:"hedges",mots:"words",format:"in format"},
@@ -574,7 +574,7 @@ en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",gar
  imported:"imported: {a} lines, {b} inquiries",bad:"Unreadable file",
  ios:"iPhone: Share → “Add to Home Screen”. Otherwise Safari may erase this data after 7 days without a visit.",
  old:"No export for over 6 days: Keep tab.",privateMode:"This browser isn't saving. Export before closing.",
- rules:"Three rules",
+ rules:"Three reference points",
  an:"analysis",st:{affirmations:"claims",references:"references",reserves:"hedges",verifieDit:"“verified” said by the model",surLuiMeme:"about itself",offres:"offers",mots:"words",chiffres:"precise figures"},
  kind:{self:"the model talking about itself",offer:"offer"},hedgeTag:"hedge",selfTag:"says “verified”",numTag:"figure",
  ask:"ask the registries",asking:"registries…",askHint:"Sends only the identifiers found (DOI, ISBN, titles, Wikipedia links) to Crossref, DataCite, Open Library, Wikipedia. No model.",
@@ -585,6 +585,7 @@ en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",gar
 var lang="fr"; try{lang=localStorage.getItem(KEY+"-lang")==="en"?"en":"fr";}catch(e){}
 function t(k){return T[lang][k];}
 function plural(n,k){return n+" "+(n===1?t("one")[k]:t("st")[k]);}
+function pl(n,k){return n+" "+(n===1?t("one")[k]:t(k));}
 function regName(r){var n=r||"";if(/^Wikip[ée]dia$/.test(n))return t("reg").wiki;if(n==="lien")return t("reg").lien;return n.replace(" · recherche"," · "+t("reg").recherche);}
 var DETAIL_FR={"absent d'Open Library, ce qui ne prouve pas que le livre n'existe pas":"olAbsent","aucun candidat":"aucunCand","page inexistante":"pageAbs"};
 function detailTxt(d){d=d||"";if(DETAIL_FR[d])return t("D")[DETAIL_FR[d]];if(d.indexOf("à ouvrir soi-même ; archive : ")===0)return t("D").aOuvrir+d.slice(29);return d;}
@@ -719,7 +720,7 @@ function vEnqs(){
   if(!data.enquetes.length)app.appendChild(h("div",{class:"empty",text:t("noEnq")}));
   data.enquetes.slice().reverse().forEach(function(e){
     var n=data.lignes.filter(function(l){return l.enquete===e.id;}).length;
-    app.appendChild(h("button",{class:"item",on:{click:function(){go("model",e.id);}}},[e.titre||"…",h("small",{text:(e.modele||"—")+" · "+e.tours.length+" "+t("turns")+" · "+n+" "+t("lines")+" · "+day(e.cree)})]));
+    app.appendChild(h("button",{class:"item",on:{click:function(){go("model",e.id);}}},[e.titre||"…",h("small",{text:(e.modele||"—")+" · "+pl(e.tours.length,"turns")+" · "+pl(n,"lines")+" · "+day(e.cree)})]));
   });
 }
 function vEnq(){
@@ -916,8 +917,8 @@ function vGarder(){
   app.appendChild(h("div",{class:"row"},[
     h("button",{class:"act",text:t("exJson").toUpperCase(),on:{click:function(){share(JSON.stringify(data,null,2),fname()+".json","application/json");}}}),
     h("button",{class:"txtbtn",text:t("exMd"),on:{click:function(){share(md(),fname()+".md","text/markdown");}}})].concat(PLUS?[
-    h("button",{class:"txtbtn",text:t("copy"),on:{click:function(){copy(md());}}}),
-    h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})]:[])));
+    h("button",{class:"txtbtn",text:t("copy"),on:{click:function(){copy(md());}}})]:[]).concat([
+    h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})])));
   app.appendChild(top(t("lieu")));
   app.appendChild(h("p",{class:"s",text:t("lieuHint")}));
   app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;}));
@@ -938,16 +939,20 @@ function md(){
     if(e.promptUnique)L.push("### "+t("single"),"",fence(e.promptUnique),"",fence(e.reponseUnique),"");
   });
   var B=data.banc;
-  if(B&&B.prompts.length){
-    L.push("","## "+t("banc"),"");
-    var head=["",].concat(B.versions.map(function(v,i){return vname(v,i);}));
-    L.push("| "+head.join(" | ")+" |","|"+head.map(function(){return "---";}).join("|")+"|");
-    var Cn=B.conditions||{};L.splice(L.length-2,0,t("attendu")+t("col")+(Cn.attendu||"—"),"",t("condModel")+t("col")+(Cn.modele||"—")+" · "+t("condDate")+t("col")+(Cn.date||"—")+" · "+t("condWeb")+t("col")+(t("web")[Cn.web]||"—")+" · "+t("condOrder")+t("col")+(t("order")[Cn.ordre]||"—"),"");
-    var lc=B.versions.map(function(v){return lecture(v.id);});Object.keys(t("LE")).forEach(function(k){L.push("| "+[t("LE")[k]].concat(lc.map(function(m){return m[k];})).join(" | ")+" |");});
-    var ms=B.versions.map(function(v){return metrics(v.id);});
-    Object.keys(t("M")).forEach(function(k){L.push("| "+[t("M")[k]].concat(ms.map(function(m){return String(m[k]);})).join(" | ")+" |");});
-    B.versions.forEach(function(v,i){if(v.id!=="sans")L.push("","### "+vname(v,i)+" · "+v.cree.slice(0,10),"",fence(v.skill));});
-    B.prompts.forEach(function(pr,pi){L.push("","### #"+(pi+1),"",fence(pr.texte));B.versions.forEach(function(v,i){var es=B.essais[pr.id+"|"+v.id];if(es&&es.reponse.trim())L.push("","**"+vname(v,i)+"**","",fence(es.reponse));});});
+  if(B){
+    var Cn=B.conditions||{};
+    L.push("","## "+t("banc"),"",t("attendu")+t("col")+(Cn.attendu||"—"),"",
+      t("condModel")+t("col")+(Cn.modele||"—")+" · "+t("condDate")+t("col")+(Cn.date||"—")+" · "+t("condWeb")+t("col")+(t("web")[Cn.web]||"—")+" · "+t("condOrder")+t("col")+(t("order")[Cn.ordre]||"—"),"");
+    if(!B.prompts.length)L.push(t("noTests"),"");
+    else{
+      var head=[""].concat(B.versions.map(function(v,i){return vname(v,i);}));
+      L.push("| "+head.join(" | ")+" |","|"+head.map(function(){return "---";}).join("|")+"|");
+      var lc=B.versions.map(function(v){return lecture(v.id);});Object.keys(t("LE")).forEach(function(k){L.push("| "+[t("LE")[k]].concat(lc.map(function(m){return m[k];})).join(" | ")+" |");});
+      var ms=B.versions.map(function(v){return metrics(v.id);});
+      Object.keys(t("M")).forEach(function(k){L.push("| "+[t("M")[k]].concat(ms.map(function(m){return String(m[k]);})).join(" | ")+" |");});
+      B.versions.forEach(function(v,i){if(v.id!=="sans")L.push("","### "+vname(v,i)+" · "+v.cree.slice(0,10),"",fence(v.skill));});
+      B.prompts.forEach(function(pr,pi){L.push("","### #"+(pi+1),"",fence(pr.texte));B.versions.forEach(function(v,i){var es=B.essais[pr.id+"|"+v.id];if(es&&es.reponse.trim())L.push("","**"+vname(v,i)+"**","",fence(es.reponse));});});
+    }
   }
   return L.join("\n");
 }
