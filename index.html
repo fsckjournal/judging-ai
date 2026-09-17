@@ -30,7 +30,7 @@ html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 v
 
 /* l'en-tête d'une page : étiquette mono à gauche, boîte O·R·I·X à droite, filet orange */
 .top{position:relative;height:2px;background:var(--orange);margin-top:2.6em}
-.top .k{position:absolute;left:0;top:-1.9em;color:var(--sourd);font:500 13px/1 var(--mono);letter-spacing:.08em;padding:.5em 0}
+.top .k{position:absolute;left:0;top:-2.0em;color:var(--sourd);font:500 15px/1 var(--mono);letter-spacing:.08em;padding:.5em 0}
 .top .tag{position:absolute;right:0;top:-2.05em;background:var(--orange);color:var(--sur-orange);font:700 14px/1 var(--serif);letter-spacing:.28em;padding:.55em .8em .55em 1em;white-space:nowrap}
 
 /* les voix */
@@ -55,7 +55,7 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 .draw{width:min(46vw,220px);height:auto}
 .help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
 
-.hd{max-width:760px;margin:0 auto;padding:10px 18px 0;display:flex;gap:14px;align-items:center;font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
+.hd{max-width:760px;margin:0 auto;padding:10px 18px 0;display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
 .hd .sp{flex:1}
 .hd .lg b{color:var(--encre);font-weight:600}
 .hd{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
@@ -63,11 +63,15 @@ main{padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px
 .hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px}
 main{max-width:760px;margin:0 auto;padding:0 18px 60px;display:flex;flex-direction:column;gap:.9em}
 .sec{display:flex;flex-direction:column;gap:.8em;padding-top:1.6em}
-.act{display:inline-block;background:var(--orange);color:var(--sur-orange);text-decoration:none;font:700 14px/46px var(--serif);letter-spacing:.2em;padding:0 1.1em;align-self:flex-start}
+.act{display:inline-block;background:var(--orange);color:var(--sur-orange);text-decoration:none;font:700 17px/54px var(--serif);letter-spacing:.14em;padding:0 1.4em;align-self:flex-start}
+.lnk{align-self:flex-start;color:var(--encre);font:500 17px/1.5 var(--sans);text-decoration:underline;text-decoration-color:var(--orange);text-decoration-thickness:2px;text-underline-offset:5px;padding:.4em 0}
+.intro{font:400 clamp(17px,4.2vw,20px)/1.5 var(--sans);color:var(--encre2);margin:0}
+.mast{font:400 clamp(26px,7vw,40px)/1.15 var(--serif);margin:0}
+.mastsub{font:500 13px/1.5 var(--mono);color:var(--sourd);margin:0;letter-spacing:.04em}
 .ln{margin:0}
 .ln.now .meta{color:var(--encre)}
 .ln.past .txt{color:var(--sourd)}
-.ln .sub{font:400 12px/1.5 var(--mono);color:var(--sourd)}
+.ln .sub{font:400 13.5px/1.55 var(--mono);color:var(--sourd)}
 .poids{font:400 30px/1 var(--serif)}
 a.plain{color:inherit;text-decoration:none}
 </style>
@@ -83,18 +87,23 @@ a.plain{color:inherit;text-decoration:none}
 var C=JSON.parse(document.getElementById("cours").textContent), K=JSON.parse(document.getElementById("carte").textContent);
 var KEY="judging-ai";
 var T={
- fr:{semaine:"cette semaine",semestre:"le semestre",carte:"la carte",journal:"le journal",travaux:"les travaux notés",lectures:"lectures avant la séance",ouvrir:"OUVRIR LE JOURNAL",voir:"voir la carte en entier",annonces:"annonces",installer:"Sur iPhone : Partager → « Sur l'écran d'accueil »."},
- en:{semaine:"this week",semestre:"the semester",carte:"the card",journal:"the journal",travaux:"graded work",lectures:"reading before the session",ouvrir:"OPEN THE JOURNAL",voir:"see the whole card",annonces:"announcements",installer:"On iPhone: Share → “Add to Home Screen”."}
+ fr:{semaine:"cette semaine",semestre:"le semestre",carte:"la carte",journal:"le journal",travaux:"les travaux notés",lectures:"lectures avant la séance",ouvrir:"OUVRIR LE JOURNAL",voir:"voir la carte en entier",annonces:"annonces",installer:"Sur iPhone : Partager → « Sur l'écran d'accueil ».",quoi:"La page du cours. Ce qui se passe vendredi, le journal que vous tenez sur votre téléphone, la carte O·R·I·X, et ce qui est noté.",ouvrirAide:"Le journal s'ouvre dans le navigateur et reste sur votre téléphone."},
+ en:{semaine:"this week",semestre:"the semester",carte:"the card",journal:"the journal",travaux:"graded work",lectures:"reading before the session",ouvrir:"OPEN THE JOURNAL",voir:"see the whole card",annonces:"announcements",installer:"On iPhone: Share → “Add to Home Screen”.",quoi:"The course page. What happens on Friday, the journal you keep on your phone, the O·R·I·X card, and what is graded.",ouvrirAide:"The journal opens in the browser and stays on your phone."}
 };
 var lang="fr";try{lang=localStorage.getItem("judging-ai-journal-lang")==="en"?"en":"fr";}catch(e){}
 var theme="";try{theme=localStorage.getItem("judging-ai-journal-theme")||"";}catch(e){}
 function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}
 function h(tag,a,kids){var e=document.createElement(tag);if(a)for(var k in a){var v=a[k];if(k==="text")e.textContent=v;else if(v!=null&&v!==false)e.setAttribute(k,v);}(kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==="string"?document.createTextNode(c):c);});return e;}
-function top(l){return h("div",{class:"top"},[h("span",{class:"k",text:l}),h("span",{class:"tag",text:"O · R · I · X"})]);}
+function top(l){return h("div",{class:"top"},[h("span",{class:"k",text:l})]);}
 function jour(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"numeric",month:"long"});}
 function render(){
   var t=T[lang], app=document.getElementById("app"); app.innerHTML="";
   document.documentElement.lang=lang; var lb=document.getElementById("lang"); lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>"; lb.setAttribute("aria-label",(lang==="fr"?"langue":"language")+" : "+lang); document.getElementById("theme").setAttribute("aria-label",lang==="fr"?"thème":"theme");
+  var first=C.seances[0], last=C.seances[C.seances.length-1];
+  app.appendChild(h("section",{class:"sec"},[
+    h("p",{class:"mast",text:"Juger l'IA"}),
+    h("p",{class:"mastsub",text:"ESAR · "+jour(first.date)+" → "+jour(last.date)}),
+    h("p",{class:"intro",text:t.quoi})]));
   var cur=C.seances.filter(function(s){return s.id===C.semaine;})[0];
   if(cur){
     var s=h("section",{class:"sec"},[top(t.semaine),h("p",{class:"k",style:"font:500 13px var(--mono);color:var(--sourd);margin:0",text:jour(cur.date)+" · "+cur.id}),h("p",{class:"big",text:cur[lang].titre}),h("p",{class:"l",text:cur[lang].detail})]);
@@ -102,7 +111,7 @@ function render(){
     app.appendChild(s);
   }
   if(C.annonces&&C.annonces.length){var an=h("section",{class:"sec"},[top(t.annonces)]);C.annonces.forEach(function(a){an.appendChild(h("p",{class:"l",text:a[lang]||a.fr||String(a)}));});app.appendChild(an);}
-  app.appendChild(h("section",{class:"sec"},[top(t.journal),h("a",{class:"act",href:"journal/",text:t.ouvrir}),h("p",{class:"s",text:t.installer})]));
+  app.appendChild(h("section",{class:"sec"},[top(t.journal),h("p",{class:"intro",text:t.ouvrirAide}),h("a",{class:"act",href:"journal/",text:t.ouvrir+" →"}),h("p",{class:"s",text:t.installer})]));
   var se=h("section",{class:"sec"},[top(t.semestre)]), past=true;
   C.seances.forEach(function(x){var now=x.id===C.semaine;if(now)past=false;
     se.appendChild(h("div",{class:"ln"+(now?" now":past?" past":"")},[h("span",{class:"meta",text:x.id}),h("div",null,[h("div",{class:"txt"},[h("b",{text:x[lang].titre})]),h("div",{class:"sub",text:jour(x.date)+" · "+x[lang].detail})])]));});
@@ -110,7 +119,7 @@ function render(){
   app.appendChild(se);
   var ca=h("section",{class:"sec"},[top(t.carte)]);
   K.lettres.forEach(function(L){ca.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:L.l}),h("span",{class:"txt"},[h("b",{text:L.nom}),document.createTextNode(" · "+L[lang].def+".")])]));});
-  ca.appendChild(h("a",{class:"txtlink",href:"journal/#carte",style:"font:500 13px var(--mono);color:var(--encre)",text:t.voir+" →"}));
+  ca.appendChild(h("a",{class:"lnk",href:"journal/#carte",text:t.voir+" →"}));
   app.appendChild(ca);
   var tr=h("section",{class:"sec"},[top(t.travaux)]);
   C.travaux.forEach(function(w){tr.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:w.poids?"":"·"}),h("div",null,[w.poids?h("div",{class:"poids",text:w.poids}):null,h("div",{class:"txt"},[h("b",{text:w[lang].titre})]),h("div",{class:"l",style:"font-size:16px;color:var(--encre2)",text:w[lang].detail}),h("div",{class:"sub",text:w[lang].quand})])]));});
