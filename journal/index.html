@@ -502,7 +502,13 @@ var PLUS=false; try{PLUS=localStorage.getItem("judging-ai-journal-plus")==="1";}
 /* ---------- langue ---------- */
 var T={
 fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Garder",saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",
- seance:"la séance",whatIs:"Votre carnet de la séance : ce que vous collez, ce que vous vérifiez, ce que vous gardez. Tout reste sur ce téléphone.",planIntro:"Quatre étapes, dans l'ordre. La carte est là quand vous doutez d'une lettre.",
+ seance:"la séance",
+ outils:"les outils",outilsIntro:"Un outil par binôme suffit. Installez celui de votre abonnement ; sinon on le fait ensemble en début de séance. Sur Mac : Terminal (⌘ + espace). Sur Windows : PowerShell.",
+ OUT:[["ChatGPT → Codex","curl -fsSL https://chatgpt.com/codex/install.sh | sh","npm install -g @openai/codex","Puis tapez codex, et « Sign in with ChatGPT »."],
+      ["Claude → Claude Code","curl -fsSL https://claude.ai/install.sh | bash","irm https://claude.ai/install.ps1 | iex","Puis tapez claude et connectez-vous."],
+      ["Gemini → Antigravity (agy)","curl -fsSL https://antigravity.google/cli/install.sh | bash","irm https://antigravity.google/cli/install.ps1 | iex","Puis tapez agy. Antigravity demande un abonnement Google AI Pro : l'essai gratuit d'un mois couvre les séances qui restent. Beaucoup d'autres choses sont ouvertes aux étudiants sur grow.google/students."]],
+ sansAb:"Aucun abonnement : ce n'est pas un obstacle, un seul ordinateur et un seul outil suffisent par binôme.",
+ whatIs:"Votre carnet de la séance : ce que vous collez, ce que vous vérifiez, ce que vous gardez. Tout reste sur ce téléphone.",planIntro:"Quatre étapes, dans l'ordre. La carte est là quand vous doutez d'une lettre.",
  steps:[["model","Coller chaque tour : votre prompt, sa réponse. Un geste par tour."],["journal","Une affirmation par ligne : une lettre, un résultat, les minutes."],["banc","La même question, sans puis avec la Skill, dans les mêmes conditions."],["garder","Exporter à la fin, garder le fichier."]],
  seeCard:"voir la carte",wink:"Cette app en sait plus qu'elle ne le dit. Comme les modèles.",unwink:"Bon, elle a tout avoué. Refermer les tiroirs.",plusOn:"Tiroirs ouverts.",plusOff:"Tiroirs refermés.",
  fmtPrompt:"le format commun",fmtHint:"Collez-le avec votre première question.",
@@ -542,7 +548,13 @@ fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",
  sent:"au journal ✓",send:"au journal",copyPrompt:"copier",
  vsPrev:"au tour précédent",paste:"Collez la réponse du modèle",refL:"référence",fmtOk:"au format",fmtNo:"texte libre",offFmt:"lignes hors format"},
 en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",
- seance:"the session",whatIs:"Your notebook for the session: what you paste, what you verify, what you keep. Everything stays on this phone.",planIntro:"Four steps, in order. The card is there when you doubt a letter.",
+ seance:"the session",
+ outils:"the tools",outilsIntro:"One tool per pair is enough. Install the one for your subscription; otherwise we do it together at the start. On Mac: Terminal (⌘ + space). On Windows: PowerShell.",
+ OUT:[["ChatGPT → Codex","curl -fsSL https://chatgpt.com/codex/install.sh | sh","npm install -g @openai/codex","Then type codex and choose “Sign in with ChatGPT”."],
+      ["Claude → Claude Code","curl -fsSL https://claude.ai/install.sh | bash","irm https://claude.ai/install.ps1 | iex","Then type claude and sign in."],
+      ["Gemini → Antigravity (agy)","curl -fsSL https://antigravity.google/cli/install.sh | bash","irm https://antigravity.google/cli/install.ps1 | iex","Then type agy. Antigravity needs a Google AI Pro subscription: the free one-month trial covers the remaining sessions. Much more is open to students at grow.google/students."]],
+ sansAb:"No subscription: not a problem, one computer and one tool are enough per pair.",
+ whatIs:"Your notebook for the session: what you paste, what you verify, what you keep. Everything stays on this phone.",planIntro:"Four steps, in order. The card is there when you doubt a letter.",
  steps:[["model","Paste each turn: your prompt, its answer. One move per turn."],["journal","One claim per line: a letter, a result, the minutes."],["banc","The same question, without then with the Skill, under the same conditions."],["garder","Export at the end, keep the file."]],
  seeCard:"see the card",wink:"This app knows more than it lets on. Like the models.",unwink:"Fine, it confessed everything. Close the drawers.",plusOn:"Drawers open.",plusOff:"Drawers closed.",
  fmtPrompt:"the shared format",fmtHint:"Paste it with your first question.",
@@ -670,6 +682,19 @@ function vPlan(){
   app.appendChild(h("p",{class:"s",text:t("planIntro")}));
   t("steps").forEach(function(st,i){app.appendChild(h("button",{class:"step",on:{click:function(){go(st[0]);}}},[h("span",{class:"n",text:String(i+1)}),h("b",{text:t(st[0])}),h("span",{class:"d",text:st[1]})]));});
   app.appendChild(h("button",{class:"txtbtn",text:t("seeCard")+" →",on:{click:function(){go("carte");}}}));
+  app.appendChild(top(t("outils")));
+  app.appendChild(h("p",{class:"s",text:t("outilsIntro")}));
+  t("OUT").forEach(function(o){
+    var d=h("details",{class:"entry"},[h("summary",null,[h("div",{class:"ln"},[h("span",{class:"meta",text:"\u203a"}),h("span",{class:"txt"},[h("b",{text:o[0]})])])])]);
+    [["macOS",o[1]],["Windows",o[2]]].forEach(function(c){
+      d.appendChild(h("p",{class:"sub",style:"margin:.6em 0 .2em",text:c[0]}));
+      d.appendChild(h("p",{class:"m",text:c[1]}));
+      d.appendChild(h("button",{class:"txtbtn",text:t("copyPrompt")+" · "+c[0],on:{click:function(){copy(c[1]);}}}));
+    });
+    d.appendChild(h("p",{class:"s",style:"margin-top:.7em",text:o[3]}));
+    app.appendChild(d);
+  });
+  app.appendChild(h("p",{class:"s",text:t("sansAb")}));
   app.appendChild(h("button",{class:"wink",text:PLUS?t("unwink"):t("wink"),on:{click:function(){PLUS=!PLUS;try{localStorage.setItem("judging-ai-journal-plus",PLUS?"1":"0");}catch(e){}render();toast(PLUS?t("plusOn"):t("plusOff"));}}}));
 }
 function vJournal(){
