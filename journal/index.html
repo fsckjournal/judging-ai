@@ -56,13 +56,13 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 .help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
 
 button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{max-width:760px;margin:0 auto;padding:10px 18px 0;display:flex;gap:14px;align-items:center;font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
+.hd{max-width:760px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 12px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
 .hd .sp{flex:1}
 .hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px}
 .save.err{color:var(--orange)}
-main{max-width:760px;margin:0 auto;padding:0 18px calc(96px + env(safe-area-inset-bottom,0px))}
+main{max-width:760px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) calc(104px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
 .page{display:flex;flex-direction:column;gap:.9em;padding-top:1.6em}
-nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--fond);border-top:1px solid var(--trait);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--fond);border-top:1px solid var(--trait);padding:0 max(20px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
 nav .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
 nav button{background:none;border:0;border-top:2px solid transparent;min-height:56px;color:var(--sourd);font:500 11px/1 var(--mono);letter-spacing:.04em;padding:0 2px}
 .grid{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -120,18 +120,37 @@ dialog{background:var(--fond);color:var(--encre);border:0;border-top:2px solid v
 dialog::backdrop{background:rgba(0,0,0,.6)}
 .toast{position:fixed;left:18px;right:18px;bottom:calc(66px + env(safe-area-inset-bottom,0px));background:var(--encre);color:var(--fond);padding:10px 14px;font:400 13px/1.4 var(--mono);opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
+.hd .lg b{color:var(--encre);font-weight:600}
+.save{font-size:11px;opacity:.8}
+.step{display:grid;grid-template-columns:2.2em 1fr;gap:0 .6em;width:100%;text-align:left;background:none;border:0;border-top:1px solid var(--trait);border-radius:0;color:var(--encre);padding:.9em 0}
+.step .n{font:400 30px/1 var(--serif);color:var(--orange)}
+.step b{font:400 22px/1.2 var(--serif)}
+.step span.d{grid-column:2;font:400 15px/1.45 var(--sans);color:var(--sourd)}
+.wink{background:none;border:0;color:var(--sourd);font:italic 400 15px/1.4 var(--serif);text-align:left;padding:.4em 0;min-height:44px;align-self:flex-start}
+.num{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px 16px}
+.num input{width:100%;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:6px 0;font:400 17px var(--sans)}
+.num label{margin:.7em 0 .2em}
+@media (orientation:landscape) and (max-height:500px){
+ .hd{padding-top:4px} .hd button{min-height:32px}
+ .page{padding-top:.7em;gap:.6em}
+ nav button{min-height:40px}
+ nav{padding-bottom:max(6px,env(safe-area-inset-bottom,0px))}
+ main{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))}
+ .toast{bottom:calc(52px + env(safe-area-inset-bottom,0px))}
+ .stats b{font-size:24px}
+}
 @media print{.hd,nav,button,.noprint{display:none!important}}
 </style>
 </head>
 <body>
 <div id="banner" class="banner" hidden></div>
-<div class="hd"><span>judging ai</span><span class="sp"></span><span id="save" class="save"></span><button id="lang" aria-label="langue">en</button><button id="theme" aria-label="thème">◐</button></div>
+<div class="hd"><span>judging ai</span><span class="sp"></span><span id="save" class="save"></span><button id="lang" class="lg"><b>fr</b> · en</button><button id="theme">◐</button></div>
 <main id="app"></main>
 <nav class="noprint"><div class="in" id="tabs"></div></nav>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <dialog id="dlg"><form method="dialog" id="dlgf"></form></dialog>
 <input type="file" id="fileIn" accept=".json,application/json" hidden>
-<script id="carte" type="application/json">{"categorie": {"fr": "statut", "en": "standing"}, "titre": {"fr": "O·R·I·X : le {categorie} d'une affirmation, jamais sa vérité", "en": "O·R·I·X: the {categorie} of a claim, never its truth"}, "lettres": [{"l": "O", "nom": "Observation", "fr": {"def": "directement vu, mesuré, enregistré, par qui, quand", "question": "qui l'a constaté, à quelle date ?", "piege": "une phrase peut imiter la forme d'un relevé sans relevé"}, "en": {"def": "directly seen, measured, recorded, by whom, when", "question": "who observed it, on what date?", "piege": "a sentence can imitate the form of a survey without a survey"}}, {"l": "R", "nom": "Retrieval", "fr": {"def": "tiré d'une source externe identifiable, qui le dit réellement", "question": "quelle source, et dit-elle cela ?", "piege": "la source existe mais ne dit pas cela : le mal attribué"}, "en": {"def": "taken from an identifiable external source that actually says it", "question": "which source, and does it say that?", "piege": "the source exists but does not say that: the misattributed"}}, {"l": "I", "nom": "Inference", "fr": {"def": "déduit de O et de R, en le disant", "question": "depuis quelles prémisses ?", "piege": "l'inférence déguisée en observation"}, "en": {"def": "deduced from O and R, and saying so", "question": "from which premises?", "piege": "inference disguised as observation"}}, {"l": "X", "nom": "Invention", "fr": {"def": "la forme d'un fait, aucun fondement dans les sources disponibles", "question": "qu'est-ce qui le porte ? rien", "piege": "une invention peut être vraie par hasard ; elle reste une invention"}, "en": {"def": "the form of a fact, no basis in the available sources", "question": "what carries it? nothing", "piege": "an invention can be true by chance; it remains an invention"}}], "regles": {"fr": ["{Categorie} ≠ vérité. Une affirmation vraie peut être une invention ; une fausse peut être un retrieval correct d'une source qui se trompe.", "Scinder les clauses composées. « Érigé en 1932, l'un des mieux conservés » = deux affirmations.", "Une absence est une affirmation sur l'espace cherché. « Introuvable » s'écrit avec ce qui a été cherché, ou ne s'écrit pas."], "en": ["{Categorie} ≠ truth. A true claim can be an invention; a false one can be a correct retrieval from a source that is wrong.", "Split compound clauses. “Built in 1932, one of the best preserved” = two claims.", "An absence is a claim about the space searched. “Not found” is written with what was searched, or not written at all."]}, "actions": ["Classify", "Verify", "Bound", "Decide and defend"], "cours": {"fr": "Juger l'IA : preuves et autorité", "en": "Judging AI: Evidence and Authority"}}</script>
+<script id="carte" type="application/json">{"categorie": {"fr": "statut", "en": "standing"}, "titre": {"fr": "O·R·I·X : le {categorie} d'une affirmation, jamais sa vérité", "en": "O·R·I·X: the {categorie} of a claim, never its truth"}, "lettres": [{"l": "O", "nom": "Observation", "fr": {"def": "directement vu, mesuré, enregistré, par qui, quand", "question": "qui l'a constaté, à quelle date ?", "piege": "une phrase peut imiter la forme d'un relevé sans relevé"}, "en": {"def": "directly seen, measured, recorded, by whom, when", "question": "who observed it, on what date?", "piege": "a sentence can imitate the form of a survey without a survey"}}, {"l": "R", "nom": "Retrieval", "fr": {"def": "tiré d'une source externe identifiable, qui le dit réellement", "question": "quelle source, et dit-elle cela ?", "piege": "la source existe mais ne dit pas cela : le mal attribué"}, "en": {"def": "taken from an identifiable external source that actually says it", "question": "which source, and does it say that?", "piege": "the source exists but does not say that: the misattributed"}}, {"l": "I", "nom": "Inference", "fr": {"def": "déduit de O et de R, en le disant", "question": "depuis quelles prémisses ?", "piege": "l'inférence déguisée en observation"}, "en": {"def": "deduced from O and R, and saying so", "question": "from which premises?", "piege": "inference disguised as observation"}}, {"l": "X", "nom": "Invention", "fr": {"def": "la forme d'un fait, aucun fondement dans les sources disponibles", "question": "qu'est-ce qui le porte ? rien", "piege": "une invention peut être vraie par hasard ; elle reste une invention"}, "en": {"def": "the form of a fact, no basis in the available sources", "question": "what carries it? nothing", "piege": "an invention can be true by chance; it remains an invention"}}], "regles": {"fr": ["{Categorie} ≠ vérité. Une affirmation vraie peut être une invention ; une fausse peut être un retrieval correct d'une source qui se trompe.", "Scinder les clauses composées. « Érigé en 1932, l'un des mieux conservés » = deux affirmations.", "Une absence est une affirmation sur l'espace cherché. « Introuvable » s'écrit avec ce qui a été cherché, ou ne s'écrit pas."], "en": ["{Categorie} ≠ truth. A true claim can be an invention; a false one can be a correct retrieval from a source that is wrong.", "Split compound clauses. “Built in 1932, one of the best preserved” = two claims.", "An absence is a claim about the space searched. “Not found” is written with what was searched, or not written at all."]}, "actions": ["Classify", "Verify", "Bound", "Decide and defend"], "cours": {"fr": "Juger l'IA : preuves et autorité", "en": "Judging AI: Evidence and Authority"}, "actions_i18n": {"fr": ["Classer", "Vérifier", "Borner", "Décider et défendre"], "en": ["Classify", "Verify", "Bound", "Decide and defend"]}}</script>
 <script>/* Judging AI · analyse d'une réponse collée.
    Découpe une réponse de modèle en affirmations et y repère ce qui se vérifie : références,
    dates, chiffres précis, réserves, « vérifié » dit par le modèle, offres. Interroge ensuite
@@ -476,18 +495,25 @@ if (typeof module !== "undefined") module.exports = ANALYSE;
 "use strict";
 var CARTE=JSON.parse(document.getElementById("carte").textContent);
 var KEY="judging-ai-journal", SCHEMA=1;
-/* Suggestions du prochain tour : présentes dans le code, invisibles dans l'interface tant que
-   SUGGESTIONS vaut false. Quand elles sont activées, l'élève choisit d'abord son geste et écrit
-   son prompt ; la suggestion de l'app ne s'affiche qu'ensuite, à côté, sur le tour ajouté. */
-var SUGGESTIONS=false;
+/* PLUS : les tiroirs. Par défaut l'app ne montre que ce que la séance utilise ;
+   la phrase en bas du plan ouvre le reste (autres gestes, prompt unique, comptes automatiques, JSON). */
+var PLUS=false; try{PLUS=localStorage.getItem("judging-ai-journal-plus")==="1";}catch(e){}
 
 /* ---------- langue ---------- */
 var T={
-fr:{journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Garder",saved:"enregistré",notsaved:"non enregistré",
+fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Garder",saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",
+ seance:"la séance",planIntro:"Quatre étapes, dans l'ordre. La carte est là quand vous doutez d'une lettre.",
+ steps:[["model","Coller chaque tour : votre prompt, sa réponse. Un geste par tour."],["journal","Une affirmation par ligne : une lettre, un résultat, les minutes."],["banc","La même question, sans puis avec la Skill, dans les mêmes conditions."],["garder","Exporter à la fin, garder le fichier."]],
+ seeCard:"voir la carte",wink:"Cette app en sait plus qu'elle ne le dit. Comme les modèles.",unwink:"Bon, elle a tout avoué. Refermer les tiroirs.",plusOn:"Tiroirs ouverts.",plusOff:"Tiroirs refermés.",
+ fmtPrompt:"le format commun",fmtHint:"Collez-le avec votre première question.",
+ cond:"les conditions",attendu:"La différence attendue (écrite avant le banc)",condModel:"Modèle affiché (et version, sinon « non indiquée »)",condDate:"Date",condWeb:"Accès web",condOrder:"Ordre des deux essais",web:{oui:"oui",non:"non"},order:{sans:"sans, puis avec",avec:"avec, puis sans"},
+ lecture:"la lecture",LE:{etaye:"étayées",contredit:"contredites",nonres:"non résolues",utilisable:"utilisables pour le lieu",minutes:"minutes"},autoCounts:"comptes automatiques",
+ reg:{wiki:"Wikipédia",lien:"lien",recherche:"recherche"},D:{olAbsent:"absent d'Open Library, ce qui ne prouve pas que le livre n'existe pas",aucunCand:"aucun candidat",aOuvrir:"à ouvrir soi-même ; archive : ",pageAbs:"page inexistante"},
+ one:{affirmations:"affirmation",references:"référence",mots:"mot"},col:" : ",
  banc:"Banc",bIntro:"Les mêmes prompts, sans puis avec votre Skill, version après version. L'app compare ce qui revient ; c'est vous qui décidez ce que ça veut dire.",
  tests:"les prompts d'essai",addTest:"AJOUTER LE PROMPT",testPh:"Un prompt d'essai, par exemple une question qui a fait inventer le modèle",
  versions:"les versions",sans:"sans Skill",addVersion:"NOUVELLE VERSION",vName:"Nom de la version",skillText:"Le texte de la Skill (les instructions données au modèle)",copySkill:"copier la Skill",
- essais:"les essais",pasteFor:"Réponse pour",coller:"coller",modifier:"modifier",compare:"la comparaison",
+ pasteFor:"Réponse pour",coller:"coller",compare:"la comparaison",
  M:{faits:"essais collés",affirmations:"affirmations",identifiants:"identifiants",trouves:"trouvés au registre",absents:"absents du registre",aucune:"« aucune » référence",reserves:"réserves",mots:"mots",format:"au format"},
  askAll:"interroger les registres pour tous les essais",delVersionQ:"Supprimer cette version et ses essais ?",delTestQ:"Supprimer ce prompt et ses essais ?",
  jIntro:"Une ligne par affirmation portée : date · affirmation · {cat} · vérifié, par quelle opération · résultat · reste non vérifié.",
@@ -499,9 +525,7 @@ fr:{journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Gard
  mIntro:"Collez chaque tour tel quel : votre prompt, sa réponse. Resserrez jusqu'à une réponse assez petite pour être vérifiée, puis envoyez la dernière réponse au journal.",
  newEnq:"+ Nouvelle enquête",noEnq:"Aucune enquête.",back:"← Enquêtes",title:"Titre",modelName:"Modèle (et version)",
  turns:"tours",turn:"Tour",gesture:"Le geste de ce tour",prompt:"Prompt",answer:"Réponse",addTurn:"Ajouter le tour",needBoth:"Le prompt et la réponse, les deux",
- G:["Resserrer","Exiger la source","Retirer le remplissage","Imposer la forme","Corriger le modèle","Autre"],
- toJournal:"Au journal",toJournalHint:"Seulement la dernière réponse, une affirmation par ligne. On vérifie sans le modèle, jamais en lui redemandant.",
- split:"Découper la dernière réponse en lignes du journal",splitDone:"lignes ajoutées au journal",
+ G:["Resserrer","Exiger la source","Retirer le remplissage","Imposer la forme","Corriger le modèle","Autre","Tout dire en une fois"],
  single:"Le prompt unique",singleHint:"Le prompt qui aurait obtenu la dernière réponse du premier coup. Lancez-le dans une conversation neuve.",
  singleAns:"Réponse en conversation neuve",same:"La même que le dernier tour ?",yes:"oui",close2:"proche",no:"non",delTurnQ:"Supprimer ce tour ?",delEnqQ:"Supprimer cette enquête et ses tours ?",
  lieuHint:"Réel, petit, documentable, sans exposer personne.",name:"Nom",addr:"Adresse",why:"Pourquoi ce lieu",
@@ -510,20 +534,26 @@ fr:{journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",garder:"Gard
  imported:"importé : {a} lignes, {b} enquêtes",bad:"Fichier illisible",
  ios:"iPhone : Partager → « Sur l'écran d'accueil ». Sinon Safari peut effacer ces données après 7 jours sans visite.",
  old:"Pas d'export depuis plus de 6 jours : onglet Garder.",privateMode:"Ce navigateur n'enregistre pas. Exportez avant de fermer.",
- rules:"Trois règles",actions:"Quatre actions",question:"question",trap:"piège",missing:"Manque : l'affirmation",
+ rules:"Trois règles",
  an:"analyse",st:{affirmations:"affirmations",references:"références",reserves:"réserves",verifieDit:"« vérifié » dit par le modèle",surLuiMeme:"sur lui-même",offres:"offres",mots:"mots",chiffres:"chiffres précis"},
  kind:{self:"le modèle parle de lui-même",offer:"offre"},hedgeTag:"réserve",selfTag:"dit « vérifié »",numTag:"chiffre",
  ask:"interroger les registres",asking:"registres…",askHint:"Envoie seulement les identifiants trouvés (DOI, ISBN, titres, liens Wikipédia) à Crossref, DataCite, Open Library, Wikipédia. Aucun modèle.",
  S:{trouve:"trouvé",absent:"absent du registre",candidats:"candidats, pas une confirmation","a-ouvrir":"à ouvrir",injoignable:"registre injoignable"},
- sent:"au journal ✓",send:"au journal",next:"le prochain tour",nextHint:"Des prompts à recoller dans votre conversation. Modifiez-les avant de copier.",
- copyPrompt:"copier",useTurn:"coller sa réponse comme tour suivant",noSuggest:"Rien à proposer : la réponse est courte, sourcée, en puces. Vérifiez-la.",
- cmpHint:"Votre choix pour ce tour, puis ce que l'app aurait proposé à partir de la réponse précédente.",yours:"votre geste et votre prompt",apps:"proposé par l'app",
+ sent:"au journal ✓",send:"au journal",copyPrompt:"copier",
  vsPrev:"au tour précédent",paste:"Collez la réponse du modèle",refL:"référence",fmtOk:"au format",fmtNo:"texte libre",offFmt:"lignes hors format"},
-en:{journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",saved:"saved",notsaved:"not saved",
+en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",
+ seance:"the session",planIntro:"Four steps, in order. The card is there when you doubt a letter.",
+ steps:[["model","Paste each turn: your prompt, its answer. One move per turn."],["journal","One claim per line: a letter, a result, the minutes."],["banc","The same question, without then with the Skill, under the same conditions."],["garder","Export at the end, keep the file."]],
+ seeCard:"see the card",wink:"This app knows more than it lets on. Like the models.",unwink:"Fine, it confessed everything. Close the drawers.",plusOn:"Drawers open.",plusOff:"Drawers closed.",
+ fmtPrompt:"the shared format",fmtHint:"Paste it with your first question.",
+ cond:"the conditions",attendu:"The expected difference (written before the bench)",condModel:"Displayed model (and version, otherwise “not shown”)",condDate:"Date",condWeb:"Web access",condOrder:"Order of the two runs",web:{oui:"yes",non:"no"},order:{sans:"without, then with",avec:"with, then without"},
+ lecture:"the reading",LE:{etaye:"supported",contredit:"contradicted",nonres:"unresolved",utilisable:"usable for the place",minutes:"minutes"},autoCounts:"automatic counts",
+ reg:{wiki:"Wikipedia",lien:"link",recherche:"search"},D:{olAbsent:"not in Open Library, which does not prove the book does not exist",aucunCand:"no candidate",aOuvrir:"open it yourself; archive: ",pageAbs:"no such page"},
+ one:{affirmations:"claim",references:"reference",mots:"word"},col:": ",
  banc:"Bench",bIntro:"The same prompts, without and then with your Skill, version after version. The app compares what comes back; you decide what it means.",
  tests:"test prompts",addTest:"ADD PROMPT",testPh:"A test prompt, for example a question that made the model invent",
  versions:"versions",sans:"without Skill",addVersion:"NEW VERSION",vName:"Version name",skillText:"The Skill text (the instructions given to the model)",copySkill:"copy the Skill",
- essais:"runs",pasteFor:"Answer for",coller:"paste",modifier:"edit",compare:"comparison",
+ pasteFor:"Answer for",coller:"paste",compare:"comparison",
  M:{faits:"runs pasted",affirmations:"claims",identifiants:"identifiers",trouves:"found in registry",absents:"not in registry",aucune:"“none” reference",reserves:"hedges",mots:"words",format:"in format"},
  askAll:"ask the registries for all runs",delVersionQ:"Delete this version and its runs?",delTestQ:"Delete this prompt and its runs?",
  jIntro:"One line per claim you carry: date · claim · {cat} · verified, by which operation · result · still unverified.",
@@ -535,9 +565,7 @@ en:{journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",s
  mIntro:"Paste each turn as is: your prompt, its answer. Narrow until the answer is small enough to verify, then send the last answer to the journal.",
  newEnq:"+ New inquiry",noEnq:"No inquiries.",back:"← Inquiries",title:"Title",modelName:"Model (and version)",
  turns:"turns",turn:"Turn",gesture:"This turn's move",prompt:"Prompt",answer:"Answer",addTurn:"Add turn",needBoth:"Both the prompt and the answer",
- G:["Narrow","Ask for the source","Remove filler","Set the format","Correct the model","Other"],
- toJournal:"To the journal",toJournalHint:"Only the last answer, one claim per line. Verify without the model, never by asking it again.",
- split:"Split the last answer into journal lines",splitDone:"lines added to the journal",
+ G:["Narrow","Ask for the source","Remove filler","Set the format","Correct the model","Other","Say it all at once"],
  single:"The single prompt",singleHint:"The prompt that would have got the last answer first time. Run it in a fresh conversation.",
  singleAns:"Answer in a fresh conversation",same:"Same as the last turn?",yes:"yes",close2:"close",no:"no",delTurnQ:"Delete this turn?",delEnqQ:"Delete this inquiry and its turns?",
  lieuHint:"Real, small, documentable, exposing no one.",name:"Name",addr:"Address",why:"Why this place",
@@ -546,18 +574,21 @@ en:{journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",s
  imported:"imported: {a} lines, {b} inquiries",bad:"Unreadable file",
  ios:"iPhone: Share → “Add to Home Screen”. Otherwise Safari may erase this data after 7 days without a visit.",
  old:"No export for over 6 days: Keep tab.",privateMode:"This browser isn't saving. Export before closing.",
- rules:"Three rules",actions:"Four actions",question:"question",trap:"pitfall",missing:"Missing: the claim",
+ rules:"Three rules",
  an:"analysis",st:{affirmations:"claims",references:"references",reserves:"hedges",verifieDit:"“verified” said by the model",surLuiMeme:"about itself",offres:"offers",mots:"words",chiffres:"precise figures"},
  kind:{self:"the model talking about itself",offer:"offer"},hedgeTag:"hedge",selfTag:"says “verified”",numTag:"figure",
  ask:"ask the registries",asking:"registries…",askHint:"Sends only the identifiers found (DOI, ISBN, titles, Wikipedia links) to Crossref, DataCite, Open Library, Wikipedia. No model.",
  S:{trouve:"found",absent:"not in the registry",candidats:"candidates, not a confirmation","a-ouvrir":"to open",injoignable:"registry unreachable"},
- sent:"in journal ✓",send:"to journal",next:"the next turn",nextHint:"Prompts to paste back into your conversation. Edit them before copying.",
- copyPrompt:"copy",useTurn:"paste its answer as the next turn",noSuggest:"Nothing to suggest: the answer is short, sourced, in bullets. Verify it.",
- cmpHint:"Your choice for this turn, then what the app would have suggested from the previous answer.",yours:"your move and prompt",apps:"suggested by the app",
+ sent:"in journal ✓",send:"to journal",copyPrompt:"copy",
  vsPrev:"previous turn",paste:"Paste the model's answer",refL:"reference",fmtOk:"in format",fmtNo:"free text",offFmt:"lines off format"}
 };
-var lang="fr"; try{lang=localStorage.getItem(KEY+"-lang")||((navigator.language||"fr").slice(0,2)==="en"?"en":"fr");}catch(e){}
+var lang="fr"; try{lang=localStorage.getItem(KEY+"-lang")==="en"?"en":"fr";}catch(e){}
 function t(k){return T[lang][k];}
+function plural(n,k){return n+" "+(n===1?t("one")[k]:t("st")[k]);}
+function regName(r){var n=r||"";if(/^Wikip[ée]dia$/.test(n))return t("reg").wiki;if(n==="lien")return t("reg").lien;return n.replace(" · recherche"," · "+t("reg").recherche);}
+var DETAIL_FR={"absent d'Open Library, ce qui ne prouve pas que le livre n'existe pas":"olAbsent","aucun candidat":"aucunCand","page inexistante":"pageAbs"};
+function detailTxt(d){d=d||"";if(DETAIL_FR[d])return t("D")[DETAIL_FR[d]];if(d.indexOf("à ouvrir soi-même ; archive : ")===0)return t("D").aOuvrir+d.slice(29);return d;}
+function visibleG(cur){return [0,1,2,3,6].concat(PLUS||cur===4?[4]:[]).concat(PLUS||cur===5?[5]:[]);}
 function cat(cap){var c=CARTE.categorie[lang];return cap?c.charAt(0).toUpperCase()+c.slice(1):c;}
 function fill(s){return s.replace("{categorie}",cat()).replace("{Categorie}",cat(true)).replace("{cat}",cat());}
 
@@ -567,7 +598,7 @@ function now(){return new Date().toISOString();}
 function S(v){return typeof v==="string"?v:"";}
 function N(v){v=Number(v);return isFinite(v)&&v>=0?v:0;}
 function blank(){return {schema:SCHEMA,lieu:{nom:"",adresse:"",note:""},lignes:[],enquetes:[],banc:blankBanc()};}
-function blankBanc(){return {prompts:[],versions:[{id:"sans",nom:"",skill:"",cree:now()}],essais:{}};}
+function blankBanc(){return {prompts:[],versions:[{id:"sans",nom:"",skill:"",cree:now()}],essais:{},conditions:{attendu:"",modele:"",date:"",web:"",ordre:""}};}
 function newLigne(src){return {id:uid(),cree:now(),date:new Date().toISOString().slice(0,10),affirmation:"",statut:"",operation:"",resultat:"",reste:"",ms:0,depuis:null,enquete:src||""};}
 function newEnq(){return {id:uid(),cree:now(),titre:"",modele:"",tours:[],promptUnique:"",reponseUnique:"",meme:""};}
 function clean(d){
@@ -581,8 +612,9 @@ function clean(d){
   var vs=(Array.isArray(bc.versions)?bc.versions:[]).map(function(x){x=x||{};return {id:S(x.id)||uid(),nom:S(x.nom),skill:S(x.skill),cree:S(x.cree)||now()};});
   if(!vs.some(function(v){return v.id==="sans";}))vs.unshift({id:"sans",nom:"",skill:"",cree:now()});
   o.banc.versions=vs;
+  var cd=bc.conditions||{}; o.banc.conditions={attendu:S(cd.attendu),modele:S(cd.modele),date:S(cd.date),web:S(cd.web),ordre:S(cd.ordre)};
   var es=bc.essais&&typeof bc.essais==="object"?bc.essais:{};
-  Object.keys(es).forEach(function(k){var x=es[k]||{};o.banc.essais[k]={reponse:S(x.reponse),cree:S(x.cree)||now(),registres:x.registres&&typeof x.registres==="object"?x.registres:{}};});
+  Object.keys(es).forEach(function(k){var x=es[k]||{};var le=x.lecture&&typeof x.lecture==="object"?x.lecture:{};o.banc.essais[k]={reponse:S(x.reponse),cree:S(x.cree)||now(),registres:x.registres&&typeof x.registres==="object"?x.registres:{},lecture:{etaye:S(le.etaye),contredit:S(le.contredit),nonres:S(le.nonres),utilisable:S(le.utilisable),minutes:S(le.minutes)}};});
   o.enquetes=(Array.isArray(d.enquetes)?d.enquetes:[]).map(function(x){x=x||{};var b=newEnq();
     ["id","cree","titre","modele","promptUnique","reponseUnique","meme"].forEach(function(k){if(S(x[k]))b[k]=S(x[k]);});
     b.tours=(Array.isArray(x.tours)?x.tours:[]).map(function(y){y=y||{};function obj(o){return o&&typeof o==="object"&&!Array.isArray(o)?o:{};}
@@ -619,17 +651,25 @@ function confirmDel(msg,cb){var f=document.getElementById("dlgf");f.innerHTML=""
   var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
 
 /* ---------- vues ---------- */
-var app=document.getElementById("app"),view={tab:"journal",enq:null,open:null};
-(function(){var x=location.hash.slice(1);var q=x.split(":");if(["journal","model","banc","carte","garder"].indexOf(q[0])>=0){view.tab=q[0];if(q[1])view.enq=q[1];}})();
-var TABS=[["journal","✎"],["model","⌨"],["banc","⚖"],["carte","O"],["garder","⇪"]];
+var app=document.getElementById("app"),view={tab:"plan",enq:null,open:null};
+(function(){var x=location.hash.slice(1);var q=x.split(":");if(["plan","journal","model","banc","carte","garder"].indexOf(q[0])>=0){view.tab=q[0];if(q[1])view.enq=q[1];}})();
+var TABS=[["plan","⌂"],["model","⌨"],["journal","✎"],["banc","⚖"],["garder","⇪"]];
 function go(tab,id){view={tab:tab,enq:id||null,open:null,g:-1,nextPrompt:""};render();window.scrollTo(0,0);}
 function render(){
-  document.documentElement.lang=lang; document.getElementById("lang").textContent=lang==="fr"?"en":"fr";
+  document.documentElement.lang=lang; var lb=document.getElementById("lang"); lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>"; lb.setAttribute("aria-label",t("langL")+" : "+lang);
+  document.getElementById("theme").setAttribute("aria-label",t("themeL")); var sv=document.getElementById("save"); if(sv.textContent)sv.textContent=sv.classList.contains("err")?t("notsaved"):t("saved");
   app.innerHTML=""; app.className="page"; var tb=document.getElementById("tabs"); tb.innerHTML="";
-  TABS.forEach(function(x){tb.appendChild(h("button",{"aria-current":String(view.tab===x[0]),on:{click:function(){go(x[0]);}}},[t(x[0]).toLowerCase()]));});
-  ({journal:vJournal,model:view.enq&&enq(view.enq)?vEnq:vEnqs,banc:vBanc,carte:vCarte,garder:vGarder})[view.tab]();
+  TABS.forEach(function(x){tb.appendChild(h("button",{"aria-current":String(view.tab===x[0]||(x[0]==="plan"&&view.tab==="carte")),on:{click:function(){go(x[0]);}}},[(x[0]==="plan"?"⌂ ":"")+t(x[0]).toLowerCase()]));});
+  ({plan:vPlan,journal:vJournal,model:view.enq&&enq(view.enq)?vEnq:vEnqs,banc:vBanc,carte:vCarte,garder:vGarder})[view.tab]();
 }
 
+function vPlan(){
+  app.appendChild(top(t("seance")));
+  app.appendChild(h("p",{class:"s",text:t("planIntro")}));
+  t("steps").forEach(function(st,i){app.appendChild(h("button",{class:"step",on:{click:function(){go(st[0]);}}},[h("span",{class:"n",text:String(i+1)}),h("b",{text:t(st[0])}),h("span",{class:"d",text:st[1]})]));});
+  app.appendChild(h("button",{class:"txtbtn",text:t("seeCard")+" →",on:{click:function(){go("carte");}}}));
+  app.appendChild(h("button",{class:"wink",text:PLUS?t("unwink"):t("wink"),on:{click:function(){PLUS=!PLUS;try{localStorage.setItem("judging-ai-journal-plus",PLUS?"1":"0");}catch(e){}render();toast(PLUS?t("plusOn"):t("plusOff"));}}}));
+}
 function vJournal(){
   app.appendChild(top(t("journal")));
   app.appendChild(h("p",{class:"s",text:fill(t("jIntro"))}));
@@ -654,7 +694,7 @@ function entry(l){
   d.appendChild(h("div",{class:"letters"},CARTE.lettres.map(function(L){return h("button",{class:L.l==="X"?"x":"","aria-pressed":String(l.statut===L.l),title:L.nom,text:L.l,on:{click:function(){l.statut=l.statut===L.l?"":L.l;view.open=l.id;save();render();}}});})));
   d.appendChild(fld(t("op"),"textarea",l.operation,function(v){l.operation=v;}));
   d.appendChild(h("label",{text:t("res")}));
-  d.appendChild(h("div",{class:"seg"},Object.keys(t("R")).map(function(k){return h("button",{class:"opt","aria-pressed":String(l.resultat===k),text:t("R")[k],on:{click:function(){l.resultat=l.resultat===k?"":k;view.open=l.id;save();render();}}});})));
+  d.appendChild(h("div",{class:"seg"},Object.keys(t("R")).filter(function(k){return k!=="perime"||PLUS||l.resultat==="perime";}).map(function(k){return h("button",{class:"opt","aria-pressed":String(l.resultat===k),text:t("R")[k],on:{click:function(){l.resultat=l.resultat===k?"":k;view.open=l.id;save();render();}}});})));
   d.appendChild(fld(t("rest"),"textarea",l.reste,function(v){l.reste=v;}));
   d.appendChild(h("label",{text:t("time")}));
   var c=h("span",{class:"clock","data-id":l.id,text:fmt(msOf(l))});
@@ -692,8 +732,8 @@ function vEnq(){
   e.tours.forEach(function(x,i){
     var a=ANALYSE.analyse(x.reponse), isLast=i===e.tours.length-1;
     var box=h("details",{class:"tour",open:isLast});
-    var sum=h("summary",null,[h("span",{class:"help",text:(t("turn")+" "+(i+1)+(x.geste>=0?" · "+t("G")[x.geste]:"")).toLowerCase()}),
-      h("div",{class:"sub",text:a.stats.affirmations+" "+t("st").affirmations+" · "+a.stats.references+" "+t("st").references+" · "+a.stats.mots+" "+t("st").mots+(prev?"  ("+t("vsPrev")+" : "+prev.stats.affirmations+" · "+prev.stats.references+" · "+prev.stats.mots+")":"")})]);
+    var sum=h("summary",null,[h("span",{class:"help",text:(t("turn")+" "+(i+1)+(x.geste>=0&&t("G")[x.geste]?" · "+t("G")[x.geste]:"")).toLowerCase()}),
+      h("div",{class:"sub",text:plural(a.stats.affirmations,"affirmations")+" · "+plural(a.stats.references,"references")+" · "+plural(a.stats.mots,"mots")+(prev?"  ("+t("vsPrev")+t("col")+prev.stats.affirmations+" · "+prev.stats.references+" · "+prev.stats.mots+")":"")})]);
     box.appendChild(sum);
     box.appendChild(h("label",{text:t("prompt")}));box.appendChild(h("pre",{class:"raw",text:x.prompt}));
     box.appendChild(h("label",{text:t("answer")}));box.appendChild(h("pre",{class:"raw",text:x.reponse}));
@@ -705,16 +745,14 @@ function vEnq(){
   nb.appendChild(h("p",{class:"med",text:t("turn")+" "+(e.tours.length+1)}));
   nb.appendChild(h("label",{text:t("gesture")}));
   var seg=h("div",{class:"seg"});
-  function paint(){seg.innerHTML="";t("G").forEach(function(s,k){seg.appendChild(h("button",{class:"opt","aria-pressed":String(view.g===k),text:s,on:{click:function(){view.g=view.g===k?-1:k;paint();}}}));});}
+  function paint(){seg.innerHTML="";visibleG(-1).forEach(function(k){var s=t("G")[k];seg.appendChild(h("button",{class:"opt","aria-pressed":String(view.g===k),text:s,on:{click:function(){view.g=view.g===k?-1:k;paint();}}}));});}
   if(view.g===undefined)view.g=-1; paint(); nb.appendChild(seg);
   var tp=h("textarea",{class:"raw"}),tr=h("textarea",{class:"raw",placeholder:t("paste")});
   tp.value=view.nextPrompt||(e.tours.length?"":"");
   nb.appendChild(h("label",{text:t("prompt")}));nb.appendChild(tp);nb.appendChild(h("label",{text:t("answer")}));nb.appendChild(tr);
   nb.appendChild(h("button",{class:"act",text:t("addTurn").toUpperCase(),on:{click:function(){
     if(!tp.value.trim()||!tr.value.trim()){toast(t("needBoth"));return;}
-    var prevT=e.tours.length?e.tours[e.tours.length-1]:null, sug=null;
-    if(prevT){try{sug=ANALYSE.suggest(ANALYSE.analyse(prevT.reponse),prevT.registres,lang,e.tours[0].prompt).map(function(s){return {label:s.label,prompt:s.prompt};});}catch(err){sug=null;}}
-    e.tours.push({id:uid(),cree:now(),geste:view.g,prompt:tp.value,reponse:tr.value,registres:{},lettres:{},envoyes:{},suggestion:sug});view.g=-1;view.nextPrompt="";save();render();
+    e.tours.push({id:uid(),cree:now(),geste:view.g,prompt:tp.value,reponse:tr.value,registres:{},lettres:{},envoyes:{},suggestion:null});view.g=-1;view.nextPrompt="";save();render();
     var d=app.querySelectorAll("details.tour");if(d.length)d[d.length-1].scrollIntoView({behavior:"smooth"});}}}));
   app.appendChild(nb);
   var u=h("div",{class:"page"});
@@ -723,7 +761,7 @@ function vEnq(){
   u.appendChild(fld(t("singleAns"),"textarea",e.reponseUnique,function(v){e.reponseUnique=v;},{class:"raw"}));
   u.appendChild(h("label",{text:t("same")}));
   u.appendChild(h("div",{class:"seg"},[["oui","yes"],["proche","close2"],["non","no"]].map(function(o){return h("button",{class:"opt","aria-pressed":String(e.meme===o[0]),text:t(o[1]),on:{click:function(){e.meme=e.meme===o[0]?"":o[0];save();render();}}});})));
-  app.appendChild(u);
+  if(PLUS||e.promptUnique||e.reponseUnique)app.appendChild(u);
   app.appendChild(h("div",{class:"row",style:"margin-top:18px"},[h("button",{class:"txtbtn quiet",text:t("del"),on:{click:function(){confirmDel(t("delEnqQ"),function(){data.enquetes=data.enquetes.filter(function(x){return x.id!==e.id;});data.lignes.forEach(function(l){if(l.enquete===e.id)l.enquete="";});save();go("model");});}}})]));
 }
 
@@ -753,12 +791,12 @@ function analysePanel(e,x,a,isLast){
     var letter=x.lettres[i]||"";
     var row=h("div",{class:"ln",style:c.kind==="claim"?"":"opacity:.62"},[h("span",{class:"meta",text:letter||"·"}),h("div",null,[
       h("div",{class:"txt",text:c.text}),
-      c.reference!==undefined?h("div",{class:"sub",text:t("refL")+" : "+(c.reference||"—")}):null,
-      c.reste!==undefined?h("div",{class:"sub",text:t("rest")+" : "+(c.reste||"—")}):null,
+      c.reference!==undefined?h("div",{class:"sub",text:t("refL")+t("col")+(c.reference||"—")}):null,
+      c.reste!==undefined?h("div",{class:"sub",text:t("rest")+t("col")+(c.reste||"—")}):null,
       tags.length?h("div",{class:"sub",text:tags.join(" · ")}):null])]);
     p.appendChild(row);
     ANALYSE.cles(c).forEach(function(k){var r=x.registres[k];if(!r)return;
-      var line=h("div",{class:"m",style:"font-size:12px;margin:0 0 .4em 2.3em"},[(r.registre+" · "+(t("S")[r.statut]||r.statut)+(r.detail?"\n"+r.detail:""))]);
+      var line=h("div",{class:"m",style:"font-size:12px;margin:0 0 .4em 2.3em"},[(regName(r.registre)+" · "+(t("S")[r.statut]||r.statut)+(r.detail?"\n"+detailTxt(r.detail):""))]);
       if(r.lien)line.appendChild(h("div",null,[h("a",{href:r.lien,target:"_blank",rel:"noopener",text:r.lien.replace(/^https?:\/\//,"").slice(0,60)})]));
       p.appendChild(line);});
     if(isLast&&c.kind==="claim"){
@@ -768,22 +806,17 @@ function analysePanel(e,x,a,isLast){
       if(x.envoyes[i])ctl.appendChild(h("span",{class:"help",text:t("sent")}));
       else ctl.appendChild(h("button",{class:"txtbtn",text:t("send"),on:{click:function(){
         var l=newLigne(e.id);l.affirmation=c.text;l.statut=x.lettres[i]||"";if(c.reste)l.reste=c.reste;
-        l.operation=ANALYSE.cles(c).map(function(k){var r=x.registres[k];return r?(r.registre+", "+r.quand.slice(0,16).replace("T"," ")+" : "+(t("S")[r.statut]||r.statut)+(r.detail?" · "+r.detail.split("\n")[0]:"")):"";}).filter(Boolean).join(" ; ");
+        l.operation=ANALYSE.cles(c).map(function(k){var r=x.registres[k];return r?(regName(r.registre)+", "+r.quand.slice(0,16).replace("T"," ")+t("col")+(t("S")[r.statut]||r.statut)+(r.detail?" · "+detailTxt(r.detail.split("\n")[0]):"")):"";}).filter(Boolean).join(" ; ");
         data.lignes.push(l);x.envoyes[i]=l.id;save();render();toast(t("sent"));}}}));
       p.appendChild(ctl);
     }
   });
-  if(SUGGESTIONS&&x.suggestion){
-    p.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("next")}),h("span",{class:"tag",text:"O · R · I · X"})]));
-    p.appendChild(h("p",{class:"s",text:t("cmpHint")}));
-    p.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:"↳"}),h("div",null,[h("div",{class:"sub",text:t("yours")}),h("div",{class:"txt",text:(x.geste>=0?t("G")[x.geste]:"—")}),h("pre",{class:"raw",text:x.prompt})])]));
-    (x.suggestion.length?x.suggestion:[{label:"—",prompt:t("noSuggest")}]).forEach(function(s){
-      p.appendChild(h("div",{class:"ln"},[h("span",{class:"meta",text:"·"}),h("div",null,[h("div",{class:"sub",text:t("apps")}),h("div",{class:"txt",text:s.label}),h("pre",{class:"raw",text:s.prompt})])]));
-    });
-  }
   return p;
 }
 
+function lecture(vid){var B=data.banc,o={},any=false;Object.keys(T.fr.LE).forEach(function(k){o[k]=0;});
+  B.prompts.forEach(function(pr){var es=B.essais[pr.id+"|"+vid];if(!es||!es.lecture)return;Object.keys(o).forEach(function(k){var n=Number(es.lecture[k]);if(es.lecture[k]!==""&&isFinite(n)){o[k]+=n;any=true;}});});
+  Object.keys(o).forEach(function(k){o[k]=any?String(o[k]):"—";});return o;}
 function vname(v,i){return v.id==="sans"?t("sans"):(v.nom||("v"+(i-1)));}
 function metrics(vid){
   var B=data.banc, m={faits:0,affirmations:0,identifiants:0,trouves:0,absents:0,aucune:0,reserves:0,mots:0,format:0};
@@ -797,19 +830,30 @@ function vBanc(){
   var B=data.banc;
   app.appendChild(top(t("banc")));
   app.appendChild(h("p",{class:"s",text:t("bIntro")}));
+  // conditions
+  var C=B.conditions;
+  app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("cond")}),h("span",{class:"tag",text:"O · R · I · X"})]));
+  app.appendChild(fld(t("attendu"),"textarea",C.attendu,function(v){C.attendu=v;}));
+  app.appendChild(fld(t("condModel"),"text",C.modele,function(v){C.modele=v;},{placeholder:"Claude, ChatGPT, Gemini…"}));
+  app.appendChild(fld(t("condDate"),"date",C.date,function(v){C.date=v;}));
+  function pick(lbl,obj,key){app.appendChild(h("label",{text:lbl}));app.appendChild(h("div",{class:"seg"},Object.keys(obj).map(function(k){return h("button",{class:"opt","aria-pressed":String(C[key]===k),text:obj[k],on:{click:function(){C[key]=C[key]===k?"":k;save();render();}}});})));}
+  pick(t("condWeb"),t("web"),"web"); pick(t("condOrder"),t("order"),"ordre");
   // comparaison
   if(B.prompts.length){
     app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("compare")}),h("span",{class:"tag",text:"O · R · I · X"})]));
     var tb=h("table"),hr=h("tr",null,[h("th",{text:""})]);
     B.versions.forEach(function(v,i){hr.appendChild(h("th",{text:vname(v,i)}));});tb.appendChild(hr);
     var ms=B.versions.map(function(v){return metrics(v.id);});
-    Object.keys(t("M")).forEach(function(k){var tr=h("tr",null,[h("th",{text:t("M")[k]})]);ms.forEach(function(m){tr.appendChild(h("td",null,[h("b",{text:String(m[k])})]));});tb.appendChild(tr);});
+    var lec=B.versions.map(function(v){return lecture(v.id);});
+    Object.keys(t("LE")).forEach(function(k){var tr=h("tr",null,[h("th",{text:t("LE")[k]})]);lec.forEach(function(m){tr.appendChild(h("td",null,[h("b",{text:m[k]}) ]));});tb.appendChild(tr);});
+    if(PLUS){tb.appendChild(h("tr",null,[h("th",{text:t("autoCounts"),style:"padding-top:1.2em"})]));
+    Object.keys(t("M")).forEach(function(k){var tr=h("tr",null,[h("th",{text:t("M")[k]})]);ms.forEach(function(m){tr.appendChild(h("td",null,[h("b",{text:String(m[k])})]));});tb.appendChild(tr);});}
     app.appendChild(h("div",{class:"grid"},[tb]));
     var ask=h("button",{class:"txtbtn",text:t("askAll"),on:{click:function(){
       ask.disabled=true;ask.textContent=t("asking");
       var jobs=[];Object.keys(B.essais).forEach(function(k){var es=B.essais[k];if(es.reponse.trim())jobs.push(es);});
       var i=0;(function next(){if(i>=jobs.length){save();render();return;}var es=jobs[i++];ANALYSE.registres(ANALYSE.analyse(es.reponse).items,es.registres,function(){save();}).then(next,next);})();}}});
-    app.appendChild(ask);
+    if(PLUS)app.appendChild(ask);
   }
   // prompts
   app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("tests")}),h("span",{class:"tag",text:"O · R · I · X"})]));
@@ -827,6 +871,9 @@ function vBanc(){
         var ta=h("textarea",{class:"raw",placeholder:t("paste")});ta.value=cur.reponse;
         ta.addEventListener("input",function(){cur.reponse=ta.value;cur.cree=now();cur.registres={};B.essais[k2]=cur;save();});
         box.appendChild(h("label",{text:t("pasteFor")+" "+vname(vv,vi)}));box.appendChild(ta);
+        if(!cur.lecture)cur.lecture={etaye:"",contredit:"",nonres:"",utilisable:"",minutes:""};
+        box.appendChild(h("label",{text:t("lecture")}));
+        box.appendChild(h("div",{class:"num"},Object.keys(t("LE")).map(function(k){var inp=h("input",{type:"number",inputmode:"numeric",min:"0"});inp.value=cur.lecture[k]||"";inp.addEventListener("input",function(){cur.lecture[k]=inp.value;B.essais[k2]=cur;save();});return h("div",null,[h("label",{text:t("LE")[k]}),inp]);})));
         box.appendChild(h("button",{class:"txtbtn",text:t("close"),on:{click:function(){view.cell=null;render();}}}));}
     }
     app.appendChild(box);
@@ -860,12 +907,7 @@ function vCarte(){
   app.appendChild(h("p",{class:"l",text:fill(CARTE.titre[lang]).replace(/^O·R·I·X ?: ?/,"")}));
   app.appendChild(top(t("rules")));
   CARTE.regles[lang].forEach(function(r){app.appendChild(h("p",{class:"med",text:fill(r).split(". ")[0]}));app.appendChild(h("p",{class:"s",text:fill(r).split(". ").slice(1).join(". ")}));});
-  app.appendChild(h("p",{class:"help",text:CARTE.actions.join(" · ")}));
-  app.appendChild(top(t("lieu")));
-  app.appendChild(h("p",{class:"s",text:t("lieuHint")}));
-  app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;}));
-  app.appendChild(fld(t("addr"),"text",data.lieu.adresse,function(v){data.lieu.adresse=v;}));
-  app.appendChild(fld(t("why"),"textarea",data.lieu.note,function(v){data.lieu.note=v;}));
+  app.appendChild(h("p",{class:"help",text:((CARTE.actions_i18n&&CARTE.actions_i18n[lang])||CARTE.actions).join(" · ")}));
 }
 
 function vGarder(){
@@ -873,10 +915,15 @@ function vGarder(){
   app.appendChild(h("p",{class:"s",text:t("gIntro")}));
   app.appendChild(h("div",{class:"row"},[
     h("button",{class:"act",text:t("exJson").toUpperCase(),on:{click:function(){share(JSON.stringify(data,null,2),fname()+".json","application/json");}}}),
-    h("button",{class:"txtbtn",text:t("exMd"),on:{click:function(){share(md(),fname()+".md","text/markdown");}}}),
+    h("button",{class:"txtbtn",text:t("exMd"),on:{click:function(){share(md(),fname()+".md","text/markdown");}}})].concat(PLUS?[
     h("button",{class:"txtbtn",text:t("copy"),on:{click:function(){copy(md());}}}),
-    h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})]));
-  app.appendChild(h("pre",{class:"out",text:md()}));
+    h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})]:[])));
+  app.appendChild(top(t("lieu")));
+  app.appendChild(h("p",{class:"s",text:t("lieuHint")}));
+  app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;}));
+  app.appendChild(fld(t("addr"),"text",data.lieu.adresse,function(v){data.lieu.adresse=v;}));
+  app.appendChild(fld(t("why"),"textarea",data.lieu.note,function(v){data.lieu.note=v;}));
+  if(PLUS)app.appendChild(h("pre",{class:"out",text:md()}));
 }
 function fname(){return "judging-ai-"+(data.lieu.nom||"journal").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w-]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+new Date().toISOString().slice(0,10);}
 function fence(s){s=s||"";var f="```";while(s.indexOf(f)>=0)f+="`";return f+"\n"+s+"\n"+f;}
@@ -886,7 +933,7 @@ function md(){
   L.push("## "+t("journal"),"","| "+[t("date"),t("aff"),cat(true),t("op"),t("res"),t("rest"),t("time")].join(" | ")+" |","|---|---|---|---|---|---|---|");
   data.lignes.forEach(function(l){L.push("| "+[l.date,l.affirmation,l.statut,l.operation,l.resultat?t("R")[l.resultat]:"",l.reste,fmt(msOf(l))].map(cell).join(" | ")+" |");});
   data.enquetes.forEach(function(e){
-    L.push("","## "+t("model")+" · "+(e.titre||"…"),"",t("modelName")+" : "+(e.modele||"—"),"");
+    L.push("","## "+t("model")+" · "+(e.titre||"…"),"",t("modelName")+t("col")+(e.modele||"—"),"");
     e.tours.forEach(function(x,i){L.push("### "+t("turn")+" "+(i+1)+(x.geste>=0?" · "+t("G")[x.geste]:""),"",fence(x.prompt),"",fence(x.reponse),"");});
     if(e.promptUnique)L.push("### "+t("single"),"",fence(e.promptUnique),"",fence(e.reponseUnique),"");
   });
@@ -895,6 +942,8 @@ function md(){
     L.push("","## "+t("banc"),"");
     var head=["",].concat(B.versions.map(function(v,i){return vname(v,i);}));
     L.push("| "+head.join(" | ")+" |","|"+head.map(function(){return "---";}).join("|")+"|");
+    var Cn=B.conditions||{};L.splice(L.length-2,0,t("attendu")+t("col")+(Cn.attendu||"—"),"",t("condModel")+t("col")+(Cn.modele||"—")+" · "+t("condDate")+t("col")+(Cn.date||"—")+" · "+t("condWeb")+t("col")+(t("web")[Cn.web]||"—")+" · "+t("condOrder")+t("col")+(t("order")[Cn.ordre]||"—"),"");
+    var lc=B.versions.map(function(v){return lecture(v.id);});Object.keys(t("LE")).forEach(function(k){L.push("| "+[t("LE")[k]].concat(lc.map(function(m){return m[k];})).join(" | ")+" |");});
     var ms=B.versions.map(function(v){return metrics(v.id);});
     Object.keys(t("M")).forEach(function(k){L.push("| "+[t("M")[k]].concat(ms.map(function(m){return String(m[k]);})).join(" | ")+" |");});
     B.versions.forEach(function(v,i){if(v.id!=="sans")L.push("","### "+vname(v,i)+" · "+v.cree.slice(0,10),"",fence(v.skill));});
@@ -928,6 +977,7 @@ applyTheme();
 document.getElementById("theme").addEventListener("click",function(){
   var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
   theme=dark?"light":"dark";applyTheme();try{localStorage.setItem(KEY+"-theme",theme);}catch(e){}});
+window.addEventListener("hashchange",function(){var q=location.hash.slice(1).split(":");if(["plan","journal","model","banc","carte","garder"].indexOf(q[0])>=0){go(q[0],q[1]);}});
 document.getElementById("lang").addEventListener("click",function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem(KEY+"-lang",lang);}catch(e){}render();});
 
 load();

@@ -1,5 +1,5 @@
-/* Judging AI · hors ligne. Version f426eb92b191 : chaque reconstruction change ce nom, l'ancien cache est jeté. */
-var V="judging-ai-f426eb92b191", F=["./", "index.html", "journal/", "journal/index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+/* Judging AI · hors ligne. Version b6d5d66ebc69 : chaque reconstruction change ce nom, l'ancien cache est jeté. */
+var V="judging-ai-b6d5d66ebc69", F=["./", "index.html", "journal/", "journal/index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 self.addEventListener("install",function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll(F);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==V;}).map(function(k){return caches.delete(k);}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener("fetch",function(e){
