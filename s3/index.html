@@ -86,8 +86,8 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
   <p class="intro">La fiche de travail et le dossier Saint-Georges sont ici. Vos réponses restent dans ce navigateur. Aucun compte, aucune impression, aucune donnée envoyée.</p>
   <p class="notice">Un seul appareil par binôme suffit. Exportez à la fin. N’écrivez aucune donnée privée dans un service public.</p>
 
-  <section class="route" id="module-route" aria-label="Suivre les neuf modules">
-    <h2>Suivre la séance · 9 modules</h2>
+  <section class="route" id="module-route" aria-label="Suivre les neuf exercices">
+    <h2>Suivre la séance · 9 exercices</h2>
     <div class="module-controls"><label for="module-select">Choisissez le numéro affiché au tableau</label><select id="module-select"></select><div class="module-buttons"><button id="module-prev" type="button">← Précédent</button><button id="module-next" type="button">Suivant →</button></div></div>
     <ol>
       <li><h3>Le projet de la salle</h3><p class="time">13h30–13h38</p><p class="goal">Choisir un lieu et formuler le résultat que l’essai devra rendre observable.</p><dl><dt>Téléphone</dt><dd>Renseignez le binôme et le lieu, puis votre question (fiche 3) et votre prédiction (fiche 4).</dd><dt>Ordinateur</dt><dd>Présentation et conversation avec le modèle. Cette même app reste utilisable sur ordinateur.</dd><dt>Avant de passer</dt><dd>Une question examinable et une prédiction conservée avant l’essai.</dd></dl></li>
@@ -101,10 +101,10 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
       <li><h3>Défendre et garder</h3><p class="time">16h00–16h15</p><p class="goal">Nommer l’effet observé, sa limite et le prochain essai, puis ouvrir les exports.</p><dl><dt>Téléphone</dt><dd>Sections 7 et 8, puis export Markdown et JSON.</dd><dt>Ordinateur</dt><dd>Notebook, ZIP final et fichiers décompressés.</dd><dt>Avant de partir</dt><dd>Les deux ZIP, l’export de l’app, une limite et un prochain geste précis.</dd></dl></li>
     </ol>
   </section>
-  <div class="module-bar"><button id="module-return" type="button"><span id="module-current">Module I / IX</span> · <span id="module-current-title">Le projet de la salle</span> ↑</button></div>
+  <div class="module-bar"><button id="module-return" type="button"><span id="module-current">Exercice I / IX</span> · <span id="module-current-title">Le projet de la salle</span> ↑</button></div>
 
   <div class="tabs" role="tablist" aria-label="Matériel S3">
-    <button id="tab-module" role="tab" aria-selected="true">module</button>
+    <button id="tab-module" role="tab" aria-selected="true">exercice</button>
     <button id="tab-work" role="tab" aria-selected="false">travail</button>
     <button id="tab-sources" role="tab" aria-selected="false">8 sources</button>
     <button id="tab-keep" role="tab" aria-selected="false">emporter</button>
@@ -129,9 +129,9 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
     <div class="top"><span class="k">fin de séance</span></div>
     <h2>Emporter la trace, pas du papier</h2>
     <p class="intro">Le Markdown est lisible partout. Le JSON permet de retrouver les champs dans cette page. Téléchargez les deux si vous changez d’appareil.</p>
-    <div class="row"><button id="md" class="act">TÉLÉCHARGER LE MARKDOWN</button><button id="json" class="txtbtn">sauvegarde JSON</button><button id="copy" class="txtbtn">copier le texte</button></div>
+    <div class="row"><button id="md" class="act">TÉLÉCHARGER LE MARKDOWN</button><button id="json" class="txtbtn" style="display:none">sauvegarde JSON</button><button id="copy" class="txtbtn" style="display:none">copier le texte</button></div>
     <p class="notice">Cette page fait partie de l’app Judging AI et fonctionne hors ligne après sa première ouverture. La clé de l’enseignant n’est pas dans l’app.</p>
-    <div class="footer row"><a class="txtbtn" href="../journal/">ouvrir le journal</a><a class="txtbtn" href="../atelier/">ouvrir le notebook</a><a class="txtbtn" href="../">page du cours</a></div>
+    <div class="footer row"><a class="txtbtn" href="../atelier/">ouvrir le notebook</a></div>
   </section>
 </main>
 
@@ -197,7 +197,7 @@ function setupModules(){
  cards.forEach(function(card,i){var title=card.querySelector("h3").textContent;select.appendChild(h("option",{value:i,text:ROMAN[i]+" · "+title}));card.insertBefore(h("p",{class:"module-number",text:"MODULE "+ROMAN[i]+" / IX"}),card.firstChild);var goal=card.querySelector(".goal");goal.insertBefore(h("strong",{text:"Objectif · "}),goal.firstChild);var links=h("div",{class:"module-actions"});actions[i].forEach(function(a){links.appendChild(a[1]==="atelier"?h("a",{href:"https://fsckjournal.github.io/judging-ai/atelier/",target:"_blank",rel:"noopener",text:a[0]}):h("button",{type:"button",text:a[0],on:{click:function(){jump(a[1]);}}}));});card.appendChild(links);});
  cards[1].querySelector("dd").textContent="Fiche I : gardez votre première réponse et la pièce qui pourrait la faire changer. Ouvrez ensuite les 8 sources, puis la fiche II.";
  cards.forEach(function(card){card.querySelectorAll("dd").forEach(function(dd){dd.textContent=dd.textContent.replace(/(fiche|section) (\d)/gi,function(_,label,n){return "fiche "+ROMAN[Number(n)-1];}).replace("Sections 7 et 8","Fiches VII et VIII");});});
- function choose(n,save){current=Math.max(0,Math.min(8,n));cards.forEach(function(card,i){card.hidden=i!==current;});select.value=String(current);document.getElementById("module-prev").disabled=current===0;document.getElementById("module-next").disabled=current===8;document.getElementById("module-current").textContent="Module "+ROMAN[current]+" / IX";document.getElementById("module-current-title").textContent=cards[current].querySelector("h3").textContent;if(save){try{localStorage.setItem("judging-ai-s3-module",String(current));}catch(e){}}}
+ function choose(n,save){current=Math.max(0,Math.min(8,n));cards.forEach(function(card,i){card.hidden=i!==current;});select.value=String(current);document.getElementById("module-prev").disabled=current===0;document.getElementById("module-next").disabled=current===8;document.getElementById("module-current").textContent="Exercice "+ROMAN[current]+" / IX";document.getElementById("module-current-title").textContent=cards[current].querySelector("h3").textContent;if(save){try{localStorage.setItem("judging-ai-s3-module",String(current));}catch(e){}}}
  select.onchange=function(){choose(Number(select.value),true);};document.getElementById("module-prev").onclick=function(){choose(current-1,true);};document.getElementById("module-next").onclick=function(){choose(current+1,true);};document.getElementById("module-return").onclick=function(){show("module");};
  var restored=0;try{restored=Number(localStorage.getItem("judging-ai-s3-module"))||0;}catch(e){}choose(restored,false);
 }
