@@ -8,6 +8,7 @@
 <meta name="apple-mobile-web-app-title" content="Judging AI">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" href="../icon-192.png">
 <title>Judging AI · Journal</title>
 <style>
 /* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
@@ -130,6 +131,10 @@ dialog::backdrop{background:rgba(0,0,0,.6)}
 .num{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px 16px}
 .num input{width:100%;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:6px 0;font:400 17px var(--sans)}
 .num label{margin:.7em 0 .2em}
+.next{border-left:2px solid var(--orange);background:var(--boite);padding:.8em .9em;display:flex;flex-direction:column;gap:.55em}
+.next .tag{font:600 12px/1.3 var(--mono);letter-spacing:.06em;color:var(--orange)}
+.next pre{background:none;border:0;padding:0;max-height:none}
+.next .row{gap:14px}
 @media (orientation:landscape) and (max-height:500px){
  .hd{padding-top:4px} .hd button{min-height:32px}
  .page{padding-top:.7em;gap:.6em}
@@ -431,7 +436,7 @@ var ANALYSE = (function () {
   var P = {
     fr: {
       resserrer: "Réponds seulement à ma question, en 3 puces au plus. Rien d'autre.",
-      source: "Pour chaque puce, donne la référence exacte : DOI, ISBN, URL ou cote d'archive. Si tu n'en as pas, écris « aucune ».",
+      source: "Pour chaque affirmation, donne la référence exacte : DOI, ISBN, URL ou cote d'archive. Si tu n'en as pas, écris « aucune ».",
       remplissage: "Sans phrase d'introduction, sans commentaire sur toi-même, sans proposition à la fin.",
       forme: FORMAT_FR,
       reserves: "Sépare en deux listes : ce qui vient d'une source que tu nommes, et le reste.",
@@ -443,7 +448,7 @@ var ANALYSE = (function () {
     },
     en: {
       resserrer: "Answer only my question, in 3 bullets at most. Nothing else.",
-      source: "For each bullet, give the exact reference: DOI, ISBN, URL or archive call number. If you have none, write “none”.",
+      source: "For each claim, give the exact reference: DOI, ISBN, URL or archive call number. If you have none, write “none”.",
       remplissage: "No introduction, no comments about yourself, no offer at the end.",
       forme: FORMAT_EN,
       reserves: "Split into two lists: what comes from a source you name, and the rest.",
@@ -454,7 +459,7 @@ var ANALYSE = (function () {
       g: { resserrer: "Narrow", source: "Ask for the source", remplissage: "Remove filler", forme: "Set the format", corriger: "Correct the model", unique: "Say it all at once" }
     }
   };
-  var GESTE_INDEX = { resserrer: 0, source: 1, remplissage: 2, forme: 3, corriger: 4, unique: -1 };
+  var GESTE_INDEX = { resserrer: 0, source: 1, remplissage: 2, forme: 3, corriger: 4, unique: 6 };
 
   function suggest(a, cache, lang, question) {
     var L = P[lang] || P.fr, s = a.stats, out = [];
@@ -480,8 +485,11 @@ var ANALYSE = (function () {
     if (nums.length) add("source", L.chiffres(uniq(nums).slice(0, 3).join(", ")), "");
 
     if (out.length > 1) {
-      var parts = uniq(out.filter(function (x) { return x.geste !== "unique"; }).map(function (x) { return x.prompt; }));
-      add("unique", (question ? L.unique + question.trim() + "\n" : "") + parts.join("\n"), "");
+      /* Le prompt composé impose un seul format cohérent. Il ne concatène pas les
+         relances atomiques, qui peuvent se contredire (par exemple puces et blocs). */
+      var parts = [L.forme].concat(out.filter(function (x) { return x.geste === "corriger"; }).map(function (x) { return x.prompt; }));
+      if (nums.length) parts.push(L.chiffres(uniq(nums).slice(0, 3).join(", ")));
+      add("unique", (question ? L.unique + question.trim() + "\n" : "") + uniq(parts).join("\n"), "");
     }
     return out;
   }
@@ -545,7 +553,7 @@ fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",
  kind:{self:"le modèle parle de lui-même",offer:"offre"},hedgeTag:"réserve",selfTag:"dit « vérifié »",numTag:"chiffre",
  ask:"interroger les registres",asking:"registres…",askHint:"Envoie seulement les identifiants trouvés (DOI, ISBN, titres, liens Wikipédia) à Crossref, DataCite, Open Library, Wikipédia. Aucun modèle.",
  S:{trouve:"trouvé",absent:"absent du registre",candidats:"candidats, pas une confirmation","a-ouvrir":"à ouvrir",injoignable:"registre injoignable"},
- sent:"au journal ✓",send:"au journal",copyPrompt:"copier",
+ sent:"au journal ✓",send:"au journal",copyPrompt:"copier",next:"le prochain tour",nextIntro:"L'app a lu toute la réponse. Choisissez ce que vous voulez demander au modèle, ou écrivez votre propre relance.",nextNone:"Pas de relance automatique : la réponse est assez petite pour passer aux vérifications.",useNext:"utiliser au prochain tour",nextReady:"Proposition placée dans le prochain tour.",otherNext:"autres relances",
  vsPrev:"au tour précédent",paste:"Collez la réponse du modèle",refL:"référence",fmtOk:"au format",fmtNo:"texte libre",offFmt:"lignes hors format"},
 en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",garder:"Keep",saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",
  seance:"the session",
@@ -591,7 +599,7 @@ en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",gar
  kind:{self:"the model talking about itself",offer:"offer"},hedgeTag:"hedge",selfTag:"says “verified”",numTag:"figure",
  ask:"ask the registries",asking:"registries…",askHint:"Sends only the identifiers found (DOI, ISBN, titles, Wikipedia links) to Crossref, DataCite, Open Library, Wikipedia. No model.",
  S:{trouve:"found",absent:"not in the registry",candidats:"candidates, not a confirmation","a-ouvrir":"to open",injoignable:"registry unreachable"},
- sent:"in journal ✓",send:"to journal",copyPrompt:"copy",
+ sent:"in journal ✓",send:"to journal",copyPrompt:"copy",next:"the next turn",nextIntro:"The app read the whole answer. Choose what you want to ask the model, or write your own follow-up.",nextNone:"No automatic follow-up: the answer is small enough to move to verification.",useNext:"use in the next turn",nextReady:"Suggestion placed in the next turn.",otherNext:"other follow-ups",
  vsPrev:"previous turn",paste:"Paste the model's answer",refL:"reference",fmtOk:"in format",fmtNo:"free text",offFmt:"lines off format"}
 };
 var lang="fr"; try{lang=localStorage.getItem(KEY+"-lang")==="en"?"en":"fr";}catch(e){}
@@ -664,10 +672,10 @@ function confirmDel(msg,cb){var f=document.getElementById("dlgf");f.innerHTML=""
   var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
 
 /* ---------- vues ---------- */
-var app=document.getElementById("app"),view={tab:"plan",enq:null,open:null};
+var app=document.getElementById("app"),view={tab:"plan",enq:null,open:null,g:-1,nextPrompt:"",nextAnswer:""};
 (function(){var x=location.hash.slice(1);var q=x.split(":");if(["plan","journal","model","banc","carte","garder"].indexOf(q[0])>=0){view.tab=q[0];if(q[1])view.enq=q[1];}})();
 var TABS=[["plan","⌂"],["model","⌨"],["journal","✎"],["banc","⚖"],["garder","⇪"]];
-function go(tab,id){view={tab:tab,enq:id||null,open:null,g:-1,nextPrompt:""};render();window.scrollTo(0,0);}
+function go(tab,id){view={tab:tab,enq:id||null,open:null,g:-1,nextPrompt:"",nextAnswer:""};render();window.scrollTo(0,0);}
 function render(){
   document.documentElement.lang=lang; var lb=document.getElementById("lang"); lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>"; lb.setAttribute("aria-label",t("langL")+" : "+lang);
   document.getElementById("theme").setAttribute("aria-label",t("themeL")); var sv=document.getElementById("save"); if(sv.textContent)sv.textContent=sv.classList.contains("err")?t("notsaved"):t("saved");
@@ -776,10 +784,15 @@ function vEnq(){
   if(view.g===undefined)view.g=-1; paint(); nb.appendChild(seg);
   var tp=h("textarea",{class:"raw"}),tr=h("textarea",{class:"raw",placeholder:t("paste")});
   tp.value=view.nextPrompt||(e.tours.length?"":"");
+  tr.value=view.nextAnswer||"";
+  function fitPrompt(){tp.style.height="auto";tp.style.height=Math.min(Math.max(tp.scrollHeight,110),320)+"px";}
+  tp.addEventListener("input",function(){view.nextPrompt=tp.value;fitPrompt();});
+  tr.addEventListener("input",function(){view.nextAnswer=tr.value;});
   nb.appendChild(h("label",{text:t("prompt")}));nb.appendChild(tp);nb.appendChild(h("label",{text:t("answer")}));nb.appendChild(tr);
+  requestAnimationFrame(fitPrompt);
   nb.appendChild(h("button",{class:"act",text:t("addTurn").toUpperCase(),on:{click:function(){
     if(!tp.value.trim()||!tr.value.trim()){toast(t("needBoth"));return;}
-    e.tours.push({id:uid(),cree:now(),geste:view.g,prompt:tp.value,reponse:tr.value,registres:{},lettres:{},envoyes:{},suggestion:null});view.g=-1;view.nextPrompt="";save();render();
+    e.tours.push({id:uid(),cree:now(),geste:view.g,prompt:tp.value,reponse:tr.value,registres:{},lettres:{},envoyes:{},suggestion:null});view.g=-1;view.nextPrompt="";view.nextAnswer="";save();render();
     var d=app.querySelectorAll("details.tour");if(d.length)d[d.length-1].scrollIntoView({behavior:"smooth"});}}}));
   app.appendChild(nb);
   var u=h("div",{class:"page"});
@@ -838,6 +851,28 @@ function analysePanel(e,x,a,isLast){
       p.appendChild(ctl);
     }
   });
+  if(isLast){
+    var suggestions=ANALYSE.suggest(a,x.registres,lang,e.tours.length?e.tours[0].prompt:x.prompt);
+    p.appendChild(top(t("next")));
+    p.appendChild(h("p",{class:"s",text:suggestions.length?t("nextIntro"):t("nextNone")}));
+    function suggestionCard(s){
+      var card=h("div",{class:"next"},[h("span",{class:"tag",text:s.label}),h("pre",{class:"raw",text:s.prompt})]);
+      card.appendChild(h("div",{class:"row"},[
+        h("button",{class:"txtbtn",text:t("useNext")+" →",on:{click:function(){
+          view.g=s.gesteIndex;view.nextPrompt=s.prompt;render();
+          var n=document.getElementById("newturn"),ta=n&&n.querySelector("textarea");if(n)n.scrollIntoView({behavior:"smooth",block:"start"});if(ta){ta.focus();ta.setSelectionRange(0,0);ta.scrollTop=0;}toast(t("nextReady"));
+        }}}),
+        h("button",{class:"txtbtn quiet",text:t("copyPrompt"),on:{click:function(){copy(s.prompt);}}})
+      ]));
+      return card;
+    }
+    if(suggestions.length){
+      var primary=suggestions.filter(function(s){return s.geste==="unique";})[0]||suggestions[0];
+      p.appendChild(suggestionCard(primary));
+      var rest=suggestions.filter(function(s){return s!==primary;});
+      if(rest.length){var more=h("details",{class:"tour"},[h("summary",null,[h("span",{class:"help",text:t("otherNext")+" · "+rest.length})])]);rest.forEach(function(s){more.appendChild(suggestionCard(s));});p.appendChild(more);}
+    }
+  }
   return p;
 }
 
