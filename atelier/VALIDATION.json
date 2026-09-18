@@ -1,0 +1,98 @@
+{
+  "execution": "controlled sequential Python execution; not Jupyter kernel or live Colab",
+  "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
+  "cells_executed": 15,
+  "cells_total": 33,
+  "classroom_cases": 6,
+  "additional_checks": [
+    {
+      "test": "malformed JSON",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "array instead of event",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "missing URL",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "non-string URL",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "FTP not HTTP",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "lookalike suffix",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "URL username trick",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "exact host allowed",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "test": "case normalized",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "test": "subdomain not implicitly allowed",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "other tool outside scope",
+      "expected": 0,
+      "observed": 0
+    },
+    {
+      "test": "malformed bracket URL",
+      "expected": 2,
+      "observed": 2
+    },
+    {
+      "test": "explicit subdomain option",
+      "expected": "subdomain allowed, suffix still blocked",
+      "observed": "as expected"
+    },
+    {
+      "test": "unreadable configuration",
+      "expected": 2,
+      "observed": 2
+    }
+  ],
+  "bundle_members": [
+    "LIRE_AVANT_CLAUDE_CODE.md",
+    "atelier-lieu/.claude-plugin/plugin.json",
+    "atelier-lieu/hooks/domaines.json",
+    "atelier-lieu/hooks/garde-lieu.py",
+    "atelier-lieu/hooks/hooks.json",
+    "atelier-lieu/skills/lieu-v0/SKILL.md",
+    "comparaison.json",
+    "empreintes.json",
+    "essais-hook.json",
+    "notre-projet.json"
+  ],
+  "bundle_hashes_verified": 9,
+  "plugin_validation_returncode": 0,
+  "plugin_validation_stdout": "Validating plugin manifest: /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/atelier-lieu/.claude-plugin/plugin.json\n\n⚠ Found 1 warning:\n\n  ❯ author: No author information provided. Consider adding author details for plugin attribution\n\n✔ Validation passed with warnings\n",
+  "plugin_validation_stderr": "",
+  "live_colab": "not tested",
+  "native_hook_firing": "not tested",
+  "model_comparison": "not performed; visibly pending"
+}
