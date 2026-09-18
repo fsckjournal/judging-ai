@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Judging AI">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" href="../icon-192.png">
+<title>Judging AI · S3 sans papier</title>
+<style>
+/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
+
+:root{
+  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
+  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
+  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+}
+:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
+
+/* l'en-tête d'une page : étiquette mono à gauche, boîte O·R·I·X à droite, filet orange */
+.top{position:relative;height:2px;background:var(--orange);margin-top:2.6em}
+.top .k{position:absolute;left:0;top:-2.0em;color:var(--sourd);font:500 15px/1 var(--mono);letter-spacing:.08em;padding:.5em 0}
+.top .tag{position:absolute;right:0;top:-2.05em;background:var(--orange);color:var(--sur-orange);font:700 14px/1 var(--serif);letter-spacing:.28em;padding:.55em .8em .55em 1em;white-space:nowrap}
+
+/* les voix */
+.big{font:400 clamp(30px,8vw,56px)/1.15 var(--serif);margin:0}
+.med{font:400 clamp(22px,5.4vw,34px)/1.3 var(--serif);margin:0}
+.l{font:400 clamp(17px,4.2vw,22px)/1.45 var(--sans);margin:0;color:var(--encre)}
+.q{font:italic 400 clamp(20px,5vw,30px)/1.3 var(--serif);margin:0}
+.s{font:400 14px/1.4 var(--sans);color:var(--sourd);margin:0}
+.m{font:400 14px/1.5 var(--mono);margin:0;padding:.35em .7em;border-left:2px solid var(--orange);background:var(--boite);white-space:pre-wrap;word-break:break-word}
+
+/* une ligne : la lettre en mono orange, le texte */
+.ln{display:grid;grid-template-columns:1.6em 1fr;gap:.7em;margin:0 0 .6em;word-break:break-word}
+.ln .meta{color:var(--orange);font:500 14px/1.9 var(--mono)}
+.ln .txt{font:400 clamp(17px,4.2vw,22px)/1.45 var(--sans)}
+.ln .txt b{font-weight:700}
+
+/* la lettre dans le texte */
+.chip{display:inline-block;min-width:1.55em;text-align:center;font:600 .95em/1.5 var(--serif);border:2px solid var(--encre);border-radius:6px;padding:0 .3em;vertical-align:baseline}
+.chip.x{border-color:var(--orange);color:var(--orange)}
+
+hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
+.draw{width:min(46vw,220px);height:auto}
+.help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
+
+button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
+.hd{max-width:900px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
+.hd .sp{flex:1}.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none}.save{font-size:11px;opacity:.8}
+main{max-width:900px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
+.mast{font:400 clamp(32px,8vw,58px)/1.04 var(--serif);margin:.2em 0;max-width:16ch}.intro{font:400 clamp(17px,4vw,21px)/1.5 var(--sans);color:var(--encre2);max-width:70ch}
+.top{margin-top:2.2em}.k{font:600 12px/1.3 var(--mono);letter-spacing:.09em;color:var(--orange);text-transform:uppercase}
+.notice{border-left:2px solid var(--orange);background:var(--boite);padding:.8em 1em;margin:1em 0;font:400 14px/1.55 var(--sans);color:var(--encre2)}
+.tabs{position:sticky;top:0;z-index:4;display:flex;gap:8px;background:var(--fond);border-bottom:1px solid var(--trait);padding:8px 0}.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;min-height:48px;font:500 14px/1 var(--mono);color:var(--sourd)}.tabs button[aria-selected=true]{color:var(--encre);border-color:var(--orange)}
+.panel[hidden]{display:none}.section{border-top:1px solid var(--trait);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}.section h2{display:inline;font:400 clamp(23px,5vw,31px)/1.2 var(--serif);margin:0}.n{display:inline-block;min-width:2em;color:var(--orange);font:400 28px/1 var(--serif)}
+label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spacing:.04em;margin:1.1em 0 .35em}input[type=text],textarea{width:100%;box-sizing:border-box;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}textarea{min-height:86px;resize:vertical}input:focus,textarea:focus{outline:0;border-bottom-color:var(--orange)}
+.act{display:inline-block;background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 15px/1.2 var(--serif);letter-spacing:.1em;padding:1em 1.2em;min-height:50px}.act:disabled{opacity:.35}.txtbtn{background:none;border:0;border-bottom:2px solid var(--orange);color:var(--encre);font:500 15px/1.3 var(--sans);padding:6px 0;min-height:42px}.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.source{border-top:1px solid var(--trait);padding:.9em 0}.source h3{display:inline;font:400 22px/1.25 var(--serif);margin:0}.badge{display:inline-block;margin-left:.5em;color:var(--orange);font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.meta{font:400 12px/1.55 var(--mono);color:var(--sourd)}blockquote{margin:1em 0;padding:.2em 0 .2em 1em;border-left:2px solid var(--orange);font:400 17px/1.5 var(--serif)}.limit{font:400 14px/1.55 var(--sans);color:var(--sourd)}
+.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:400 26px/1.2 var(--serif);margin-bottom:.5em}.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--orange);font:400 23px/1 var(--serif)}
+.footer{margin-top:2em;border-top:1px solid var(--trait);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:520px){.tabs button{font-size:12px}.source h3{font-size:20px}.hd .where{display:none}}
+@media print{.hd,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
+</style>
+</head>
+<body>
+<div class="hd"><a href="../">judging ai</a><span class="where">· S3 sans papier</span><span class="sp"></span><span id="save" class="save">prêt</span><button id="theme" aria-label="thème">◐</button></div>
+<main>
+  <div class="top"><span class="k">ESAR · séance 3 · 18 septembre 2026</span></div>
+  <h1 class="mast">Ce que notre essai nous permet de dire</h1>
+  <p class="intro">La fiche de travail et le dossier Saint-Georges sont ici. Vos réponses restent dans ce navigateur. Aucun compte, aucune impression, aucune donnée envoyée.</p>
+  <p class="notice">Un seul appareil par binôme suffit. Exportez à la fin. N’écrivez aucune donnée privée dans un service public.</p>
+
+  <div class="tabs" role="tablist" aria-label="Matériel S3">
+    <button id="tab-work" role="tab" aria-selected="true">travail</button>
+    <button id="tab-sources" role="tab" aria-selected="false">8 sources</button>
+    <button id="tab-keep" role="tab" aria-selected="false">emporter</button>
+  </div>
+
+  <section id="work" class="panel" role="tabpanel" aria-labelledby="tab-work">
+    <div id="identity"></div>
+    <div id="sections"></div>
+  </section>
+
+  <section id="sources" class="panel" role="tabpanel" aria-labelledby="tab-sources" hidden>
+    <div id="source-lock" class="locked">
+      <strong>D’abord votre réponse.</strong>
+      <p class="intro">Écrivez dans la section 1 la phrase que vous retiendriez et ce qui pourrait vous faire changer d’avis. Le dossier s’ouvrira ensuite, sans effacer cette première trace.</p>
+      <button id="unlock" class="act" disabled>OUVRIR LE DOSSIER</button>
+    </div>
+    <div id="source-list" hidden></div>
+  </section>
+
+  <section id="keep" class="panel" role="tabpanel" aria-labelledby="tab-keep" hidden>
+    <div class="top"><span class="k">fin de séance</span></div>
+    <h2>Emporter la trace, pas du papier</h2>
+    <p class="intro">Le Markdown est lisible partout. Le JSON permet de retrouver les champs dans cette page. Téléchargez les deux si vous changez d’appareil.</p>
+    <div class="row"><button id="md" class="act">TÉLÉCHARGER LE MARKDOWN</button><button id="json" class="txtbtn">sauvegarde JSON</button><button id="copy" class="txtbtn">copier le texte</button></div>
+    <p class="notice">Cette page fait partie de l’app Judging AI et fonctionne hors ligne après sa première ouverture. La clé de l’enseignant n’est pas dans l’app.</p>
+    <div class="footer row"><a class="txtbtn" href="../journal/">ouvrir le journal</a><a class="txtbtn" href="../atelier/">ouvrir le notebook</a><a class="txtbtn" href="../">page du cours</a></div>
+  </section>
+</main>
+
+<script>
+(function(){
+"use strict";
+var KEY="judging-ai-s3-work", THEME="judging-ai-journal-theme";
+var state={fields:{},unlocked:false};
+try{var raw=localStorage.getItem(KEY);if(raw){var parsed=JSON.parse(raw);if(parsed&&typeof parsed==="object"){state.fields=parsed.fields||{};state.unlocked=!!parsed.unlocked;}}}catch(e){}
+var sections=[
+ {n:"1",title:"Avant les sources — Saint-Georges",note:"Question : « Qui a conçu l’Hôtel Saint-Georges à Beyrouth, et en quelle année ? Donne tes sources. » Ne réécrivez pas cette première réponse après ouverture du dossier.",fields:[
+  ["pre_conditions","Application / modèle affiché / date / accès web"],["pre_saved","Réponse complète conservée où ? Ou capture de secours utilisée"],["pre_phrase","Phrase que nous retiendrions, AVANT de recevoir le dossier"],["pre_change","Pourquoi ? Quelle pièce pourrait nous faire changer d’avis ?"]]},
+ {n:"2",title:"Après les sources — ce qui change",note:"Une référence introuvable n’est pas automatiquement une invention. Une source imprimée n’est pas automatiquement exacte.",fields:[
+  ["post_piece","Pièce, auteur, page ou passage effectivement lu"],["post_role","Même bâtiment ? Même phase ? Même rôle ?"],["post_orix","Standing O / R / I / X, avec raison"],["post_result","Résultat séparé : appuyée / contredite / non résolue — pourquoi ?"],["post_sentence","Notre phrase corrigée, maintenue ou suspendue"],["post_effect","Conséquence précise dans une notice, une chronologie ou un argument"],["notice_50","Retour à la notice : 50 mots maximum, références à part"],["notice_objection","Mot ou omission contesté par le binôme voisin, avec passage précis"],["notice_response","Notre réponse : réviser / maintenir / suspendre, parce que"],["notice_criterion","Critère que nous emportons dans l’essai sans / avec"],["notice_without","Critère appliqué à la réponse sans"],["notice_with","Critère appliqué à la réponse avec"]]},
+ {n:"3",title:"Notre lieu — une affirmation examinée",note:"Aucun défaut démontré ? Dites ce qui est juste, utile et doit être préservé. Aucune pièce accessible ? Utilisez le cas commun et signalez que le transfert reste à faire.",fields:[
+  ["place_question","Notre question"],["place_answer","Réponse et conditions conservées"],["place_claim","Affirmation prioritaire"],["place_passage","Passage consulté : auteur, titre, page ou URL"],["place_bound","Ce qu’il permet de dire ; ce qu’il ne permet pas de dire"],["place_decision","Notre décision et sa conséquence"]]},
+ {n:"4",title:"Avant l’essai de la Skill",note:"Écrivez la prédiction avant de lancer l’essai. Gardez v0 dans le premier ZIP avant la pause.",fields:[
+  ["skill_behavior","Comportement à changer ou préserver"],["skill_instruction","Instruction(s) choisie(s)"],["skill_expected","Effet attendu ; ce qui montrerait son absence"],["skill_cost","Résultat utile que nous risquons de perdre"]]},
+ {n:"5",title:"Le hook — prédire, observer, juger",note:"Pour chaque cas : prédiction AVANT · observation APRÈS · conséquence pour l’enquête.",fields:[
+  ["hook_allowed","Adresse prévue"],["hook_blocked","Adresse hors liste"],["hook_lookalike","Hôte ressemblant"],["hook_error","Erreur sur l’hôte admis"],["hook_testimony","Témoignage utile hors liste"],["hook_missing","URL absente"],["hook_revision","Source utile écartée : quel changement justifions-nous ?"],["hook_false","Quel essai montre que le faux hôte reste bloqué ?"],["hook_limit","Ce mécanisme ne peut toujours pas décider"]]},
+ {n:"6",title:"Sans / avec — mêmes conditions",note:"Une amélioration de formulation n’est pas une vérification. Aucun effet visible est un résultat. Des instructions collées ne prouvent pas un chargement natif de Skill.",fields:[
+  ["bench_conditions","Modèle / web / mémoire / ordre / autres différences"],["bench_without","Passage comparable « sans »"],["bench_with","Passage comparable « avec »"],["bench_source","Passage de source qui permet de juger l’un et l’autre"],["bench_effect","Effet observé par rapport à notre prédiction"],["bench_cost","Élément utile perdu, refus excessif ou autre coût"],["bench_decision","Garder / réviser / abandonner quelle instruction, et pourquoi ?"],["bench_limit","Ce qu’une seule paire de réponses ne permet pas de conclure"]]},
+ {n:"7",title:"Ce que nous emportons",note:"Ouvrez réellement les archives avant de dire qu’elles contiennent votre travail.",fields:[
+  ["take_zip1","Premier ZIP ouvert : oui / pas encore"],["take_zip2","ZIP final ouvert : oui / pas encore"],["take_where","Où se retrouvent notre Skill et les réponses ?"],["take_run","Ce qui a réellement été exécuté"],["take_given","Ce qui a seulement été fourni au modèle"],["take_untried","Ce qui reste non essayé"],["take_next","Prochain essai précis"]]},
+ {n:"8",title:"Billet de sortie individuel · quatre lignes",note:"Deux minutes, sans le texte du partenaire. Trace formative, pas une nouvelle note.",fields:[
+  ["exit_name","Nom"],["exit_1","1. Voici une affirmation que je peux maintenant examiner"],["exit_2","2. Voici le passage précis et ce qu’il m’autorise à conclure"],["exit_3","3. Je garde / corrige / suspends cette phrase parce que"],["exit_4","4. Voici une limite que notre hook ne peut pas résoudre, et mon prochain geste"]]}
+];
+var identity=[["pair","Binôme"],["place","Lieu adopté"]];
+var sources=[
+ {title:"1 · Georges Arbid, thèse, Harvard 2002",common:true,meta:"Practicing Modernism in Beirut, p. 80–81 (PDF 90–91), notes 156–157 ; p. 91 (PDF 101).",quotes:[
+  "Tabet's brief stay at Perret's atelier probably earned him the mission of local architect for the construction of the Hôtel Saint-Georges in Beirut, a modernist exposed concrete building designed in 1931, by the French firm—close to Perret—of J. Poirrier, A. Lotte & G. Bordes with André Lotte as architect in charge. Later, in 1946, Tabet was responsible for the enlargement of the third floor and the addition of a fourth floor, as well as the extension of the restaurant, which explains why he was understood to be the author of the original building.",
+  "As for the Hôtel Saint-Georges, if not the actual designer, Tabet was the field agent who enabled the realization of the job. More importantly, he should be looked at as the protagonist who not only endorsed the presence of such a modernist building in Beirut, but also went on to design buildings inspired by its syntax.",
+  "The massive water tank was built from the start at roof level, taking into consideration the extension of the third and fourth floors; it also carries the hotel sign, executed in relief with concrete blocks.",
+  "156. Besides the drawings that bear the firm's signature and stamp, a conclusive document that certifies authorship is the contract with the Société des Grands Hôtels du Levant (archives of Fouad El Khoury, contractor of the concrete blocks for the project). In a letter sent by the Société des Grands Hôtels du Levant to the Régie Générale des Chemins de Fer et Travaux Publics, dated May 27, 1931, Mr. Philippat confirms their assignment as contractors, and mentions the architects who designed the building: « Nous avons l'honneur de vous confirmer les accords intervenus entre notre Société et la vôtre concernant la construction d'un hôtel à Beyrouth (Liban). Nous avons fait dresser les plans de cet hôtel par MM. Poirrier, Lotte, Bordes, architectes à Paris, 18 Rue Monge, chargés de la direction et de la surveillance des travaux. » Poirrier, Lotte and Bordes were experts in Hotel design. They were in touch with Perret to whom they had commissioned the enlargement of the Touring Club de France in Paris at the same time they were designing Hôtel Saint-Georges. Moreover, Jacques Poirrier, a former student of Perret, had been an employee of the Perret firm. He later contributed to the design of Le Havre. As for Lotte, he should not be mistaken for André Lhote, a renowned French painter who was a friend of Antoine Tabet, and who had introduced Tabet to Perret.",
+  "For the first part, built in 1931, Tabet was architecte d'opérations (architect on site). He designed the second part, as is testified by his stamp and signature on the plans and other documents dated 1946-47."
+ ],limit:"Arbid cite une lettre du 27 mai 1931 nommant Poirrier, Lotte et Bordes et des plans de 1946–47. Nous lisons ici ces documents par sa thèse, pas leurs originaux. Le réservoir en toiture avait anticipé l’extension des troisième et quatrième étages."},
+ {title:"2 · Jad Tabet et coll., Beyrouth, 2001",common:true,meta:"Portrait de ville, p. 17 ; légende 109, p. 62.",quotes:[
+  "Antoine Tabet (1907-1964) qui, après des études à l'École supérieure d'ingénieurs de Beyrouth, rejoint l'atelier parisien d'Auguste Perret en [année partiellement illisible dans la reliure du scan], puis rentre au Liban, fonde un groupe surréaliste avec le poète Georges Shéhadé et signe trois œuvres qui apparaissent alors comme les icônes d'une modernité architecturale en rupture avec l'éclectisme ambiant. Ce sont l'hôtel Saint-Georges à Minet el-Hosn, construit en 1931 en association avec les architectes français Poirrier, Bordes et Lotte, le collège de la Sagesse à Achrafyeh en 1936 et l'extension du lycée français de jeunes filles à Zokak el-Blatt en 1938. Dans ces trois œuvres apparaissent les thèmes chers au rationalisme constructif de Perret : utilisation du béton brut, distinction entre éléments d'ossature et panneaux de remplissage, expression de « l'ordre structurel » qui règle le rythme et les modénatures des façades et priorité de la logique constructive sur les ornements « rajoutés ».",
+  "109. Hôtel Saint-Georges, 1931, Poirrier, Bordes, Lotte et Antoine Tabet arch., rue Ahmad Chaouqui. Une nouvelle aile, respectueuse de l'architecture de ce bâtiment remarquable, a été ajoutée en 2000 (Jacques Liger-Belair, Jean-Pierre Mogharbané et Georges Khayat arch.)."
+ ],limit:"Le livre remercie George Arbid pour ses remarques, sans établir l’origine de cette attribution ni une dépendance envers une thèse publiée ensuite. Jad Tabet est architecte, urbaniste et auteur sur Beyrouth ; sa connaissance ne se réduit pas à sa parenté avec Antoine Tabet."},
+ {title:"3 · Arab Center for Architecture, notice du bâtiment",common:true,meta:"Notice signée George Arbid. Équipe : Poirrier, Lotte, Bordes, with A. Tabet. Construction : 1930/1932.",quotes:[
+  "The Hôtel Saint-Georges is an icon of modern architecture in Lebanon, designed by the French firm of Poirrier, Lotte and Bordes with Lebanese engineer-architect Antoine Tabet as architect on site. The building clearly bears the influence of Auguste Perret […]",
+  "Later, in 1946-47, Tabet was in charge of adding to the building the third and fourth floors, and enlarging the restaurant."
+ ],limit:"Les pièces 1 et 3 ont le même auteur : leur accord n’est pas deux témoignages indépendants. La notice cite notamment les archives de Fouad El Khoury et des plans publiés dans L’Architecture Française."},
+ {title:"4 · Wikipédia, St. Georges Hotel, Beirut",meta:"Paragraphe d’ouverture consulté le 17 septembre 2026.",quotes:["The Hotel St. Georges […] opened in 1934. […] Parisian architect Auguste Perret came to Beirut to design the hotel with local architect Antun Tabet."],limit:"La page cite A Global History of Architecture, p. 712, et Alex Rowell, Daily Beast. Ces deux références n’ont pas été ouvertes dans cette préparation ; Poirrier, Lotte et Bordes n’apparaissent pas dans l’article."},
+ {title:"5 · Réponse de Claude, 13 septembre 2026",meta:"Recherche web refusée ; adresse Wikipédia erronée et non ouverte.",quotes:["On attribue souvent la conception […] à l'architecte libanais Antoine Tabet […] — non vérifié : je n'ai pas pu confirmer cette attribution […] car la recherche web m'a été refusée ; ceci vient de ma mémoire."],limit:"L’adresse citée renvoyait 404 ; l’article existe sous une autre adresse. La réserve fait partie de la réponse originale. La pièce ne dit pas qui est « on »."},
+ {title:"6 · Modèle local gpt-oss-20b, sans web",meta:"Réponse 2 sur 5, 13 septembre 2026.",quotes:["Architecte : Jean R. Bousquet · Année : 1938 · Référence : Beyrouth, un patrimoine architectural, L’Harmattan, 1999, pp. 112–115."],limit:"Les quatre autres réponses donnent Joseph Kouri, Pierre Dufour, Michel Rachid et Jean-Baptiste Humbert. Trois donnent une référence paginée ; Kouri n’en donne aucune. Rien n’a été retrouvé, mais cinq réponses incompatibles ne prouvent pas séparément la fausseté de chacune."},
+ {title:"7 · Maha Yahya, thèse MIT 2005 — citation rapportée",meta:"Citation fournie par un rapport Perplexity ; thèse originale non ouverte.",quotes:["Constructed between 1930–1932 […] Auguste Perret was hired as the principal architect […] along with […] J. Poirrier, A. Lotte and G. Bordes. What is clear is that Tabet was the local architect in charge of construction and implementation […]"],limit:"Ne pas citer ceci comme l’original consulté : page et document d’appui de la phrase « Perret was hired » restent inconnus."},
+ {title:"8 · British Council, Beirut Urban Declaration, 2020 — citation rapportée",meta:"Citation fournie par le même rapport ; PDF original non ouvert.",quotes:["Saint George Hotel, designed by Antoun Tabet in 1931 in association with French colleagues from Perret's atelier"],limit:"Ne pas citer ceci comme l’original consulté. Auteur du passage et origine de « from Perret’s atelier » pour Poirrier, Lotte et Bordes restent inconnus."}
+];
+function h(tag,a,kids){var e=document.createElement(tag);if(a)Object.keys(a).forEach(function(k){var v=a[k];if(k==="text")e.textContent=v;else if(k==="on")Object.keys(v).forEach(function(ev){e.addEventListener(ev,v[ev]);});else if(v!==false&&v!=null)e.setAttribute(k,v);});(kids||[]).forEach(function(c){if(c!=null)e.appendChild(typeof c==="string"?document.createTextNode(c):c);});return e;}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));document.getElementById("save").textContent="✓ enregistré";}catch(e){document.getElementById("save").textContent="non enregistré";}updateUnlock();}
+function field(id,label,short){var control=short?h("input",{type:"text",id:id}):h("textarea",{id:id});control.value=state.fields[id]||"";control.addEventListener("input",function(){state.fields[id]=control.value;persist();});return h("div",null,[h("label",{for:id,text:label}),control]);}
+function renderWork(){var ident=document.getElementById("identity");ident.appendChild(h("div",{class:"row"},identity.map(function(f){return field(f[0],f[1],true);})));var box=document.getElementById("sections");sections.forEach(function(s,idx){var d=h("details",{class:"section",open:idx<2});d.appendChild(h("summary",null,[h("span",{class:"n",text:s.n}),h("h2",{text:s.title})]));d.appendChild(h("p",{class:"notice",text:s.note}));s.fields.forEach(function(f){d.appendChild(field(f[0],f[1],f[0]==="exit_name"));});box.appendChild(d);});}
+function renderSources(){var box=document.getElementById("source-list");box.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:"Hôtel Saint-Georges · huit pièces, pas huit confirmations"})]));box.appendChild(h("p",{class:"intro",text:"Pour chaque pièce : qui parle ? qu’a-t-il pu voir ? sur quoi s’appuie-t-il ? que ne dit-il pas ? Les pièces 1 à 3 sont le travail commun ; 4 à 8 prolongent l’enquête."}));sources.forEach(function(s,i){var d=h("details",{class:"source",open:i<3});var sum=h("summary",null,[h("h3",{text:s.title})]);if(s.common)sum.appendChild(h("span",{class:"badge",text:"commun"}));d.appendChild(sum);d.appendChild(h("p",{class:"meta",text:s.meta}));s.quotes.forEach(function(q){d.appendChild(h("blockquote",{text:q}));});d.appendChild(h("p",{class:"limit",text:"Limite · "+s.limit}));box.appendChild(d);});box.appendChild(h("div",{class:"notice four"},[h("strong",{text:"Conclusion provisoire — quatre lignes"}),h("p",{text:"Notre phrase initiale était… ; nous avions retenu O/R/I/X parce que…"}),h("p",{text:"Le passage de la pièce…, à…, permet de dire… mais pas…"}),h("p",{text:"Nous conservons / corrigeons / suspendons… ; cela change aussi… dans notre notice."}),h("p",{text:"Pour aller plus loin, il faudrait… ; l’absence de cette pièce aujourd’hui n’efface pas ce que les pièces permettent déjà de connaître."})]));}
+function updateUnlock(){var ready=(state.fields.pre_phrase||"").trim()&&(state.fields.pre_change||"").trim();document.getElementById("unlock").disabled=!ready;if(state.unlocked){document.getElementById("source-lock").hidden=true;document.getElementById("source-list").hidden=false;}}
+function show(which){["work","sources","keep"].forEach(function(id){var on=id===which;document.getElementById(id).hidden=!on;document.getElementById("tab-"+id).setAttribute("aria-selected",String(on));});location.hash=which;window.scrollTo(0,0);}
+function markdown(){var lines=["# S3 · Ce que notre essai nous permet de dire","","Binôme : "+(state.fields.pair||""),"Lieu : "+(state.fields.place||""),""];sections.forEach(function(s){lines.push("## "+s.n+" · "+s.title,"");s.fields.forEach(function(f){lines.push("### "+f[1],"",state.fields[f[0]]||""," ");});});lines.push("Dossier ouvert avant la conclusion : "+(state.unlocked?"oui":"non"));return lines.join("\n");}
+function download(name,text,type){var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);}
+document.getElementById("tab-work").onclick=function(){show("work");};document.getElementById("tab-sources").onclick=function(){show("sources");};document.getElementById("tab-keep").onclick=function(){show("keep");};
+document.getElementById("unlock").onclick=function(){state.unlocked=true;persist();show("sources");};
+document.getElementById("md").onclick=function(){download("S3-travail-binome.md",markdown(),"text/markdown;charset=utf-8");};
+document.getElementById("json").onclick=function(){download("S3-travail-binome.json",JSON.stringify(state,null,2),"application/json");};
+document.getElementById("copy").onclick=function(){navigator.clipboard.writeText(markdown()).then(function(){document.getElementById("save").textContent="texte copié";});};
+var theme="";try{theme=localStorage.getItem(THEME)||"";}catch(e){}function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}applyTheme();
+document.getElementById("theme").onclick=function(){var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;theme=dark?"light":"dark";applyTheme();try{localStorage.setItem(THEME,theme);}catch(e){}};
+renderWork();renderSources();updateUnlock();var start=location.hash.slice(1);show(["work","sources","keep"].indexOf(start)>=0?start:"work");
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
+})();
+</script>
+</body>
+</html>

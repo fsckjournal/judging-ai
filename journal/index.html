@@ -516,6 +516,7 @@ fr:{plan:"Plan",journal:"Journal",model:"Modèle",lieu:"Mon lieu",carte:"Carte",
       ["Claude → Claude Code","curl -fsSL https://claude.ai/install.sh | bash","irm https://claude.ai/install.ps1 | iex","Puis tapez claude et connectez-vous."],
       ["Gemini → Antigravity (agy)","curl -fsSL https://antigravity.google/cli/install.sh | bash","irm https://antigravity.google/cli/install.ps1 | iex","Puis tapez agy. Antigravity demande un abonnement Google AI Pro : l'essai gratuit d'un mois couvre les séances qui restent. Beaucoup d'autres choses sont ouvertes aux étudiants sur grow.google/students."]],
  sansAb:"Aucun abonnement : ce n'est pas un obstacle, un seul ordinateur et un seul outil suffisent par binôme.",
+ s3Paper:"Fiche + sources S3",s3PaperIntro:"Votre espace sans papier : première réponse, huit pièces Saint-Georges, essai de la Skill, comparaison et billet de sortie. Il s'enregistre sur cet appareil.",
  whatIs:"Votre carnet de la séance : ce que vous collez, ce que vous vérifiez, ce que vous gardez. Tout reste sur ce téléphone.",planIntro:"Quatre étapes, dans l'ordre. La carte est là quand vous doutez d'une lettre.",
  steps:[["model","Coller chaque tour : votre prompt, sa réponse. Un geste par tour."],["journal","Une affirmation par ligne : une lettre, un résultat, les minutes."],["banc","La même question, sans puis avec la Skill, dans les mêmes conditions."],["garder","Exporter à la fin, garder le fichier."]],
  seeCard:"voir la carte",wink:"Cette app en sait plus qu'elle ne le dit. Comme les modèles.",unwink:"Bon, elle a tout avoué. Refermer les tiroirs.",plusOn:"Tiroirs ouverts.",plusOff:"Tiroirs refermés.",
@@ -562,6 +563,7 @@ en:{plan:"Plan",journal:"Journal",model:"Model",lieu:"My place",carte:"Card",gar
       ["Claude → Claude Code","curl -fsSL https://claude.ai/install.sh | bash","irm https://claude.ai/install.ps1 | iex","Then type claude and sign in."],
       ["Gemini → Antigravity (agy)","curl -fsSL https://antigravity.google/cli/install.sh | bash","irm https://antigravity.google/cli/install.ps1 | iex","Then type agy. Antigravity needs a Google AI Pro subscription: the free one-month trial covers the remaining sessions. Much more is open to students at grow.google/students."]],
  sansAb:"No subscription: not a problem, one computer and one tool are enough per pair.",
+ s3Paper:"S3 worksheet + sources",s3PaperIntro:"Your paperless workspace: first answer, eight Saint-Georges sources, Skill test, comparison, and exit ticket. It saves on this device. The material is in French.",
  whatIs:"Your notebook for the session: what you paste, what you verify, what you keep. Everything stays on this phone.",planIntro:"Four steps, in order. The card is there when you doubt a letter.",
  steps:[["model","Paste each turn: your prompt, its answer. One move per turn."],["journal","One claim per line: a letter, a result, the minutes."],["banc","The same question, without then with the Skill, under the same conditions."],["garder","Export at the end, keep the file."]],
  seeCard:"see the card",wink:"This app knows more than it lets on. Like the models.",unwink:"Fine, it confessed everything. Close the drawers.",plusOn:"Drawers open.",plusOff:"Drawers closed.",
@@ -688,6 +690,7 @@ function render(){
 function vPlan(){
   app.appendChild(top(t("seance")));
   app.appendChild(h("p",{class:"l",text:t("whatIs")}));
+  app.appendChild(h("div",{class:"next"},[h("span",{class:"tag",text:t("s3Paper")}),h("p",{class:"s",text:t("s3PaperIntro")}),h("a",{class:"act",href:"../s3/",text:t("s3Paper").toUpperCase()+" →"})]));
   app.appendChild(h("p",{class:"s",text:t("planIntro")}));
   t("steps").forEach(function(st,i){app.appendChild(h("button",{class:"step",on:{click:function(){go(st[0]);}}},[h("span",{class:"n",text:String(i+1)}),h("b",{text:t(st[0])}),h("span",{class:"d",text:st[1]})]));});
   app.appendChild(h("button",{class:"txtbtn",text:t("seeCard")+" →",on:{click:function(){go("carte");}}}));
