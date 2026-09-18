@@ -1,5 +1,5 @@
-/* Judging AI · hors ligne. Version cf74354904c5 : chaque reconstruction change ce nom, l'ancien cache est jeté. */
-var V="judging-ai-cf74354904c5", F=["./", "index.html", "journal/", "journal/index.html", "entrainement/", "entrainement/index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+/* Judging AI · hors ligne. Version 33d9a1afd5c7 : chaque reconstruction change ce nom, l'ancien cache est jeté. */
+var V="judging-ai-33d9a1afd5c7", F=["./", "index.html", "journal/", "journal/index.html", "entrainement/", "entrainement/index.html", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 self.addEventListener("install",function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll(F);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==V;}).map(function(k){return caches.delete(k);}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener("fetch",function(e){
