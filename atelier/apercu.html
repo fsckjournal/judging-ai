@@ -23,7 +23,7 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 ui-monospace,SFMo
 <ol><li><b>Si vous utilisez Colab depuis la page du cours :</b> le notebook est déjà ouvert. Vérifiez le compte Google affiché, puis cliquez sur <b>Copier sur Drive</b> avant de le modifier.</li>
 <li><b>Depuis un fichier téléchargé :</b> ouvrez <a href="https://colab.research.google.com/">Google Colab</a> → <b>Fichier</b> → <b>Importer le notebook</b>, puis choisissez le <code>.ipynb</code>.</li>
 <li>Choisissez un environnement <b>Python 3 / CPU</b>, cliquez sur <b>Se connecter</b>, puis exécutez chaque cellule avec ▶.</li></ol>
-<p><b>Pas de compte Google ?</b> N’en créez pas un pour cette séance. Un compte par binôme suffit : travaillez ensemble sur l’ordinateur de la personne connectée, qui garde la main sur sa propre session. Ne partagez pas d’identifiants. Si aucun des deux n’a de compte, utilisez cet aperçu et suivez la démonstration collective ; vous pouvez toujours formuler les instructions, prédire les six cas et discuter les limites.</p>
+<p><b>Pas de compte Google ?</b> Depuis la page du cours, choisissez <b>Binder · sans compte</b>. C’est un environnement Jupyter open source ; son premier démarrage peut prendre quelques minutes. La session est temporaire : téléchargez les deux ZIP avant de la fermer.</p>
 <p><b>Le notebook enregistré et les fichiers du moteur d’exécution sont deux choses différentes.</b> Téléchargez le ZIP aux deux points de sauvegarde. Une reconnexion peut perdre les fichiers temporaires.</p>
 <p>Ne collez ni mots de passe, ni données personnelles de tiers, ni documents que vous n’êtes pas autorisés à déposer chez Google. Aucun dossier Drive n’est monté par ce notebook.</p>
 <p>En cas d’écran bloqué : utilisez l’autre poste du binôme ou l’aperçu déjà exécuté.</p>
@@ -142,13 +142,23 @@ def proposer_telechargement(fichier):
     try:
         from google.colab import files
     except ImportError:
-        print(&quot;Hors Colab — fichier disponible ici :&quot;, fichier)
+        try:
+            from IPython import get_ipython
+            from IPython.display import FileLink, display
+            if get_ipython() is None:
+                raise RuntimeError
+            copie = Path.cwd() / fichier.name
+            copie.write_bytes(fichier.read_bytes())
+            display(FileLink(copie.name, result_html_prefix=&quot;Télécharger : &quot;))
+            print(&quot;✓ Copie visible dans les fichiers Jupyter :&quot;, copie.name)
+        except (ImportError, RuntimeError):
+            print(&quot;Hors notebook — fichier disponible ici :&quot;, fichier)
     else:
         files.download(str(fichier))
 
 sauvegarder_projet()
 proposer_telechargement(creer_zip(&quot;esar-premiere-sauvegarde.zip&quot;))</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ À emporter : esar-premiere-sauvegarde.zip
-Hors Colab — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/esar-premiere-sauvegarde.zip
+Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/esar-premiere-sauvegarde.zip
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">INTERCEPTER · 2/5 · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">De l’instruction à l’interception</h2>
 <p style="font-size:22px">Instruction → <b>ce qu’on demande au modèle</b><br>Hook → <b>ce que le programme fait à un événement</b></p>

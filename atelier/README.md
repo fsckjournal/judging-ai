@@ -1,6 +1,6 @@
 # ESAR · Un lieu, une Skill, un hook
 
-Un atelier Google Colab en français, conçu pour travailler à deux sans prérequis de programmation. Le parcours central n’utilise ni clé API, ni modèle payant, ni GPU, ni installation sur le poste étudiant. Colab demande sa propre connexion Google ; les essais de réponses se font dans l’application de chat déjà disponible.
+Un atelier Jupyter en français, conçu pour travailler à deux sans prérequis de programmation. Le parcours central n’utilise ni clé API, ni modèle payant, ni GPU, ni installation sur le poste étudiant. Deux environnements ouvrent le même notebook : Google Colab avec un compte Google, ou Binder sans compte. Les essais de réponses se font dans l’application de chat déjà disponible.
 
 ## Ouvrir le bon fichier
 
@@ -10,7 +10,7 @@ Un atelier Google Colab en français, conçu pour travailler à deux sans prére
 - **Exemple de ce qu’emporte un binôme :** `EXEMPLE_toolkit.zip`. Il contient une Skill illustrative, les domaines fictifs et une comparaison de modèle explicitement en attente. Ce n’est pas un travail étudiant terminé.
 - **Reçu de vérification :** `VALIDATION.json`.
 
-Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : si une personne du binôme a un compte Google, utiliser son ordinateur, vérifier le compte affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. La personne connectée garde la main sur sa propre session ; les identifiants ne sont pas partagés. Si aucun des deux n’a de compte, ne pas en créer un pour la séance : utiliser l’aperçu déjà exécuté et suivre la démonstration collective. Le travail de formulation, de prédiction des six cas et de discussion reste possible, mais l’aperçu n’exécute pas Python. Depuis un fichier téléchargé, Colab demande aussi une connexion pour exécuter le notebook. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
+Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : vérifier le compte affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. Le bouton Binder ouvre le même notebook dans un environnement Jupyter open source sans demander de compte. Cette session publique est temporaire : ne rien y déposer de sensible et télécharger les deux ZIP avant de fermer. Le premier démarrage peut prendre quelques minutes. Hors Colab, chaque cellule de sauvegarde place aussi une copie du ZIP dans les fichiers Jupyter et affiche un lien de téléchargement. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
 
 ## Placement dans la séance · 45 minutes de manipulation
 

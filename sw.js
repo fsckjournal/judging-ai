@@ -1,5 +1,5 @@
-/* Judging AI · hors ligne. Version 03ae489c27e5 : chaque reconstruction change ce nom, l'ancien cache est jeté. */
-var V="judging-ai-03ae489c27e5", F=["./", "index.html", "journal/", "journal/index.html", "entrainement/", "entrainement/index.html", "atelier/", "atelier/index.html", "atelier/apercu.html", "atelier/ESAR_Un_lieu_une_Skill_un_hook.ipynb", "atelier/EXEMPLE_toolkit.zip", "atelier/README.md", "atelier/VALIDATION.json", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
+/* Judging AI · hors ligne. Version 84edc0903daf : chaque reconstruction change ce nom, l'ancien cache est jeté. */
+var V="judging-ai-84edc0903daf", F=["./", "index.html", "journal/", "journal/index.html", "entrainement/", "entrainement/index.html", "atelier/", "atelier/index.html", "atelier/apercu.html", "atelier/ESAR_Un_lieu_une_Skill_un_hook.ipynb", "atelier/EXEMPLE_toolkit.zip", "atelier/README.md", "atelier/VALIDATION.json", "manifest.webmanifest", "icon-180.png", "icon-192.png", "icon-512.png"];
 self.addEventListener("install",function(e){e.waitUntil(caches.open(V).then(function(c){return c.addAll(F);}).then(function(){return self.skipWaiting();}));});
 self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(ks){return Promise.all(ks.filter(function(k){return k!==V;}).map(function(k){return caches.delete(k);}));}).then(function(){return self.clients.claim();}));});
 self.addEventListener("fetch",function(e){
