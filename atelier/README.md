@@ -10,7 +10,7 @@ Un atelier Google Colab en français, conçu pour travailler à deux sans prére
 - **Exemple de ce qu’emporte un binôme :** `EXEMPLE_toolkit.zip`. Il contient une Skill illustrative, les domaines fictifs et une comparaison de modèle explicitement en attente. Ce n’est pas un travail étudiant terminé.
 - **Reçu de vérification :** `VALIDATION.json`.
 
-Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : vérifier le compte Google affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. Depuis un fichier téléchargé, utiliser **Fichier → Importer le notebook**. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
+Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : si une personne du binôme a un compte Google, utiliser son ordinateur, vérifier le compte affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. La personne connectée garde la main sur sa propre session ; les identifiants ne sont pas partagés. Si aucun des deux n’a de compte, ne pas en créer un pour la séance : utiliser l’aperçu déjà exécuté et suivre la démonstration collective. Le travail de formulation, de prédiction des six cas et de discussion reste possible, mais l’aperçu n’exécute pas Python. Depuis un fichier téléchargé, Colab demande aussi une connexion pour exécuter le notebook. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
 
 ## Placement dans la séance · 45 minutes de manipulation
 
