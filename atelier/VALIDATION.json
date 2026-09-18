@@ -92,7 +92,20 @@
   "plugin_validation_returncode": 0,
   "plugin_validation_stdout": "Validating plugin manifest: /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/atelier-lieu/.claude-plugin/plugin.json\n\n⚠ Found 1 warning:\n\n  ❯ author: No author information provided. Consider adding author details for plugin attribution\n\n✔ Validation passed with warnings\n",
   "plugin_validation_stderr": "",
-  "live_colab": "not tested",
+  "live_colab": {
+    "tested": true,
+    "date": "2026-09-18",
+    "entry": "published GitHub notebook opened from the Judging AI Colab URL",
+    "runtime": "connected Python 3 Google Compute Engine backend",
+    "cells_executed": 15,
+    "observed": [
+      "execution counts 1 through 15",
+      "6/6 expected classroom behaviors observed",
+      "final archive verified with 9 identified files",
+      "both google.colab.files.download calls reached"
+    ],
+    "browser_download_persistence": "not verified; the in-app browser exposed no recoverable download event or file"
+  },
   "native_hook_firing": "not tested",
   "model_comparison": "not performed; visibly pending"
 }

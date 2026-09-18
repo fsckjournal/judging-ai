@@ -10,7 +10,7 @@ Un atelier Google Colab en français, conçu pour travailler à deux sans prére
 - **Exemple de ce qu’emporte un binôme :** `EXEMPLE_toolkit.zip`. Il contient une Skill illustrative, les domaines fictifs et une comparaison de modèle explicitement en attente. Ce n’est pas un travail étudiant terminé.
 - **Reçu de vérification :** `VALIDATION.json`.
 
-Dans [Colab](https://colab.research.google.com/), importer le `.ipynb`, enregistrer une copie et connecter un moteur Python 3 / CPU. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
+Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : vérifier le compte Google affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. Depuis un fichier téléchargé, utiliser **Fichier → Importer le notebook**. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
 
 ## Placement dans la séance · 45 minutes de manipulation
 
@@ -52,7 +52,8 @@ Le mini-runner s’arrête sur toute erreur du sous-processus. Le runtime natif 
 ## Vérifications réalisées
 
 - Structure `nbformat` validée.
-- **15/15 cellules Python exécutées dans l’ordre**, avec une exécution Python contrôlée et un espace de variables partagé. Ce n’est pas une exécution dans un kernel Jupyter ni une session Google Colab.
+- **15/15 cellules Python exécutées dans l’ordre** lors de la validation locale contrôlée, avec un espace de variables partagé.
+- Le 18 septembre, le notebook publié a aussi été ouvert depuis son URL Colab et exécuté intégralement sur un moteur Python 3 Google Compute Engine : comptes d’exécution 1 à 15, six cas conformes et archive finale vérifiée avec neuf fichiers identifiés.
 - **6/6 cas pédagogiques** avec effet attendu et vérification du compteur de lecture.
 - **14 contrôles supplémentaires** : JSON incorrect, forme incorrecte de l’événement, URL absente ou non textuelle, protocole inadmissible, faux suffixe, identifiant avant `@`, hôte exact, casse, sous-domaine par défaut, outil hors périmètre, URL mal formée, option sous-domaines, configuration illisible.
 - Comparaison du même appel sans/avec hook ; réparation de la source utile sans ouverture du faux hôte.
@@ -60,13 +61,13 @@ Le mini-runner s’arrête sur toute erreur du sous-processus. Le runtime natif 
 - `claude plugin validate` : code de sortie 0. Ce contrôle de structure n’invoque aucun modèle et ne démontre pas le déclenchement natif.
 - Comparaison de réponses de modèles laissée **explicitement en attente**, sans données inventées.
 
-L’aperçu HTML a été produit et son contenu contrôlé structurellement, mais **pas inspecté visuellement dans un navigateur** : l’outil de navigation a refusé l’ouverture de l’URL `file://` locale. Aucun contournement de ce refus n’a été essayé. La relecture visuelle du notebook importé reste donc dans la répétition ci-dessous.
+L’aperçu HTML et son intégration publique ont été inspectés dans un navigateur aux formats ordinateur et mobile. L’ouverture du notebook publié dans Colab et l’exécution complète ont également été confirmées. Les deux appels `google.colab.files.download` ont été atteints ; le navigateur intégré n’a toutefois exposé ni événement de téléchargement récupérable ni fichier local, donc la conservation effective des deux ZIP reste à confirmer dans un navigateur étudiant ordinaire.
 
 ## À répéter avant la classe
 
-1. Importer le fichier dans un vrai compte Colab et lancer les cellules 01–02. La construction locale n’a pas vérifié l’interface Colab, le compte ou le réseau de l’école.
-2. Remplir un lieu d’essai, lancer jusqu’à 05 et confirmer le téléchargement du premier ZIP dans le navigateur.
-3. Lancer 06–15, vérifier le téléchargement final, puis quitter/reprendre la copie du notebook. Les fichiers du moteur peuvent disparaître ; les ZIP téléchargés restent les points de récupération.
+1. Depuis la page du cours, vérifier le compte Google affiché puis choisir **Copier sur Drive**. L’ouverture et l’exécution ont été testées ; la persistance de cette copie ne l’a pas été.
+2. Remplir un lieu d’essai, lancer jusqu’à 05 et confirmer que le premier ZIP apparaît réellement dans les téléchargements d’un navigateur étudiant ordinaire.
+3. Lancer 06–15, confirmer de la même manière le ZIP final, puis quitter et reprendre la copie du notebook. Les fichiers du moteur peuvent disparaître ; les ZIP téléchargés restent les points de récupération.
 4. Sur le poste déjà équipé de Claude Code et Python 3, suivre `LIRE_AVANT_CLAUDE_CODE.md` dans le ZIP. Conserver la trace du vrai WebFetch et du hook. **Ce déclenchement natif n’a pas été testé pendant cette construction.**
 5. Préparer une copie locale du notebook et de l’aperçu HTML pour ne pas dépendre uniquement du partage Google.
 
