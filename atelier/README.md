@@ -1,6 +1,8 @@
 # ESAR · Un lieu, une Skill, un hook
 
-Un atelier Jupyter en français, conçu pour travailler à deux sans prérequis de programmation. Le parcours central n’utilise ni clé API, ni modèle payant, ni GPU, ni installation sur le poste étudiant. Deux environnements ouvrent le même notebook : Google Colab avec un compte Google, ou Binder sans compte. Les essais de réponses se font dans l’application de chat déjà disponible.
+Un atelier Jupyter en français, dans Colab ou Binder, à deux sans prérequis de programmation. Aucun besoin de clé API, modèle payant, GPU ou installation étudiante. Colab demande un compte Google ; Binder s'ouvre sans compte dans une session publique temporaire. Les réponses viennent du chat déjà disponible, pas du notebook.
+
+**ChatGPT / OpenAI, Claude / Anthropic, Gemini / Google : le parcours commun ne choisit pas le fournisseur à la place du binôme.** OpenCode est l’option open source multi-fournisseur, facultative. Aucun Mac, iPhone ou Apple Shortcuts n’est nécessaire. Le [guide de compatibilité](COMPATIBILITE.md) distingue collage, Skill native, hook natif, comptes/coûts et essais effectivement réalisés.
 
 ## Ouvrir le bon fichier
 
@@ -9,10 +11,18 @@ Un atelier Jupyter en français, conçu pour travailler à deux sans prérequis 
 - **Pour lire sans exécuter :** `APERCU_ATELIER.html` — rendu autonome de la version exécutée. Ce n’est pas une application ni un environnement Python.
 - **Exemple de ce qu’emporte un binôme :** `EXEMPLE_toolkit.zip`. Il contient une Skill illustrative, les domaines fictifs et une comparaison de modèle explicitement en attente. Ce n’est pas un travail étudiant terminé.
 - **Reçu de vérification :** `VALIDATION.json`.
+- **Répétition dans un vrai kernel Jupyter :** `VALIDATION_JUPYTER.json`, avec `ESAR_Un_lieu_une_Skill_un_hook_JUPYTER.ipynb`. Les essais supplémentaires utilisent des textes synthétiques, pas un modèle.
+- **Compatibilité et limites :** `COMPATIBILITE.md`, également présent dans le ZIP.
 
-Depuis la page du cours, le bouton Colab ouvre directement le notebook publié : vérifier le compte affiché, choisir **Copier sur Drive**, puis connecter un moteur Python 3 / CPU. Le bouton Binder ouvre le même notebook dans un environnement Jupyter open source sans demander de compte. Cette session publique est temporaire : ne rien y déposer de sensible et télécharger les deux ZIP avant de fermer. Le premier démarrage peut prendre quelques minutes. Hors Colab, chaque cellule de sauvegarde place aussi une copie du ZIP dans les fichiers Jupyter et affiche un lien de téléchargement. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
+Le dossier `portable/` de chaque ZIP conserve du texte ordinaire : instructions, demandes sans/avec, ainsi que la Skill et, dans le ZIP final, les quatre documents fictifs et les six cas en JSON. Les demandes sont réutilisables dans les trois chats ; aucun manifeste Claude n’est requis pour ce parcours. Les premiers ZIP contiennent déjà les instructions et la Skill ; les demandes arrivent après la cellule 12. La comparaison doit rester dans le même modèle et les mêmes conditions, pas changer de fournisseur entre les deux réponses.
 
-## Placement dans la séance · 45 minutes de manipulation
+La cellule 03 conserve aussi l'affirmation, le passage de source, le standing et la décision avec sa conséquence. La cellule 04 offre cinq champs d'instructions (vides si inutiles), un format et une limite modifiables. Les réponses sont importées en 13 comme fichiers UTF-8 `sans.txt` et `avec.txt`, jamais comme code Python. Colab affiche le bouton d'import ; Binder lit les deux fichiers déposés dans le dossier du notebook par la flèche d'import JupyterLab. Une comparaison vide reste en attente. « Renseignée » vérifie la présence des champs, pas la qualité du raisonnement.
+
+Dans Binder, les ZIP apparaissent comme liens et dans `exports/esar-atelier-…/` : clic droit → Download. Une réexécution de 13 sans nouvel import conserve les réponses déjà lues. Après modification du jugement, relancer 13 puis 14–15. Ne pas relancer 01 en cours de travail : elle crée un nouvel atelier temporaire. La feuille `../FR/FEUILLE_TRAVAIL_S3.md` permet de conserver le raisonnement même si un import bloque.
+
+Dans [Colab](https://colab.research.google.com/), importer le `.ipynb`, enregistrer une copie et connecter un moteur Python 3 / CPU. Rien n’a été publié ou déposé dans un compte Google par la construction de cet atelier.
+
+## Placement dans la séance · estimation de 45 minutes de manipulation
 
 | Moment | Cellules exécutables | Travail du binôme |
 |---|---|---|
@@ -52,26 +62,27 @@ Le mini-runner s’arrête sur toute erreur du sous-processus. Le runtime natif 
 ## Vérifications réalisées
 
 - Structure `nbformat` validée.
-- **15/15 cellules Python exécutées dans l’ordre** lors de la validation locale contrôlée, avec un espace de variables partagé.
-- Le 18 septembre, le notebook publié a aussi été ouvert depuis son URL Colab et exécuté intégralement sur un moteur Python 3 Google Compute Engine : comptes d’exécution 1 à 15, six cas conformes et archive finale vérifiée avec neuf fichiers identifiés.
-- Le même jour, le bouton Binder a ouvert le notebook publié sans connexion dans JupyterLab avec un noyau Python 3. **Exécuter toutes les cellules** a atteint l’archive finale vérifiée ; les deux sauvegardes ont été rendues comme liens et comme fichiers Jupyter. Un premier lancement a échoué dans l’infrastructure publique (`fsnotify watcher: too many open files`) avant qu’un lancement ultérieur réussisse : Binder enlève le compte obligatoire, pas la dépendance à un service disponible.
+- **15/15 cellules Python exécutées dans l’ordre**, avec une exécution Python contrôlée et un espace de variables partagé. Ce n’est pas une exécution dans un kernel Jupyter ni une session Google Colab.
 - **6/6 cas pédagogiques** avec effet attendu et vérification du compteur de lecture.
 - **14 contrôles supplémentaires** : JSON incorrect, forme incorrecte de l’événement, URL absente ou non textuelle, protocole inadmissible, faux suffixe, identifiant avant `@`, hôte exact, casse, sous-domaine par défaut, outil hors périmètre, URL mal formée, option sous-domaines, configuration illisible.
 - Comparaison du même appel sans/avec hook ; réparation de la source utile sans ouverture du faux hôte.
 - ZIP valide ; intégrité vérifiée contre les empreintes des fichiers ; hook exporté identique au hook exécuté.
+- Exports portables vérifiés contre les variables réellement exécutées : instructions sans en-tête YAML, deux demandes avec la même question, Skill identique, quatre documents synthétiques, six cas et guide de compatibilité exact.
 - `claude plugin validate` : code de sortie 0. Ce contrôle de structure n’invoque aucun modèle et ne démontre pas le déclenchement natif.
 - Comparaison de réponses de modèles laissée **explicitement en attente**, sans données inventées.
+- Import de réponses : contenu ressemblant à du Python et triples guillemets conservés comme texte, BOM UTF-8 accepté, fichier manquant et encodage incorrect rejetés. Dix champs requis testés chacun vide puis avec un placeholder ; aucun ne laisse passer la comparaison comme complète.
 
-L’aperçu HTML et son intégration publique ont été inspectés dans un navigateur aux formats ordinateur et mobile. L’ouverture du notebook publié dans Colab et l’exécution complète ont également été confirmées. Les deux appels `google.colab.files.download` ont été atteints ; le navigateur intégré n’a toutefois exposé ni événement de téléchargement récupérable ni fichier local, donc la conservation effective des deux ZIP reste à confirmer dans un navigateur étudiant ordinaire.
+La révision est aussi exécutée dans un kernel Jupyter isolé : 15 cellules de classe puis cinq cellules de contrôle, import de deux fichiers UTF-8, liens de téléchargement Jupyter et réexport vérifié. `VALIDATION_JUPYTER.json` porte l'empreinte exacte. L'aperçu reprend la palette et la typographie du mur S2 ; son contrôle navigateur est distinct du contrôle Python.
+
+Le prototype publié plus tôt a ses propres essais Colab/Binder dans le rapport de session du site. **Ces anciens essais ne valident pas automatiquement cette révision.** Une synchronisation des fichiers locaux de publication n'est pas une publication GitHub Pages.
 
 ## À répéter avant la classe
 
-1. Depuis la page du cours, vérifier le compte Google affiché puis choisir **Copier sur Drive**. L’ouverture et l’exécution ont été testées ; la persistance de cette copie ne l’a pas été.
-2. Remplir un lieu d’essai, lancer jusqu’à 05 et confirmer que le premier ZIP apparaît réellement dans les téléchargements d’un navigateur étudiant ordinaire.
-3. Lancer 06–15, confirmer de la même manière le ZIP final, puis quitter et reprendre la copie du notebook. Les fichiers du moteur peuvent disparaître ; les ZIP téléchargés restent les points de récupération.
+1. Après publication ou distribution directe de ce fichier, lancer 01–02 dans Colab ou Binder. Les essais locaux ne vérifient ni le compte Colab ni le réseau de l'école pour cette révision.
+2. Remplir un lieu d’essai, lancer jusqu’à 05 et confirmer le téléchargement du premier ZIP dans le navigateur.
+3. Lancer 06–15, vérifier le téléchargement final, puis quitter/reprendre la copie du notebook. Les fichiers du moteur peuvent disparaître ; les ZIP téléchargés restent les points de récupération.
 4. Sur le poste déjà équipé de Claude Code et Python 3, suivre `LIRE_AVANT_CLAUDE_CODE.md` dans le ZIP. Conserver la trace du vrai WebFetch et du hook. **Ce déclenchement natif n’a pas été testé pendant cette construction.**
 5. Préparer une copie locale du notebook et de l’aperçu HTML pour ne pas dépendre uniquement du partage Google.
-6. Ouvrir Binder une fois avant la classe pour amorcer son image ; conserver Colab et l’aperçu comme replis si le service public tarde ou refuse un lancement.
 
 En cas de perte du moteur Colab, relancer le notebook dont les cellules modifiées ont été enregistrées. Si seule l’archive reste, `notre-projet.json`, `comparaison.json` et `SKILL.md` conservent les textes : les recopier dans une nouvelle copie du notebook. Le ZIP ne rétablit pas automatiquement une session Google.
 
@@ -82,8 +93,9 @@ Depuis le dossier du projet :
 ```sh
 python3 ESAR/S3_2026-09-18/COLAB/build_notebook.py
 python3 ESAR/S3_2026-09-18/COLAB/validate_notebook.py
+uv run --no-project --with nbclient --with ipykernel --with nbformat python ESAR/S3_2026-09-18/COLAB/validate_kernel.py
 ```
 
 Les scripts d’auteur utilisent `nbformat` déjà disponible sur le poste de construction ; le validateur appelle également `claude plugin validate`. **Le notebook étudiant n’a pas besoin de ces dépendances.** Le validateur crée un dossier temporaire d’essai et ne touche aucune configuration personnelle d’agent.
 
-Références techniques consultées le 18 septembre 2026 : [Google Colab — FAQ](https://research.google.com/colaboratory/faq.html), [Project Jupyter — Binder](https://jupyter.org/binder), [Binder — usage guidelines](https://mybinder.readthedocs.io/en/latest/about/user-guidelines.html), [Claude Code — hooks](https://code.claude.com/docs/en/hooks), [Claude Code — plugins](https://code.claude.com/docs/en/plugins).
+Références techniques consultées le 18 septembre 2026 : [Google Colab — FAQ](https://research.google.com/colaboratory/faq.html), [Claude Code — hooks](https://code.claude.com/docs/en/hooks), [Claude Code — plugins](https://code.claude.com/docs/en/plugins).

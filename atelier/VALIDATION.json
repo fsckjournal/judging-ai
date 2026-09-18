@@ -1,5 +1,6 @@
 {
   "execution": "controlled sequential Python execution; not Jupyter kernel or live Colab",
+  "notebook_sha256": "fe71335bcae6241151181fa93ce51aa1bb8bede8f64fea4c184f8f43de05bb51",
   "python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.0.0 (clang-2100.1.1.101)]",
   "cells_executed": 15,
   "cells_total": 33,
@@ -77,6 +78,7 @@
     }
   ],
   "bundle_members": [
+    "COMPATIBILITE.md",
     "LIRE_AVANT_CLAUDE_CODE.md",
     "atelier-lieu/.claude-plugin/plugin.json",
     "atelier-lieu/hooks/domaines.json",
@@ -86,41 +88,42 @@
     "comparaison.json",
     "empreintes.json",
     "essais-hook.json",
-    "notre-projet.json"
+    "notre-projet.json",
+    "portable/cas-hook.json",
+    "portable/demande-avec.txt",
+    "portable/demande-sans.txt",
+    "portable/documents-fictifs.json",
+    "portable/instructions.txt",
+    "portable/skill/lieu-v0/SKILL.md"
   ],
-  "bundle_hashes_verified": 9,
+  "bundle_hashes_verified": 16,
+  "portable_export": {
+    "plain_instructions": "exact match",
+    "prompts": "exact match; same question",
+    "skill": "identical to Claude example Skill",
+    "synthetic_documents": 4,
+    "synthetic_cases": 6,
+    "compatibility_guide": "exact match",
+    "native_clients_tested": []
+  },
+  "response_import_and_completeness": {
+    "inert_code_like_text": "preserved without execution",
+    "utf8_bom": "accepted",
+    "missing_file": "rejected",
+    "invalid_utf8": "rejected",
+    "complete_example": "accepted as present fields, not quality",
+    "empty_required_fields_rejected": 10,
+    "placeholder_required_fields_rejected": 10
+  },
+  "domain_form": {
+    "normalized_and_deduplicated": true,
+    "invalid_inputs_rejected": 6,
+    "hosted_colab_form": "not tested"
+  },
   "plugin_validation_returncode": 0,
-  "plugin_validation_stdout": "Validating plugin manifest: /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/atelier-lieu/.claude-plugin/plugin.json\n\n⚠ Found 1 warning:\n\n  ❯ author: No author information provided. Consider adding author details for plugin attribution\n\n✔ Validation passed with warnings\n",
+  "plugin_validation_stdout": "Validating plugin manifest: /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj/atelier-lieu/.claude-plugin/plugin.json\n\n⚠ Found 1 warning:\n\n  ❯ author: No author information provided. Consider adding author details for plugin attribution\n\n✔ Validation passed with warnings\n",
   "plugin_validation_stderr": "",
-  "live_colab": {
-    "tested": true,
-    "date": "2026-09-18",
-    "entry": "published GitHub notebook opened from the Judging AI Colab URL",
-    "runtime": "connected Python 3 Google Compute Engine backend",
-    "cells_executed": 15,
-    "observed": [
-      "execution counts 1 through 15",
-      "6/6 expected classroom behaviors observed",
-      "final archive verified with 9 identified files",
-      "both google.colab.files.download calls reached"
-    ],
-    "browser_download_persistence": "not verified; the in-app browser exposed no recoverable download event or file"
-  },
-  "live_binder": {
-    "tested": true,
-    "date": "2026-09-18",
-    "entry": "published GitHub notebook opened from the Judging AI Binder URL without login",
-    "runtime": "JupyterLab with Python 3 (ipykernel) on the 2i2c mybinder.org federation member",
-    "run_all_reached_final_cell": true,
-    "observed": [
-      "final archive verified with 9 identified files",
-      "first and final ZIP copied into the Jupyter file area and rendered as download links",
-      "kernel returned to idle",
-      "no Playwright page errors"
-    ],
-    "startup_variability": "the first public launch failed before startup with fsnotify watcher: too many open files; a later launch succeeded",
-    "persistence": "temporary session; students must download their ZIP files before closing"
-  },
+  "live_colab": "not tested",
   "native_hook_firing": "not tested",
   "model_comparison": "not performed; visibly pending"
 }

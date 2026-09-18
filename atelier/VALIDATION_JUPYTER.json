@@ -1,0 +1,15 @@
+{
+  "notebook_sha256": "fe71335bcae6241151181fa93ce51aa1bb8bede8f64fea4c184f8f43de05bb51",
+  "execution": "isolated real Jupyter kernel",
+  "classroom_code_cells": 15,
+  "additional_rehearsal_cells": 5,
+  "errors": [],
+  "jupyter_download_links": 3,
+  "response_import": "two synthetic UTF-8 files, including BOM and triple quotes",
+  "reexport": "comparison and verification retained; all 16 hashes matched",
+  "hosted_colab": "not tested for this revision",
+  "hosted_binder": "not tested for this revision",
+  "native_hook": "not tested",
+  "model_calls": 0,
+  "student_learning": "not measured"
+}

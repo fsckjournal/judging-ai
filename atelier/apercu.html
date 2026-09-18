@@ -1,15 +1,15 @@
 <!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ESAR · Un lieu, une Skill, un hook</title><style>
-*{box-sizing:border-box}body{margin:0;background:#eee;color:#181818;font:17px/1.6 system-ui,-apple-system,sans-serif}
-main{max-width:1000px;margin:40px auto;background:#fff;padding:60px 72px}
-p,li{max-width:76ch}h2{letter-spacing:-.025em}a{color:#333}code{background:#eee;padding:1px 4px;border-radius:3px;font-size:.9em}
+*{box-sizing:border-box}body{margin:0;background:#08090b;color:#e8e6e1;font:18px/1.6 Georgia,serif}
+main{max-width:1000px;margin:40px auto;background:#08090b;padding:36px 48px}
+p,li{max-width:76ch}h2{letter-spacing:-.025em;font-weight:400}a{color:#d97757}code{background:#181b20;padding:1px 4px;border-radius:3px;font-size:.9em}
 table{border-collapse:collapse;width:100%;margin:20px 0;font-size:15px}th,td{text-align:left;padding:10px;border-bottom:1px solid #d8d9d2;vertical-align:top}
-th{background:#222;color:white}.cell{border:1px solid #ccc;border-radius:4px;overflow:hidden;margin:12px 0 40px;background:#fff}
-.cell h3{font-size:17px;margin:0;padding:16px 20px;background:#eee}.cell details{padding:12px 20px}summary{cursor:pointer;color:#555}
+th{background:#181b20;color:#e8e6e1}.cell{border:1px solid #3e4147;border-radius:4px;overflow:hidden;margin:12px 0 40px;background:#08090b}
+.cell h3{font-size:19px;font-weight:400;margin:0;padding:16px 20px;background:#181b20}.cell details{padding:12px 20px}summary{cursor:pointer;color:#d97757}
 pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 ui-monospace,SFMono-Regular,monospace;margin:10px 0}
-.output{padding:14px 20px;background:#f7f7f7;border-top:1px solid #ddd}.output span{font-size:10px;letter-spacing:1.7px;color:#666}
-.notice{background:#222;color:#fff;padding:18px 24px;border-radius:4px;margin-bottom:35px;font-size:15px}
-@media(max-width:700px){main{margin:0;padding:28px 20px}body{font-size:16px}table{display:block;width:100%;max-width:100%;overflow-x:auto;font-size:13px}th,td{padding:7px}}
+.output{padding:14px 20px;background:#111316;border-top:1px solid #3e4147}.output span{font-size:11px;letter-spacing:1.7px;color:#bbb6ad}
+.notice{border-left:2px solid #d97757;background:#181b20;color:#e8e6e1;padding:18px 24px;margin-bottom:35px;font-size:16px}
+@media(max-width:700px){main{margin:0;padding:28px 20px}body{font-size:16px}table{font-size:13px}th,td{padding:7px}}
 </style><main><div class="notice">APERÇU DE L’ATELIER · Les cellules ont été exécutées localement avec les données fictives. Cette page ne les exécute pas. Ouvrir le fichier .ipynb dans Colab ou Binder pour manipuler.</div><div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ESAR · S3 · LABORATOIRE JUPYTER </p><h2 style="font-size:30px;line-height:1.15">Un lieu. Une instruction. Un effet observable.</h2>
 <p style="font-size:20px">Vous n’allez pas apprendre à croire une IA. Vous allez fabriquer quelque chose qui change son travail — puis chercher ce que cela ne change pas.</p>
 <p><b>À emporter :</b> votre <code>SKILL.md</code>, un hook Python, ses essais, une comparaison de réponses et un dossier portable.</p>
@@ -17,16 +17,17 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 ui-monospace,SFMo
 <table><tr><th>1 · Ouvrir</th><th>2 · Formuler</th><th>3 · Intercepter</th><th>4 · Éprouver</th><th>5 · Emporter</th></tr>
 <tr><td>3 min</td><td>10 min</td><td>12 min</td><td>15 min</td><td>5 min</td></tr></table>
 <p><b>Pas de clé API. Pas de GPU. Pas d’installation locale pour ce parcours.</b> Le notebook exécute du Python ; votre application de chat habituelle sert à comparer les réponses.</p>
+<p><b>ChatGPT · Claude · Gemini :</b> gardez le chat déjà disponible. Le même texte d’instructions et les mêmes essais sont exportés sans format propriétaire. <b>OpenCode</b>, client open source multi-fournisseur, est une voie facultative pour aller plus loin. Aucun Mac, iPhone ou Apple Shortcuts n’est nécessaire.</p>
 <p>Les documents de démonstration ci-dessous sont <b>inventés et signalés comme tels</b>. Ils ne sont pas des sources sur Beyrouth. Remplacez le lieu et les réponses par votre propre travail.</p>
 </div>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 1 MIN</p><h2 style="font-size:30px;line-height:1.15">Avant le premier triangle ▶</h2>
-<ol><li><b>Si vous utilisez Colab depuis la page du cours :</b> le notebook est déjà ouvert. Vérifiez le compte Google affiché, puis cliquez sur <b>Copier sur Drive</b> avant de le modifier.</li>
-<li><b>Depuis un fichier téléchargé :</b> ouvrez <a href="https://colab.research.google.com/">Google Colab</a> → <b>Fichier</b> → <b>Importer le notebook</b>, puis choisissez le <code>.ipynb</code>.</li>
-<li>Choisissez un environnement <b>Python 3 / CPU</b>, cliquez sur <b>Se connecter</b>, puis exécutez chaque cellule avec ▶.</li></ol>
-<p><b>Pas de compte Google ?</b> Depuis la page du cours, choisissez <b>Binder · sans compte</b>. C’est un environnement Jupyter open source ; son premier démarrage peut prendre quelques minutes. La session est temporaire : téléchargez les deux ZIP avant de la fermer.</p>
+<ol><li>Depuis la page du cours, choisissez <b>Colab</b> (compte Google) ou <b>Binder</b> (sans compte). Ne lancez qu’un environnement.</li>
+<li>Dans Colab : vérifiez le compte affiché, <b>Copier sur Drive</b>, puis <b>Se connecter</b> en Python 3 / CPU. Depuis un fichier téléchargé : <b>Fichier → Importer le notebook</b>.</li>
+<li>Dans Binder : attendez JupyterLab, puis sélectionnez une cellule et <b>Shift + Entrée</b>. Les champs Colab apparaissent ici comme variables Python : ne modifiez que leur valeur. Faites-vous accompagner si les guillemets bloquent.</li>
+<li>Lisez chaque courte consigne, modifiez les champs, puis cliquez sur ▶ à gauche de la cellule.</li></ol>
 <p><b>Le notebook enregistré et les fichiers du moteur d’exécution sont deux choses différentes.</b> Téléchargez le ZIP aux deux points de sauvegarde. Une reconnexion peut perdre les fichiers temporaires.</p>
-<p>Ne collez ni mots de passe, ni données personnelles de tiers, ni documents que vous n’êtes pas autorisés à déposer dans Colab ou Binder. Aucun dossier Drive n’est monté par ce notebook.</p>
-<p>En cas d’écran bloqué : utilisez l’autre poste du binôme ou l’aperçu déjà exécuté.</p>
+<p>Ne collez ni mots de passe, ni données personnelles de tiers, ni documents que vous n’êtes pas autorisés à déposer dans Colab ou Binder. Aucun dossier Drive n’est monté par ce notebook. Binder est temporaire : gardez les ZIP et téléchargez aussi le notebook modifié.</p>
+<p>En cas d’écran bloqué : votre binôme peut utiliser l’ordinateur voisin ; le fichier HTML fourni à l’enseignant contient l’exemple déjà exécuté.</p>
 </div>
 <section class="cell"><h3>▶ 01 · Ouvrir l’atelier — premier résultat</h3><details><summary>Voir le code Python</summary><pre>from pathlib import Path
 import json, sys, subprocess, tempfile, zipfile, hashlib, re
@@ -35,6 +36,8 @@ from datetime import datetime, timezone
 # Dossier neuf à chaque exécution : aucune configuration personnelle n’est modifiée.
 ATELIER = Path(tempfile.mkdtemp(prefix=&quot;esar-atelier-&quot;))
 PLUGIN = ATELIER / &quot;atelier-lieu&quot;
+PORTABLE = ATELIER / &quot;portable&quot;
+(PORTABLE / &quot;skill&quot; / &quot;lieu-v0&quot;).mkdir(parents=True)
 (PLUGIN / &quot;hooks&quot;).mkdir(parents=True)
 (PLUGIN / &quot;skills&quot; / &quot;lieu-v0&quot;).mkdir(parents=True)
 (PLUGIN / &quot;.claude-plugin&quot;).mkdir(parents=True)
@@ -42,7 +45,7 @@ print(&quot;✓ Votre atelier est ouvert.&quot;)
 print(&quot;✓ Python est prêt. Aucun compte de modèle ni accès réseau n’a été utilisé.&quot;)
 print(&quot;Dossier temporaire :&quot;, ATELIER)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Votre atelier est ouvert.
 ✓ Python est prêt. Aucun compte de modèle ni accès réseau n’a été utilisé.
-Dossier temporaire : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj
+Dossier temporaire : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">L’action a-t-elle eu lieu ?</h2>
 <p>Un hook intervient à un moment précis. Ici : <b>juste avant</b> la lecture d’un document. Exécutez la cellule, puis changez <code>INTERCEPTER = True</code> en <code>False</code> et relancez.</p>
@@ -59,7 +62,7 @@ Le document n’a pas été lu par cette cellule.
 Question : est-ce le modèle qui a choisi de s’arrêter ? Non : c’est le programme.
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">FORMULER · 1/5 · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Votre lieu, votre difficulté</h2>
-<p>Revenez à une réponse réellement obtenue sur votre lieu. Retenez <b>un défaut précis</b> : attribution fusionnée, référence introuvable, désaccord effacé, précision sans source…</p>
+<p>Revenez à une réponse réellement obtenue sur votre lieu. Retenez <b>un besoin précis</b> : attribution fusionnée, référence introuvable, désaccord effacé, précision sans source… Si la réponse est juste et utile, dites ce qui mérite d’être préservé ; ne lui inventez pas une faute.</p>
 <p><b>La bonne question :</b> quel changement un autre binôme pourrait-il constater dans la prochaine réponse ? « Sois fiable » ne permet pas de le vérifier.</p>
 </div>
 <section class="cell"><h3>▶ 03 · Remplir notre point de départ</h3><details><summary>Voir le code Python</summary><pre>LIEU = &quot;Votre lieu à Beyrouth&quot; #@param {type:&quot;string&quot;}
@@ -67,6 +70,10 @@ QUESTION = &quot;Qui a conçu ce lieu, et sur quelles pièces peut-on appuyer ce
 DEFAUT_OBSERVE = &quot;À remplacer par un passage de notre vraie réponse : ...&quot; #@param {type:&quot;string&quot;}
 EFFET_ATTENDU = &quot;Distinguer ce qu’une source attribue de ce que nous pouvons conclure.&quot; #@param {type:&quot;string&quot;}
 DONNEES_DISPONIBLES = &quot;À décrire : documents fournis, web disponible ou non.&quot; #@param {type:&quot;string&quot;}
+AFFIRMATION = &quot;À renseigner : phrase exacte de la réponse examinée.&quot; #@param {type:&quot;string&quot;}
+PASSAGE_SOURCE = &quot;À renseigner : auteur, titre, page ou URL, passage effectivement lu.&quot; #@param {type:&quot;string&quot;}
+STATUT_ORIX = &quot;À renseigner : O/R/I/X et raison ; distinct de vrai ou faux.&quot; #@param {type:&quot;string&quot;}
+DECISION_SOURCE = &quot;À renseigner : garder, corriger ou suspendre ; pourquoi et quelle conséquence dans notre notice ?&quot; #@param {type:&quot;string&quot;}
 print(&quot;LIEU →&quot;, LIEU)
 print(&quot;DÉFAUT OBSERVÉ →&quot;, DEFAUT_OBSERVE)
 print(&quot;EFFET QUE NOUS CHERCHONS →&quot;, EFFET_ATTENDU)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>LIEU → Votre lieu à Beyrouth
@@ -78,11 +85,14 @@ EFFET QUE NOUS CHERCHONS → Distinguer ce qu’une source attribue de ce que no
 <p>Choisissez une à cinq instructions issues du défaut observé. L’exemple ci-dessous propose trois comportements. Gardez, réécrivez ou supprimez ; <b>le nombre d’instructions n’est pas une note</b>.</p>
 <p><b>Exemple testable :</b> « Présente séparément les attributions contradictoires et leur source. » Un refus automatique de toute question difficile n’est pas une amélioration.</p>
 </div>
-<section class="cell"><h3>▶ 04 · Écrire notre SKILL.md</h3><details><summary>Voir le code Python</summary><pre>INSTRUCTIONS = [
-    &quot;Distingue l’attribution rapportée par une source de ta conclusion sur l’auteur du lieu.&quot;,
-    &quot;Pour chaque attribution, donne la pièce effectivement consultée ; sinon écris non vérifié.&quot;,
-    &quot;Quand deux sources divergent, conserve les deux attributions sans inventer une conciliation.&quot;,
-]
+<section class="cell"><h3>▶ 04 · Écrire notre SKILL.md</h3><details><summary>Voir le code Python</summary><pre>INSTRUCTION_1 = &quot;Distingue l’attribution rapportée par une source de ta conclusion sur l’auteur du lieu.&quot; #@param {type:&quot;string&quot;}
+INSTRUCTION_2 = &quot;Pour chaque attribution, donne la pièce effectivement consultée ; sinon écris non vérifié.&quot; #@param {type:&quot;string&quot;}
+INSTRUCTION_3 = &quot;Quand deux sources divergent, conserve les deux attributions sans inventer une conciliation.&quot; #@param {type:&quot;string&quot;}
+INSTRUCTION_4 = &quot;&quot; #@param {type:&quot;string&quot;}
+INSTRUCTION_5 = &quot;&quot; #@param {type:&quot;string&quot;}
+FORMAT_REPONSE = &quot;Attribution · pièce consultée · désaccord éventuel · ce qui reste à vérifier.&quot; #@param {type:&quot;string&quot;}
+LIMITE_SKILL = &quot;Ne transforme pas une absence de vérification en preuve de fausseté.&quot; #@param {type:&quot;string&quot;}
+INSTRUCTIONS = [x.strip() for x in [INSTRUCTION_1, INSTRUCTION_2, INSTRUCTION_3, INSTRUCTION_4, INSTRUCTION_5] if x.strip()]
 assert 1 &lt;= len(INSTRUCTIONS) &lt;= 5, &quot;Choisissez de une à cinq instructions.&quot;
 assert all(isinstance(x, str) and x.strip() for x in INSTRUCTIONS), &quot;Une instruction est vide.&quot;
 
@@ -91,9 +101,11 @@ SKILL = &quot;---\nname: lieu-v0\ndescription: &quot; + json.dumps(DESCRIPTION, 
 SKILL += f&quot;# Examiner {LIEU}\n\n## Quand l’utiliser\nPour cette question : {QUESTION}\n&quot;
 SKILL += f&quot;\n## Matériaux disponibles\n{DONNEES_DISPONIBLES}\n\n## Instructions\n&quot;
 SKILL += &quot;\n&quot;.join(f&quot;{i+1}. {phrase}&quot; for i, phrase in enumerate(INSTRUCTIONS))
-SKILL += &quot;\n\n## Réponse attendue\nAttribution · pièce consultée · désaccord éventuel · ce qui reste à vérifier.\n&quot;
-SKILL += &quot;\nNe transforme pas une absence de vérification en preuve de fausseté.\n&quot;
+SKILL += f&quot;\n\n## Réponse attendue\n{FORMAT_REPONSE}\n\n## Limite\n{LIMITE_SKILL}\n&quot;
 (PLUGIN / &quot;skills&quot; / &quot;lieu-v0&quot; / &quot;SKILL.md&quot;).write_text(SKILL, encoding=&quot;utf-8&quot;)
+INSTRUCTIONS_TEXTE = SKILL.split(&quot;---&quot;, 2)[2].lstrip()
+(PORTABLE / &quot;instructions.txt&quot;).write_text(INSTRUCTIONS_TEXTE, encoding=&quot;utf-8&quot;)
+(PORTABLE / &quot;skill&quot; / &quot;lieu-v0&quot; / &quot;SKILL.md&quot;).write_text(SKILL, encoding=&quot;utf-8&quot;)
 print(SKILL)
 print(&quot;✓ Fichier créé. Cela ne prouve pas encore qu’un modèle l’a chargé ni respecté.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>---
 name: lieu-v0
@@ -116,6 +128,7 @@ Pour cette question : Qui a conçu ce lieu, et sur quelles pièces peut-on appuy
 ## Réponse attendue
 Attribution · pièce consultée · désaccord éventuel · ce qui reste à vérifier.
 
+## Limite
 Ne transforme pas une absence de vérification en preuve de fausseté.
 
 ✓ Fichier créé. Cela ne prouve pas encore qu’un modèle l’a chargé ni respecté.
@@ -126,7 +139,9 @@ Ne transforme pas une absence de vérification en preuve de fausseté.
 <section class="cell"><h3>▶ 05 · Télécharger une première sauvegarde</h3><details><summary>Voir le code Python</summary><pre>def sauvegarder_projet():
     projet = {&quot;lieu&quot;: LIEU, &quot;question&quot;: QUESTION, &quot;defaut_observe&quot;: DEFAUT_OBSERVE,
               &quot;effet_attendu&quot;: EFFET_ATTENDU, &quot;donnees&quot;: DONNEES_DISPONIBLES,
-              &quot;instructions&quot;: INSTRUCTIONS}
+              &quot;instructions&quot;: INSTRUCTIONS, &quot;format_reponse&quot;: FORMAT_REPONSE, &quot;limite_skill&quot;: LIMITE_SKILL,
+              &quot;verification&quot;: {&quot;affirmation&quot;: AFFIRMATION, &quot;passage_source&quot;: PASSAGE_SOURCE,
+                  &quot;standing&quot;: STATUT_ORIX, &quot;decision_et_consequence&quot;: DECISION_SOURCE}}
     (ATELIER / &quot;notre-projet.json&quot;).write_text(json.dumps(projet, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
 
 def creer_zip(nom):
@@ -147,10 +162,13 @@ def proposer_telechargement(fichier):
             from IPython.display import FileLink, display
             if get_ipython() is None:
                 raise RuntimeError
-            copie = Path.cwd() / fichier.name
+            # Visible sous la racine Jupyter, pas un lien inutilisable vers /tmp.
+            destination = Path.cwd() / &quot;exports&quot; / ATELIER.name
+            destination.mkdir(parents=True, exist_ok=True)
+            copie = destination / fichier.name
             copie.write_bytes(fichier.read_bytes())
-            display(FileLink(copie.name, result_html_prefix=&quot;Télécharger : &quot;))
-            print(&quot;✓ Copie visible dans les fichiers Jupyter :&quot;, copie.name)
+            display(FileLink(str(copie.relative_to(Path.cwd())), result_html_prefix=&quot;Télécharger : &quot;))
+            print(&quot;Jupyter : clic droit sur le ZIP dans exports → Download si le lien ne télécharge pas.&quot;)
         except (ImportError, RuntimeError):
             print(&quot;Hors notebook — fichier disponible ici :&quot;, fichier)
     else:
@@ -158,12 +176,12 @@ def proposer_telechargement(fichier):
 
 sauvegarder_projet()
 proposer_telechargement(creer_zip(&quot;esar-premiere-sauvegarde.zip&quot;))</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ À emporter : esar-premiere-sauvegarde.zip
-Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/esar-premiere-sauvegarde.zip
+Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj/esar-premiere-sauvegarde.zip
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">INTERCEPTER · 2/5 · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">De l’instruction à l’interception</h2>
 <p style="font-size:22px">Instruction → <b>ce qu’on demande au modèle</b><br>Hook → <b>ce que le programme fait à un événement</b></p>
 <p>Nous allons intercepter une demande de lecture web. L’essai reste hors ligne : un petit lecteur ouvre un document fictif en mémoire. Le hook, lui, est un <b>vrai programme Python</b>, appelé automatiquement avant le lecteur.</p>
-<p><b>Portée exacte :</b> ce mécanisme agit dans ce notebook. Il ne contrôle ni votre chat ouvert ailleurs, ni tout le réseau de l’environnement Jupyter. L’export permettra un essai séparé dans Claude Code.</p>
+<p><b>Portée exacte :</b> ce mécanisme agit dans ce notebook. Il ne contrôle ni votre chat ouvert ailleurs, ni tout le réseau de Colab. Les hooks natifs dépendent du client : l’export conserve une démonstration Claude Code facultative, pas un branchement universel.</p>
 </div>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">Qu’est-ce que votre hook doit décider ?</h2>
 <p>Notre premier choix : autoriser la lecture seulement si l’hôte de l’URL appartient à une liste explicitement choisie. Ce n’est <b>pas</b> une liste des lieux où tout serait vrai.</p>
@@ -325,10 +343,19 @@ Cas 04 : une erreur est passée. Cas 05 : un témoignage utile a été arrêté.
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Réparer sans ouvrir toutes les portes</h2>
 <p>Le cas 05 est utile mais bloqué. Vous avez examiné son intérêt ; ajoutez uniquement son hôte. <b>Le cas ressemblant doit rester bloqué.</b></p>
+<p>Dans le formulaire, saisissez les noms d’hôtes séparés par une virgule, sans guillemets ni crochets. Le code transforme ce texte en liste. Gardez les deux hôtes proposés pour cet essai commun.</p>
 <p>Question d’architecture : si l’on ne retient que des archives institutionnelles, quelles expériences du lieu deviennent invisibles ? Élargir la liste est un choix argumenté ; ce n’est pas certifier chaque phrase du témoignage.</p>
 </div>
-<section class="cell"><h3>▶ 10 · Corriger l’exclusion d’une source pertinente</h3><details><summary>Voir le code Python</summary><pre>DOMAINES_REVISES = [&quot;archives.example.org&quot;, &quot;memoire.example.net&quot;]
-JUSTIFICATION = &quot;Nous voulons confronter la notice à un témoignage sur l’usage du lieu ; son contenu reste à examiner.&quot;
+<section class="cell"><h3>▶ 10 · Corriger l’exclusion d’une source pertinente</h3><details><summary>Voir le code Python</summary><pre>DOMAINES_REVISES_TEXTE = &quot;archives.example.org, memoire.example.net&quot; #@param {type:&quot;string&quot;}
+JUSTIFICATION = &quot;Nous voulons confronter la notice à un témoignage sur l’usage du lieu ; son contenu reste à examiner.&quot; #@param {type:&quot;string&quot;}
+def lire_domaines_revises(texte):
+    domaines = [d.strip().lower() for d in texte.split(&quot;,&quot;) if d.strip()]
+    if not domaines:
+        raise ValueError(&quot;Saisissez au moins un nom d’hôte dans le champ, par exemple archives.example.org.&quot;)
+    if any(not re.fullmatch(r&quot;[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+&quot;, d) for d in domaines):
+        raise ValueError(&quot;Saisissez seulement les noms d’hôtes séparés par des virgules, sans https://, chemin, guillemets ni crochets.&quot;)
+    return list(dict.fromkeys(domaines))
+DOMAINES_REVISES = lire_domaines_revises(DOMAINES_REVISES_TEXTE)
 ecrire_configuration(DOMAINES_REVISES, False)
 preuve_utile = proposer_lecture(&quot;https://memoire.example.net/temoignage&quot;)
 preuve_piege = proposer_lecture(&quot;https://archives.example.org.pirate.example/notice-17&quot;)
@@ -361,25 +388,26 @@ Différence établie pour cet appel et cette configuration seulement.
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">COMPARER · 4/5 · 8 MIN</p><h2 style="font-size:30px;line-height:1.15">Et la Skill, a-t-elle changé la réponse ?</h2>
 <p>Ouvrez <b>deux conversations neuves</b> dans la même application, avec le même modèle affiché, les mêmes documents et le même accès web. Dans l’une, posez la question seule ; dans l’autre, collez les instructions puis exactement la même question.</p>
-<p>Les binômes pairs commencent sans Skill ; les impairs commencent avec. Collez les deux réponses complètes dans la cellule suivante, entre les triples guillemets, à la place de « COLLER ICI… ». <b>Ici, « avec » signifie instructions collées, pas Skill nativement chargée.</b></p>
+<p><b>ChatGPT, Claude ou Gemini :</b> ce choix ne change pas la manipulation. Ne faites pas « sans » chez un fournisseur et « avec » chez un autre : vous ne pourriez pas isoler le changement d’instructions.</p>
+<p>Les binômes pairs commencent sans Skill ; les impairs commencent avec. Enregistrez les réponses complètes en <b>texte brut UTF-8</b>, dans deux fichiers nommés <code>sans.txt</code> et <code>avec.txt</code>. À la cellule 13, cochez <code>IMPORTER_REPONSES</code>, exécutez, puis sélectionnez les deux fichiers. <b>Ne collez jamais une réponse dans le code Python.</b> Ici, « avec » signifie instructions collées, pas Skill nativement chargée.</p>
+<p>Si l’enregistrement en texte brut bloque, gardez les deux réponses hors du notebook et laissez la comparaison « en attente » ; le banc de hook et l’export restent utilisables. L’enseignant peut montrer cette importation sans en faire un test de maîtrise informatique.</p>
+<p><b>Binder / JupyterLab :</b> utilisez la flèche d’import du navigateur de fichiers pour déposer <code>sans.txt</code> et <code>avec.txt</code> dans le dossier du notebook, puis choisissez <code>IMPORTER_REPONSES = True</code> et exécutez 13. Le code lit ces fichiers comme texte, jamais comme Python. Après modification d’un jugement, relancez 13 puis 14–15 pour réexporter.</p>
 <p>Ne demandez pas au modèle de noter sa propre obéissance : relevez une phrase qui établit l’effet et une limite encore présente. Un essai unique ne prouve pas un gain général.</p>
 </div>
-<section class="cell"><h3>▶ 12 · Préparer les deux demandes comparables</h3><details><summary>Voir le code Python</summary><pre>PROMPT_SANS = f&quot;Lieu : {LIEU}\nQuestion : {QUESTION}&quot;
-PROMPT_AVEC = SKILL + &quot;\n\n---\n\n&quot; + PROMPT_SANS
+<section class="cell"><h3>▶ 12 · Préparer les deux demandes comparables</h3><details><summary>Voir le code Python</summary><pre>PROMPT_SANS = f&quot;Lieu : {LIEU}\nMatériaux disponibles : {DONNEES_DISPONIBLES}\nQuestion : {QUESTION}&quot;
+PROMPT_AVEC = INSTRUCTIONS_TEXTE + &quot;\n\n---\n\n&quot; + PROMPT_SANS
+(PORTABLE / &quot;demande-sans.txt&quot;).write_text(PROMPT_SANS, encoding=&quot;utf-8&quot;)
+(PORTABLE / &quot;demande-avec.txt&quot;).write_text(PROMPT_AVEC, encoding=&quot;utf-8&quot;)
 print(&quot;À COPIER DANS LA CONVERSATION SANS INSTRUCTIONS\n&quot;)
 print(PROMPT_SANS)
 print(&quot;\nÀ COPIER DANS LA CONVERSATION AVEC INSTRUCTIONS\n&quot;)
 print(PROMPT_AVEC)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>À COPIER DANS LA CONVERSATION SANS INSTRUCTIONS
 
 Lieu : Votre lieu à Beyrouth
+Matériaux disponibles : À décrire : documents fournis, web disponible ou non.
 Question : Qui a conçu ce lieu, et sur quelles pièces peut-on appuyer cette attribution ?
 
 À COPIER DANS LA CONVERSATION AVEC INSTRUCTIONS
-
----
-name: lieu-v0
-description: &quot;Examiner les attributions architecturales concernant Votre lieu à Beyrouth, à partir des pièces disponibles.&quot;
----
 
 # Examiner Votre lieu à Beyrouth
 
@@ -397,12 +425,14 @@ Pour cette question : Qui a conçu ce lieu, et sur quelles pièces peut-on appuy
 ## Réponse attendue
 Attribution · pièce consultée · désaccord éventuel · ce qui reste à vérifier.
 
+## Limite
 Ne transforme pas une absence de vérification en preuve de fausseté.
 
 
 ---
 
 Lieu : Votre lieu à Beyrouth
+Matériaux disponibles : À décrire : documents fournis, web disponible ou non.
 Question : Qui a conçu ce lieu, et sur quelles pièces peut-on appuyer cette attribution ?
 </pre></div></section>
 <section class="cell"><h3>▶ 13 · Garder les réponses et notre jugement</h3><details><summary>Voir le code Python</summary><pre>APPLICATION = &quot;À renseigner&quot; #@param {type:&quot;string&quot;}
@@ -410,8 +440,36 @@ MODELE_AFFICHE = &quot;À renseigner, ou non indiqué&quot; #@param {type:&quot;
 ACCES_WEB = &quot;À renseigner : identique dans les deux essais ?&quot; #@param {type:&quot;string&quot;}
 ORDRE = &quot;sans puis avec&quot; #@param [&quot;sans puis avec&quot;, &quot;avec puis sans&quot;]
 MEMOIRE = &quot;À renseigner : désactivée / non désactivable / inconnue&quot; #@param {type:&quot;string&quot;}
-REPONSE_SANS = &quot;&quot;&quot;COLLER ICI LA RÉPONSE SANS INSTRUCTIONS&quot;&quot;&quot;
-REPONSE_AVEC = &quot;&quot;&quot;COLLER ICI LA RÉPONSE AVEC INSTRUCTIONS&quot;&quot;&quot;
+IMPORTER_REPONSES = False #@param {type:&quot;boolean&quot;}
+def lire_reponses(fichiers):
+    # Les réponses restent des données ; aucun eval/exec de leur contenu.
+    attendus = (&quot;sans.txt&quot;, &quot;avec.txt&quot;)
+    if not all(nom in fichiers for nom in attendus):
+        raise ValueError(&quot;Sélectionnez les deux fichiers texte brut : sans.txt et avec.txt.&quot;)
+    return tuple(fichiers[nom].decode(&quot;utf-8-sig&quot;) for nom in attendus)
+
+def lire_reponses_jupyter(dossier):
+    try:
+        return lire_reponses({nom: (Path(dossier) / nom).read_bytes() for nom in (&quot;sans.txt&quot;, &quot;avec.txt&quot;)})
+    except FileNotFoundError as erreur:
+        raise ValueError(&quot;Importez sans.txt et avec.txt dans le dossier du notebook avec la flèche d’import JupyterLab.&quot;) from erreur
+
+# Une nouvelle exécution pour modifier le jugement ne perd pas l’import précédent.
+REPONSE_SANS = globals().get(&quot;REPONSE_SANS&quot;, &quot;&quot;)
+REPONSE_AVEC = globals().get(&quot;REPONSE_AVEC&quot;, &quot;&quot;)
+if IMPORTER_REPONSES:
+    try:
+        from google.colab import files
+    except ImportError:
+        try:
+            REPONSE_SANS, REPONSE_AVEC = lire_reponses_jupyter(Path.cwd())
+        except (ValueError, UnicodeDecodeError) as erreur:
+            print(&quot;Import non terminé :&quot;, erreur)
+    else:
+        try:
+            REPONSE_SANS, REPONSE_AVEC = lire_reponses(files.upload())
+        except (ValueError, UnicodeDecodeError) as erreur:
+            print(&quot;Import non terminé :&quot;, erreur)
 EXTRAIT_EFFET = &quot;À renseigner : passage précis, ou aucun effet visible.&quot; #@param {type:&quot;string&quot;}
 LIMITE_RESTANTE = &quot;À renseigner : ce que notre Skill n’a pas résolu.&quot; #@param {type:&quot;string&quot;}
 DECISION = &quot;À renseigner : garder / réviser / abandonner cette instruction, et pourquoi.&quot; #@param {type:&quot;string&quot;}
@@ -423,14 +481,21 @@ COMPARAISON = {&quot;application&quot;: APPLICATION, &quot;modele_affiche&quot;:
     &quot;reponse_sans&quot;: REPONSE_SANS, &quot;reponse_avec&quot;: REPONSE_AVEC,
     &quot;extrait_effet&quot;: EXTRAIT_EFFET, &quot;limite&quot;: LIMITE_RESTANTE, &quot;decision&quot;: DECISION,
     &quot;date_utc&quot;: datetime.now(timezone.utc).isoformat()}
-COMPARAISON[&quot;completee&quot;] = all(&quot;COLLER ICI&quot; not in r for r in [REPONSE_SANS, REPONSE_AVEC]) and all(
-    &quot;À renseigner&quot; not in x for x in [APPLICATION, EXTRAIT_EFFET, LIMITE_RESTANTE, DECISION])
+def comparaison_renseignee(comparaison):
+    champs = [&quot;application&quot;, &quot;modele_affiche&quot;, &quot;web&quot;, &quot;ordre&quot;, &quot;memoire&quot;, &quot;reponse_sans&quot;,
+              &quot;reponse_avec&quot;, &quot;extrait_effet&quot;, &quot;limite&quot;, &quot;decision&quot;]
+    return all(isinstance(comparaison.get(c), str) and comparaison[c].strip()
+               and &quot;À renseigner&quot; not in comparaison[c] and &quot;COLLER ICI&quot; not in comparaison[c]
+               for c in champs)
+COMPARAISON[&quot;completee&quot;] = comparaison_renseignee(COMPARAISON)
 print(&quot;Comparaison :&quot;, &quot;renseignée — à examiner ensemble&quot; if COMPARAISON[&quot;completee&quot;] else &quot;EN ATTENTE de vos réponses réelles&quot;)
+print(&quot;Renseignée signifie champs présents, pas amélioration établie. Un modèle non indiqué ou une mémoire inconnue doit être écrit explicitement.&quot;)
 print(&quot;Aucune réponse de modèle n’a été fabriquée par le notebook.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>Comparaison : EN ATTENTE de vos réponses réelles
+Renseignée signifie champs présents, pas amélioration établie. Un modèle non indiqué ou une mémoire inconnue doit être écrit explicitement.
 Aucune réponse de modèle n’a été fabriquée par le notebook.
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">EMPORTER · 5/5 · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Emporter ce qui a réellement tourné</h2>
-<p>Le ZIP rassemble le même hook que celui exécuté, ses résultats, votre Skill, vos réponses, une notice d’essai dans Claude Code et une empreinte des fichiers. L’empreinte permet de reconnaître une version ; elle ne prouve pas sa qualité.</p>
+<p>Le ZIP rassemble le même hook que celui exécuté, ses résultats, votre Skill, vos réponses, un dossier <code>portable/</code> (instructions, demandes, documents fictifs et six cas), un guide des quatre voies et une notice Claude Code facultative. L’empreinte permet de reconnaître une version ; elle ne prouve pas sa qualité.</p>
 <p><b>Avant d’exporter :</b> décidez des domaines de votre vrai lieu. Si vous gardez les adresses d’exercice, le programme restera un démonstrateur. Cela sera visible dans l’export.</p>
 </div>
 <section class="cell"><h3>▶ 14 · Choisir la liste emportée, sans la confondre avec la liste testée</h3><details><summary>Voir le code Python</summary><pre>DOMAINES_EXPORT = DOMAINES_REVISES  # Remplacer par les hôtes retenus pour votre lieu après examen.
@@ -449,7 +514,11 @@ CONFIG_HOOKS = {&quot;hooks&quot;: {&quot;PreToolUse&quot;: [{&quot;matcher&quot
 (PLUGIN / &quot;.claude-plugin&quot; / &quot;plugin.json&quot;).write_text(json.dumps(MANIFESTE, indent=2), encoding=&quot;utf-8&quot;)
 (PLUGIN / &quot;hooks&quot; / &quot;hooks.json&quot;).write_text(json.dumps(CONFIG_HOOKS, indent=2), encoding=&quot;utf-8&quot;)
 
-NOTICE_INSTALLATION = &#x27;# Essayer notre dossier dans Claude Code\n\nLe parcours notebook a exécuté un hook dans un mini-runner Python, pas dans Claude Code.\nCe dossier est préparé pour un essai natif. Rien n’est installé automatiquement.\n\n## Préparer le poste de démonstration\n\nClaude Code doit déjà être installé et authentifié ; python3 doit être disponible.\nL’enseignant peut faire cette partie sur son poste. Aucun compte Claude payant n’est\nrequis pour faire le parcours notebook. Ne collez aucune clé dans le notebook.\n\n1. Décompresser le ZIP dans un nouveau dossier d’exercice, sans remplacer de fichiers.\n2. Dans un terminal, se placer dans ce dossier. Vérifier la présence de atelier-lieu/.\n3. Lancer : `claude --plugin-dir ./atelier-lieu`\n   C’est un chargement local pour cette session, pas une installation permanente.\n4. Voir `/hooks` : événement PreToolUse, outil WebFetch, chemin garde-lieu.py.\n5. Invoquer `/atelier-lieu:lieu-v0` avec une question sur notre lieu. Garder la trace\n   de l’invocation, pas seulement la réponse du modèle disant que la Skill est là.\n6. Demander explicitement un WebFetch vers `https://example.com` avec la liste de\n   démonstration : le hook doit arrêter l’appel, puisque cet hôte est hors liste.\n   Examiner la trace de l’outil et du hook. Une réponse « je refuse » ne suffit pas.\n7. Pour le passage autorisé, ajouter après examen un hôte réel public choisi pour\n   l’essai dans hooks/domaines.json, relancer la session puis demander ce WebFetch.\n   Vérifier la trace d’appel. Ne pas affirmer que le contenu est vrai parce qu’il passe.\n8. Quitter la session pour ne plus charger ce dossier par --plugin-dir.\n\nLe hook exporté ne concerne que WebFetch. Il ne bloque pas WebSearch, Bash, d’autres\noutils, les redirections réseau ou votre navigateur. Ce n’est pas un dispositif de\nsécurité complet. Le mini-runner arrête aussi les erreurs inattendues ; Claude Code\npeut traiter certains échecs ou délais comme non bloquants. Comparer les deux traces.\n\nPreuve à conserver : version de Claude Code, configuration, événement observé,\ncommande du hook, code de sortie, appel effectivement empêché ou exécuté.\nLes six essais du notebook ne sont pas une preuve de déclenchement natif.\n\nDocumentation officielle consultée pour la construction :\n- https://code.claude.com/docs/en/plugins\n- https://code.claude.com/docs/en/hooks\n&#x27;
+GUIDE_COMPATIBILITE = &quot;# Une trousse, plusieurs applications\n\nÉtat de cette construction : 18 septembre 2026. Le parcours commun est **Colab ou Binder + le chat déjà disponible** : ChatGPT (OpenAI), Claude (Anthropic), Gemini (Google), ou un autre chat capable de recevoir du texte. Aucun Mac, iPhone, Apple Shortcuts, abonnement supplémentaire, clé API ou agent local n&#x27;est requis. Colab demande une connexion Google ; Binder n&#x27;exige pas de compte mais sa session publique est temporaire. Les limites du chat restent celles du fournisseur.\n\n## Ce que tout le monde emporte\n\nDans le ZIP, `portable/` contient :\n\n- `instructions.txt` : texte ordinaire, sans configuration d&#x27;application.\n- `demande-sans.txt` et `demande-avec.txt` : les deux demandes de la comparaison.\n- `skill/lieu-v0/SKILL.md` : la même instruction, emballée comme Agent Skill ; sa présence dans le ZIP ne la charge dans aucun client.\n- `documents-fictifs.json` et `cas-hook.json` : données et six cas du banc hors ligne, explicitement fictifs. Ce ne sont pas les sources de votre lieu.\n\n`notre-projet.json`, `comparaison.json` et `essais-hook.json` conservent le projet, les réponses réelles à remplir et les traces du programme. `COMPATIBILITE.md` accompagne aussi l&#x27;archive.\n\nPour l&#x27;essai commun, ouvrir deux conversations neuves dans **la même application et le même modèle affiché**, avec les mêmes documents et le même accès web. Copier les deux demandes ; conserver les réponses complètes et les conditions. Ne pas comparer « sans » dans ChatGPT à « avec » dans Claude : cela changerait deux choses à la fois. L&#x27;ordre peut varier entre binômes. Coller des instructions ne constitue pas une installation native de Skill ; un accord verbal du modèle ne prouve pas qu&#x27;un hook s&#x27;est exécuté.\n\n## Les quatre voies, sans prétendre qu&#x27;elles sont identiques\n\n| Voie | Parcours commun | Skill native : chemin documenté pour un projet d&#x27;essai | Hook natif : mécanisme distinct | Accès et coût | Vérification de CET export |\n|---|---|---|---|---|---|\n| **OpenAI : ChatGPT / Codex** | Coller les demandes dans deux chats accessibles. Aucun hook n&#x27;est installé par ce collage. | Codex : copier le dossier `lieu-v0` dans `.agents/skills/`. | Codex documente `PreToolUse` ; les noms d&#x27;outils et entrées doivent être adaptés. Les outils hébergés comme WebSearch ne suivent pas cette interception locale. | Codex : connexion ChatGPT ou clé API, selon accès ; les appels API ont leur propre facturation. | Texte portable exporté et vérifié. Aucun adaptateur hook Codex fourni ; aucune découverte de cette Skill ni interception native démontrée. |\n| **Anthropic : Claude / Claude Code** | Même comparaison par collage dans Claude. | Claude Code : `.claude/skills/lieu-v0/`, ou le plugin séparé `atelier-lieu` de ce ZIP. | Plugin fourni : `PreToolUse` ciblant `WebFetch`, Python 3. Ne contrôle pas tous les accès réseau. | Accès Claude Code authentifié, selon abonnement/compte API autorisé ; ne pas supposer qu&#x27;un compte chat gratuit suffit. | `claude plugin validate` contrôle la structure. Aucun déclenchement natif démontré par ce contrôle ; suivre la notice optionnelle. |\n| **Google : Gemini / Antigravity CLI** | Même comparaison par collage dans Gemini. | Antigravity CLI : `.agents/skills/lieu-v0/` dans le projet. | `PreToolUse`, configuration de projet `.agents/hooks.json` ; adapter aussi le format de l’événement et de la réponse, pas seulement le nom du hook. | Authentification et accès Antigravity selon le compte et le mode ; vérifier les conditions actuelles. Aucune clé API requise par le parcours Colab + chat. | Texte portable exporté et vérifié. Aucun adaptateur Antigravity fourni ; découverte et événement natif non testés. |\n| **OpenCode : option open source multi-fournisseur** | Instructions réutilisables dans un client déjà configuré ; ce n&#x27;est pas un compte de chat fourni avec le ZIP. | `.opencode/skills/lieu-v0/` ou `.agents/skills/lieu-v0/`. | Plugins JavaScript/TypeScript, événements `tool.execute.before` / `tool.execute.after`. Le hook Python Claude n&#x27;est pas un plugin OpenCode. | Fournisseur choisi et authentification autorisée, ou modèle local configuré ; logiciel open source ne veut pas dire inférence distante gratuite. | Documentation consultée ; aucun adaptateur OpenCode fourni, aucune Skill chargée ni interception native testée. |\n\nCes chemins sont des indications pour un **nouveau dossier d&#x27;essai**, pas une invitation à écraser une configuration personnelle. Ne pas copier le manifeste Claude dans les autres clients. La compatibilité documentaire n&#x27;est pas une validation de la version installée, du compte, de la découverte de Skill ou de son effet sur la réponse.\n\n**Correction du 18 septembre :** le client Google visé ici est Antigravity CLI, successeur de Gemini CLI pour les comptes individuels. Google a fixé cette transition au 18 juin 2026 ; certaines voies professionnelles/API de Gemini CLI subsistent. Les anciennes indications `BeforeTool` / `.gemini/settings.json` ne sont donc pas le parcours recommandé pour cette classe. Le fichier d’instructions reste portable, mais une migration de hooks exige un adaptateur testé. [Annonce Google](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) · [Migration et chemins des Skills](https://www.antigravity.google/docs/cli/gcli-migration/) · [Hooks Antigravity](https://antigravity.google/docs/hooks).\n\nLe chemin `${CLAUDE_PLUGIN_ROOT}` appartient uniquement au plugin Claude facultatif. Le remplacer par un chemin relatif ne rendrait pas ce plugin universel : événements, entrées, sorties et répertoire d’exécution restent à adapter et à tester. Le dossier `portable/` est le parcours commun sans ce manifeste.\n\n### Pourquoi OpenCode ici ?\n\nOpenCode propose un même client avec plusieurs fournisseurs et des modèles locaux : il permet de séparer le choix du client du choix du modèle. Le projet se présente comme open source et affiche une large communauté sur son site ; ce constat ne prouve pas sa fiabilité pédagogique. Il reste une extension facultative, **pas une quatrième installation demandée à la classe**. [Projet](https://opencode.ai/) · [Fournisseurs](https://opencode.ai/docs/providers/).\n\n## Avant de dire « le hook fonctionne dans ce client »\n\nGarder la version du client, le fichier chargé, la configuration, l&#x27;événement et l&#x27;entrée reçus, le code/résultat du hook, puis la trace de l&#x27;action effectivement empêchée ou exécutée. Tester au moins passage, arrêt, hôte ressemblant, entrée absente et panne du hook. Refaire ces essais après adaptation : noms d&#x27;outils, formats, erreurs et délais ne sont pas universels. Les six cas du notebook vérifient son mini-runner, pas les clients ci-dessus.\n\nLe banc ne contacte aucun site. Autoriser un nom d&#x27;hôte ne vérifie ni le contenu d&#x27;une page ni les redirections possibles d&#x27;un vrai outil web. Les documents utiles hors liste doivent pouvoir être examinés : le filtre n&#x27;est pas un classement des sources dignes de confiance.\n\n## Sources techniques ouvertes pour cette révision\n\n- OpenAI : [Skills et chemins de découverte](https://learn.chatgpt.com/docs/build-skills), [hooks et couverture des outils](https://learn.chatgpt.com/docs/hooks), [authentification](https://learn.chatgpt.com/docs/auth).\n- Anthropic : [Skills](https://code.claude.com/docs/en/skills), [hooks](https://code.claude.com/docs/en/hooks), [authentification](https://code.claude.com/docs/en/authentication).\n- Google : [Migration et Skills Antigravity](https://www.antigravity.google/docs/cli/gcli-migration/), [hooks Antigravity](https://antigravity.google/docs/hooks), [installation et authentification](https://antigravity.google/docs/cli/install).\n- OpenCode : [Skills](https://opencode.ai/docs/skills/), [plugins](https://opencode.ai/docs/plugins/), [fournisseurs](https://opencode.ai/docs/providers/).\n\nContrôles locaux limités de cette révision : `codex --version` a affiché `0.154.0`, `gemini --version` a affiché `0.46.0`. Un exécutable OpenCode est présent, mais `opencode --version` a terminé avec le code 137, sans version ; il n&#x27;est donc pas présenté comme opérationnel. Aucun compte, réglage, plugin ou client n&#x27;a été installé ou modifié par ces contrôles. Aucun appel à un modèle n&#x27;a été effectué.\n&quot;
+NOTICE_INSTALLATION = &#x27;# Essayer notre dossier dans Claude Code\n\nLe parcours Colab a exécuté un hook dans un mini-runner Python, pas dans Claude Code.\nCe dossier est préparé pour un essai natif. Rien n’est installé automatiquement.\n\n## Préparer le poste de démonstration\n\nClaude Code doit déjà être installé et authentifié ; python3 doit être disponible.\nL’enseignant peut faire cette partie sur son poste. Aucun compte Claude payant n’est\nrequis pour faire le parcours Colab. Ne collez aucune clé dans le notebook.\n\n1. Décompresser le ZIP dans un nouveau dossier d’exercice, sans remplacer de fichiers.\n2. Dans un terminal, se placer dans ce dossier. Vérifier la présence de atelier-lieu/.\n3. Lancer : `claude --plugin-dir ./atelier-lieu`\n   C’est un chargement local pour cette session, pas une installation permanente.\n4. Voir `/hooks` : événement PreToolUse, outil WebFetch, chemin garde-lieu.py.\n5. Invoquer `/atelier-lieu:lieu-v0` avec une question sur notre lieu. Garder la trace\n   de l’invocation, pas seulement la réponse du modèle disant que la Skill est là.\n6. Demander explicitement un WebFetch vers `https://example.com` avec la liste de\n   démonstration : le hook doit arrêter l’appel, puisque cet hôte est hors liste.\n   Examiner la trace de l’outil et du hook. Une réponse « je refuse » ne suffit pas.\n7. Pour le passage autorisé, ajouter après examen un hôte réel public choisi pour\n   l’essai dans hooks/domaines.json, relancer la session puis demander ce WebFetch.\n   Vérifier la trace d’appel. Ne pas affirmer que le contenu est vrai parce qu’il passe.\n8. Quitter la session pour ne plus charger ce dossier par --plugin-dir.\n\nLe hook exporté ne concerne que WebFetch. Il ne bloque pas WebSearch, Bash, d’autres\noutils, les redirections réseau ou votre navigateur. Ce n’est pas un dispositif de\nsécurité complet. Le mini-runner arrête aussi les erreurs inattendues ; Claude Code\npeut traiter certains échecs ou délais comme non bloquants. Comparer les deux traces.\n\nPreuve à conserver : version de Claude Code, configuration, événement observé,\ncommande du hook, code de sortie, appel effectivement empêché ou exécuté.\nLes six essais du notebook ne sont pas une preuve de déclenchement natif.\n\nDocumentation officielle consultée pour la construction :\n- https://code.claude.com/docs/en/plugins\n- https://code.claude.com/docs/en/hooks\n&#x27;
+(ATELIER / &quot;COMPATIBILITE.md&quot;).write_text(GUIDE_COMPATIBILITE, encoding=&quot;utf-8&quot;)
+(PORTABLE / &quot;documents-fictifs.json&quot;).write_text(json.dumps({&quot;nature&quot;: &quot;Documents synthétiques pour le banc hors ligne, pas sources du lieu&quot;, &quot;documents&quot;: DOCUMENTS_FICTIFS}, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
+(PORTABLE / &quot;cas-hook.json&quot;).write_text(json.dumps({&quot;nature&quot;: &quot;Six essais synthétiques du mini-runner, pas tests natifs&quot;, &quot;configuration&quot;: {&quot;domaines&quot;: [&quot;archives.example.org&quot;], &quot;sous_domaines&quot;: False}, &quot;cas&quot;: [{&quot;nom&quot;: nom, &quot;url&quot;: url, &quot;lecture_attendue&quot;: attendu} for nom, url, attendu in CAS]}, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
 (ATELIER / &quot;LIRE_AVANT_CLAUDE_CODE.md&quot;).write_text(NOTICE_INSTALLATION, encoding=&quot;utf-8&quot;)
 sauvegarder_projet()
 (ATELIER / &quot;comparaison.json&quot;).write_text(json.dumps(COMPARAISON, ensure_ascii=False, indent=2), encoding=&quot;utf-8&quot;)
@@ -472,21 +541,28 @@ with zipfile.ZipFile(ZIP_FINAL) as archive:
     assert &quot;atelier-lieu/hooks/garde-lieu.py&quot; in archive.namelist()
 print(&quot;✓ Archive vérifiée :&quot;, len(empreintes), &quot;fichiers identifiés.&quot;)
 print(&quot;✓ Hook exécuté ici ; chargement natif encore à vérifier.&quot;)
-proposer_telechargement(ZIP_FINAL)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Archive vérifiée : 9 fichiers identifiés.
+proposer_telechargement(ZIP_FINAL)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Archive vérifiée : 16 fichiers identifiés.
 ✓ Hook exécuté ici ; chargement natif encore à vérifier.
 ✓ À emporter : esar-notre-toolkit.zip
-Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-u_6ko1qj/esar-notre-toolkit.zip
+Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj/esar-notre-toolkit.zip
 </pre></div></section>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">Installer : savoir où cela prend effet</h2>
 <p>Vous avez trois états distincts, tous utiles :</p>
 <table><tr><th>État</th><th>Ce qui est établi</th></tr>
 <tr><td>Instructions collées dans un chat</td><td>Le texte a été fourni au modèle ; il faut examiner l’effet.</td></tr>
-<tr><td>Hook exécuté dans Colab ou Binder</td><td>Le mini-runner a réellement intercepté ses appels au lecteur.</td></tr>
+<tr><td>Hook exécuté dans Colab</td><td>Le mini-runner a réellement intercepté ses appels au lecteur.</td></tr>
 <tr><td>Dossier chargé dans Claude Code</td><td>À vérifier sur le poste : Skill invoquée, hook déclenché par un vrai WebFetch.</td></tr></table>
 <p>La notice du ZIP donne les étapes pour le troisième état. La démonstration peut être collective : personne ne doit perdre l’atelier à résoudre un compte ou un terminal.</p>
 <p><b>Sortie de séance :</b> « Nous avons changé <i>ce comportement</i>. Voici l’essai qui le montre. Voici encore <i>ce que nous n’avons pas résolu</i>. »</p>
 </div>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA </p><h2 style="font-size:30px;line-height:1.15">Pour aller plus loin — pas un prérequis</h2>
+<p><b>Quatre voies, des hooks différents.</b> Le guide <code>COMPATIBILITE.md</code> dans votre ZIP donne les sources techniques et l’état exact des essais.</p>
+<table><tr><th>Client</th><th>Skill locale documentée</th><th>Interception native</th></tr>
+<tr><td>Codex · OpenAI</td><td><code>.agents/skills/</code></td><td><code>PreToolUse</code> ; adapter aux outils effectivement couverts.</td></tr>
+<tr><td>Claude Code · Anthropic</td><td><code>.claude/skills/</code> ou plugin fourni</td><td><code>PreToolUse</code> / <code>WebFetch</code> ; structure validée, événement encore à tester.</td></tr>
+<tr><td>Antigravity CLI · Google</td><td><code>.agents/skills/</code></td><td><code>PreToolUse</code>, <code>.agents/hooks.json</code> ; adaptateur non fourni.</td></tr>
+<tr><td>OpenCode · multi-fournisseur</td><td><code>.opencode/skills/</code> ou <code>.agents/skills/</code></td><td>Plugin JS/TS : <code>tool.execute.before</code> ; adaptateur non fourni.</td></tr></table>
+<p><b>Documentation ≠ exécution native.</b> Aucun de ces chargements ou événements n’est établi par le banc Python. Ce tableau n’impose aucune installation aux étudiants.</p>
 <ul><li><b>Un test qui casse votre confiance :</b> proposez une URL admissible dont la page ne soutient pas l’affirmation. Le hook doit-il résoudre cela ? Sinon, quel travail revient à votre Skill et à vous ?</li>
 <li><b>Une instruction trop stricte :</b> retirez une instruction qui fait refuser une question pourtant traitable avec les pièces. Reprenez le même essai.</li>
 <li><b>Autre action, autre moment :</b> comment demander une confirmation avant de publier une synthèse ? Définissez l’événement, les informations disponibles et l’effet attendu avant d’écrire le code.</li>
@@ -495,6 +571,6 @@ Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxz
 </div>
 <div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA </p><h2 style="font-size:30px;line-height:1.15">Sources, fabrication, limites</h2>
 <p>Ce notebook est une proposition pédagogique réalisée pour ESAR S3. Il reprend l’idée Skill de lieu + filtre de domaine de la trousse locale <code>ESAR/_toolkit/juger-ia</code>, mais son code est une adaptation ciblée à <code>WebFetch</code>, avec ses propres essais.</p>
-<p>Références techniques : <a href="https://research.google.com/colaboratory/faq.html">Google Colab — FAQ</a> ; <a href="https://jupyter.org/binder">Project Jupyter — Binder</a> ; <a href="https://code.claude.com/docs/en/hooks">Claude Code — hooks</a> ; <a href="https://code.claude.com/docs/en/plugins">Claude Code — plugins</a>.</p>
-<p><b>Ne pas confondre :</b> un banc Python local réussi, une exécution réelle dans Colab ou Binder, un ZIP effectivement conservé et le déclenchement d’un hook dans Claude Code sont quatre vérifications différentes. La notice accompagnant ce fichier dit lesquelles ont effectivement été réalisées.</p>
+<p>Références techniques : <a href="https://research.google.com/colaboratory/faq.html">Google Colab — FAQ</a> ; <a href="https://code.claude.com/docs/en/hooks">Claude Code — hooks</a> ; <a href="https://code.claude.com/docs/en/plugins">Claude Code — plugins</a>.</p>
+<p><b>Ne pas confondre :</b> un banc Python local réussi, un import réel dans Colab, un téléchargement autorisé par le navigateur et le déclenchement d’un hook dans Claude Code sont quatre vérifications différentes. La notice accompagnant ce fichier dit lesquelles ont effectivement été réalisées.</p>
 </div></main></html>
