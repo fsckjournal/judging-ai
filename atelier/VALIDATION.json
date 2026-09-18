@@ -106,6 +106,21 @@
     ],
     "browser_download_persistence": "not verified; the in-app browser exposed no recoverable download event or file"
   },
+  "live_binder": {
+    "tested": true,
+    "date": "2026-09-18",
+    "entry": "published GitHub notebook opened from the Judging AI Binder URL without login",
+    "runtime": "JupyterLab with Python 3 (ipykernel) on the 2i2c mybinder.org federation member",
+    "run_all_reached_final_cell": true,
+    "observed": [
+      "final archive verified with 9 identified files",
+      "first and final ZIP copied into the Jupyter file area and rendered as download links",
+      "kernel returned to idle",
+      "no Playwright page errors"
+    ],
+    "startup_variability": "the first public launch failed before startup with fsnotify watcher: too many open files; a later launch succeeded",
+    "persistence": "temporary session; students must download their ZIP files before closing"
+  },
   "native_hook_firing": "not tested",
   "model_comparison": "not performed; visibly pending"
 }

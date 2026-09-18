@@ -54,6 +54,7 @@ Le mini-runner s’arrête sur toute erreur du sous-processus. Le runtime natif 
 - Structure `nbformat` validée.
 - **15/15 cellules Python exécutées dans l’ordre** lors de la validation locale contrôlée, avec un espace de variables partagé.
 - Le 18 septembre, le notebook publié a aussi été ouvert depuis son URL Colab et exécuté intégralement sur un moteur Python 3 Google Compute Engine : comptes d’exécution 1 à 15, six cas conformes et archive finale vérifiée avec neuf fichiers identifiés.
+- Le même jour, le bouton Binder a ouvert le notebook publié sans connexion dans JupyterLab avec un noyau Python 3. **Exécuter toutes les cellules** a atteint l’archive finale vérifiée ; les deux sauvegardes ont été rendues comme liens et comme fichiers Jupyter. Un premier lancement a échoué dans l’infrastructure publique (`fsnotify watcher: too many open files`) avant qu’un lancement ultérieur réussisse : Binder enlève le compte obligatoire, pas la dépendance à un service disponible.
 - **6/6 cas pédagogiques** avec effet attendu et vérification du compteur de lecture.
 - **14 contrôles supplémentaires** : JSON incorrect, forme incorrecte de l’événement, URL absente ou non textuelle, protocole inadmissible, faux suffixe, identifiant avant `@`, hôte exact, casse, sous-domaine par défaut, outil hors périmètre, URL mal formée, option sous-domaines, configuration illisible.
 - Comparaison du même appel sans/avec hook ; réparation de la source utile sans ouverture du faux hôte.
@@ -70,6 +71,7 @@ L’aperçu HTML et son intégration publique ont été inspectés dans un navig
 3. Lancer 06–15, confirmer de la même manière le ZIP final, puis quitter et reprendre la copie du notebook. Les fichiers du moteur peuvent disparaître ; les ZIP téléchargés restent les points de récupération.
 4. Sur le poste déjà équipé de Claude Code et Python 3, suivre `LIRE_AVANT_CLAUDE_CODE.md` dans le ZIP. Conserver la trace du vrai WebFetch et du hook. **Ce déclenchement natif n’a pas été testé pendant cette construction.**
 5. Préparer une copie locale du notebook et de l’aperçu HTML pour ne pas dépendre uniquement du partage Google.
+6. Ouvrir Binder une fois avant la classe pour amorcer son image ; conserver Colab et l’aperçu comme replis si le service public tarde ou refuse un lancement.
 
 En cas de perte du moteur Colab, relancer le notebook dont les cellules modifiées ont été enregistrées. Si seule l’archive reste, `notre-projet.json`, `comparaison.json` et `SKILL.md` conservent les textes : les recopier dans une nouvelle copie du notebook. Le ZIP ne rétablit pas automatiquement une session Google.
 
@@ -84,4 +86,4 @@ python3 ESAR/S3_2026-09-18/COLAB/validate_notebook.py
 
 Les scripts d’auteur utilisent `nbformat` déjà disponible sur le poste de construction ; le validateur appelle également `claude plugin validate`. **Le notebook étudiant n’a pas besoin de ces dépendances.** Le validateur crée un dossier temporaire d’essai et ne touche aucune configuration personnelle d’agent.
 
-Références techniques consultées le 18 septembre 2026 : [Google Colab — FAQ](https://research.google.com/colaboratory/faq.html), [Claude Code — hooks](https://code.claude.com/docs/en/hooks), [Claude Code — plugins](https://code.claude.com/docs/en/plugins).
+Références techniques consultées le 18 septembre 2026 : [Google Colab — FAQ](https://research.google.com/colaboratory/faq.html), [Project Jupyter — Binder](https://jupyter.org/binder), [Binder — usage guidelines](https://mybinder.readthedocs.io/en/latest/about/user-guidelines.html), [Claude Code — hooks](https://code.claude.com/docs/en/hooks), [Claude Code — plugins](https://code.claude.com/docs/en/plugins).
