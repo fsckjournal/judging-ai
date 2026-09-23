@@ -134,7 +134,7 @@ var T={
   sans:"Réponse sans la Skill (entière)",avec:"Réponse avec la Skill (entière)",lecture:"la lecture des deux réponses (affirmations de la réponse avec)",
   etayees:"étayées",contredites:"contredites",non_resolues:"non résolues",utilisables:"utilisables",
   gagne:"Ce qui a été gagné",perdu:"Ce qui a été perdu",decision:"La décision : garder, réviser ou abandonner quelle instruction, et pourquoi",
-  enreg:"ENREGISTRER L'ESSAI",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",pasDeV:"Figez d'abord une version : l'essai dit quelle version a été chargée.",
+  enreg:"ENREGISTRER L'ESSAI",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",pasDeV:"Figez d'abord une version : un essai D (ou sans puis avec) dit quelle version de votre Skill a été chargée. A, B et C s'enregistrent sans.",
   essai:"Essai",aucunE:"Aucun essai.",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",annuler:"Annuler",
   condition:"Condition de l'essai",condAucune:"— (sans puis avec, un seul essai)",source:"Nom ou source de la Skill",reponse:"La réponse (entière)",
   cases:"les six cases, cochées par un autre binôme",score:"{n} / 6",pasNote:"pas encore noté",
@@ -161,7 +161,7 @@ var T={
   sans:"Answer without the Skill (whole)",avec:"Answer with the Skill (whole)",lecture:"reading the two answers (claims in the answer with)",
   etayees:"supported",contredites:"contradicted",non_resolues:"unresolved",utilisables:"usable",
   gagne:"What was gained",perdu:"What was lost",decision:"The decision: keep, revise or drop which instruction, and why",
-  enreg:"RECORD THE RUN",manqueE:"Missing: ",enregistre:"Run {n} recorded",pasDeV:"Freeze a version first: the run says which version was loaded.",
+  enreg:"RECORD THE RUN",manqueE:"Missing: ",enregistre:"Run {n} recorded",pasDeV:"Freeze a version first: a D run (or without then with) says which version of your Skill was loaded. A, B and C record without one.",
   essai:"Run",aucunE:"No runs.",suppr:"Delete",supprQ:"Delete this run?",annuler:"Cancel",
   condition:"Condition of the run",condAucune:"— (without then with, one run)",source:"The Skill's name or source",reponse:"The answer (whole)",
   cases:"the six boxes, ticked by another pair",score:"{n} / 6",pasNote:"not scored yet",
@@ -267,7 +267,7 @@ function render(){
   /* le binôme */
   var sb=h("section",{class:"sec",id:"binome"},[top(t("sBinome"))]);
   sb.appendChild(h("div",{class:"deux"},[fld(t("noms"),"text",D.binome.noms.join(", "),function(v){D.binome.noms=v.split(",").map(function(x){return x.trim();}).filter(Boolean);},{id:"b-noms"}),fld(t("lieu"),"text",D.binome.lieu,function(v){D.binome.lieu=v;},{id:"b-lieu"})]));
-  sb.appendChild(fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;},{id:"b-question"}));
+  sb.appendChild(fld(t("question"),"textarea",D.binome.question,function(v){var E=B.essai,q=document.getElementById("e-question");if(!E.question||E.question===D.binome.question){E.question=v;if(q)q.value=v;}D.binome.question=v;},{id:"b-question"}));
   app.appendChild(sb);
 
   /* l'éditeur */
@@ -330,13 +330,13 @@ function render(){
   /* le banc */
   var E=B.essai;if(!E.question&&D.binome.question)E.question=D.binome.question;
   var sk=h("section",{class:"sec",id:"banc"},[top(t("sBanc")),h("p",{class:"s",text:t("bIntro")})]);
-  if(!n)sk.appendChild(h("p",{class:"alerte",text:t("pasDeV")}));
-  else{
+  var pdv=h("p",{class:"alerte",id:"pas-de-v",text:t("pasDeV")});
+  function sansV(){return !n&&(!E.condition||E.condition==="D");}
     var vs=h("select",{id:"e-version"});D.skill.versions.forEach(function(v,i){vs.appendChild(h("option",{value:String(i),text:"v"+v.n+" · "+(v.nom||"…")}));});
-    vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);vs.addEventListener("change",function(){E.version=Number(vs.value);save();});
+    if(n){vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);}vs.addEventListener("change",function(){E.version=Number(vs.value);save();});
     var ap=h("select",{id:"e-app"});JA.APPS.forEach(function(a){ap.appendChild(h("option",{value:a,text:a}));});ap.value=E.app;ap.addEventListener("change",function(){E.app=ap.value;save();});
     var cSeg=seg(E.condition,[["",t("condAucune")]].concat(JA.CONDS.map(function(c){return [c,JA.condLabel(c)];})),function(v){E.condition=v;majC();});cSeg.id="e-condition";
-    sk.appendChild(h("div",null,[h("label",{text:t("condition")}),cSeg]));
+    sk.appendChild(h("div",null,[h("label",{text:t("condition")}),cSeg]));sk.appendChild(pdv);
     var srcF=fld(t("source"),"text",E.skill_source,function(v){E.skill_source=v;},{id:"e-source"});sk.appendChild(srcF);
     var vW=h("div",null,[h("label",{text:t("version"),for:"e-version"}),vs]);
     sk.appendChild(h("div",{class:"deux"},[vW,h("div",null,[h("label",{text:t("app"),for:"e-app"}),ap])]));
@@ -349,17 +349,17 @@ function render(){
     var saW=h("div",{class:"deux"},[fld(t("sans"),"textarea",E.sans,function(v){E.sans=v;},{id:"e-sans",class:"raw"}),fld(t("avec"),"textarea",E.avec,function(v){E.avec=v;},{id:"e-avec",class:"raw"})]);
     var reW=fld(t("reponse"),"textarea",E.reponse,function(v){E.reponse=v;},{id:"e-reponse",class:"raw"});
     sk.appendChild(saW);sk.appendChild(reW);
-    function majC(){var c=E.condition;srcF.hidden=c!=="B"&&c!=="C";vW.hidden=!!c&&c!=="D";mW.hidden=c==="A";saW.hidden=!!c;reW.hidden=!c;}majC();
+    function majC(){var c=E.condition;srcF.hidden=c!=="B"&&c!=="C";vW.hidden=!n||!!c&&c!=="D";pdv.hidden=!sansV();mW.hidden=c==="A";saW.hidden=!!c;reW.hidden=!c;}majC();
     sk.appendChild(h("label",{text:t("lecture")}));
     sk.appendChild(h("div",{class:"num"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(E[k]),function(v){E[k]=Math.max(0,Math.floor(Number(v))||0);},{id:"e-"+k,min:"0",step:"1",inputmode:"numeric"});})));
     sk.appendChild(h("div",{class:"deux"},[fld(t("gagne"),"textarea",E.gagne,function(v){E.gagne=v;},{id:"e-gagne"}),fld(t("perdu"),"textarea",E.perdu,function(v){E.perdu=v;},{id:"e-perdu"})]));
     sk.appendChild(fld(t("decision"),"textarea",E.decision,function(v){E.decision=v;},{id:"e-decision"}));
     sk.appendChild(h("button",{type:"button",class:"act",id:"enreg",text:t("enreg"),on:{click:function(){
+      if(sansV()){toast(t("pasDeV"));return;}
       var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!E.question.trim())m.push(t("question"));if(E.condition){if((E.condition==="B"||E.condition==="C")&&!E.skill_source.trim())m.push(t("source"));if(!E.reponse.trim())m.push(t("reponse"));}else{if(!E.sans.trim())m.push(t("sans"));if(!E.avec.trim())m.push(t("avec"));}
       if(m.length){toast(t("manqueE")+m.join(" · "));return;}
-      var x=JSON.parse(JSON.stringify(E));x.version=D.skill.versions[E.version].n;D.essais.push(x);
+      var x=JSON.parse(JSON.stringify(E));x.version=n?D.skill.versions[E.version].n:0;D.essais.push(x);
       var nx=nouvelEssai();nx.version=E.version;nx.question=E.question;B.essai=nx;save();render();toast(r(t("enregistre"),{n:D.essais.length}));location.hash="banc";}}}));
-  }
   if(!D.essais.length)sk.appendChild(h("p",{class:"s",text:t("aucunE")}));
   var bc=JA.banc(),q4=h("div");
   D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
