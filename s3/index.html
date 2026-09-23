@@ -136,6 +136,7 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
   </section>
 </main>
 
+<script src="../commun.js"></script>
 <script>
 (function(){
 "use strict";
@@ -200,7 +201,7 @@ function setupModules(){
  var cards=Array.from(document.querySelectorAll(".route li")),select=document.getElementById("module-select"),current=0;
  var actions=[[["COMMENCER L’EXERCICE I","pair"]],[["COMMENCER L’EXERCICE II","sg_claim"]],[["OUVRIR L’ATELIER","atelier"]],[["COMMENCER L’EXERCICE IV","place_answer"]],[["COMMENCER L’EXERCICE V","skill_question"]],[["OUVRIR LA FICHE REPORTÉE","hook_allowed"]],[["COMMENCER L’EXERCICE VII","notice_50"]],[["COMMENCER L’EXERCICE VIII","bench_conditions"]],[["COMMENCER L’EXERCICE IX","exit_name"]]];
  function jump(target){if(target==="sources"||target==="keep"){show(target);return;}show("work");if(target==="pair"||target==="place")selectWorksheet("3");if(target==="sg_claim"){selectWorksheet("1");document.getElementById("field-sg_claim").scrollIntoView({block:"start"});return;}var control=document.getElementById(target),details=control.closest("details");if(details){selectWorksheet(details.id.replace("worksheet-",""));details.open=true;}document.getElementById("field-"+target).scrollIntoView({block:"start"});control.focus({preventScroll:true});}
- cards.forEach(function(card,i){var title=card.querySelector("h3").textContent;select.appendChild(h("option",{value:i,text:ROMAN[i]+" · "+title}));card.insertBefore(h("p",{class:"module-number",text:"MODULE "+ROMAN[i]+" / IX"}),card.firstChild);var goal=card.querySelector(".goal");goal.insertBefore(h("strong",{text:"Objectif · "}),goal.firstChild);var links=h("div",{class:"module-actions"});actions[i].forEach(function(a){links.appendChild(a[1]==="atelier"?h("a",{href:"https://fsckjournal.github.io/judging-ai/atelier/",target:"_blank",rel:"noopener",text:a[0]}):h("button",{type:"button",text:a[0],on:{click:function(){jump(a[1]);}}}));});card.appendChild(links);});
+ cards.forEach(function(card,i){var title=card.querySelector("h3").textContent;select.appendChild(h("option",{value:i,text:ROMAN[i]+" · "+title}));card.insertBefore(h("p",{class:"module-number",text:"EXERCICE "+ROMAN[i]+" / IX"}),card.firstChild);var goal=card.querySelector(".goal");goal.insertBefore(h("strong",{text:"Objectif · "}),goal.firstChild);var links=h("div",{class:"module-actions"});actions[i].forEach(function(a){links.appendChild(a[1]==="atelier"?h("a",{href:"https://fsckjournal.github.io/judging-ai/atelier/",target:"_blank",rel:"noopener",text:a[0]}):h("button",{type:"button",text:a[0],on:{click:function(){jump(a[1]);}}}));});card.appendChild(links);});
  cards[1].querySelector("dd").textContent="Lisez les trois affirmations proposées et choisissez-en une.";
  cards.forEach(function(card){card.querySelectorAll("dd").forEach(function(dd){dd.textContent=dd.textContent.replace(/(fiche|section) (\d)/gi,function(_,label,n){return "fiche "+ROMAN[Number(n)-1];}).replace("Sections 7 et 8","Fiches VII et VIII");});});
  function choose(n,save){current=Math.max(0,Math.min(8,n));cards.forEach(function(card,i){card.hidden=i!==current;});select.value=String(current);document.getElementById("module-prev").disabled=current===0;document.getElementById("module-next").disabled=current===8;document.getElementById("module-current").textContent="Exercice "+ROMAN[current]+" / IX";document.getElementById("module-current-title").textContent=cards[current].querySelector("h3").textContent;document.getElementById("tab-sources").hidden=[1,6].indexOf(current)<0;if(save){try{localStorage.setItem("judging-ai-s3-module",String(current));}catch(e){}}}
@@ -225,6 +226,7 @@ if(new URLSearchParams(location.search).has("embedded")){document.body.classList
 var start=location.hash.slice(1);if(["work","sources","keep"].indexOf(start)>=0){show(start);}else{show("module");}
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
 })();
+JA.pied();
 </script>
 </body>
 </html>
