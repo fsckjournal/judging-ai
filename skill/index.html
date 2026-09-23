@@ -86,9 +86,17 @@ pre.m{font:400 13px/1.5 var(--mono);margin:0;padding:.5em .7em;border-left:2px s
 .diff .saut{color:var(--sourd);border-top:1px dashed var(--trait);border-bottom:1px dashed var(--trait);padding:.2em .4em}
 .toast{position:fixed;left:18px;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:600px;margin:0 auto;background:var(--encre);color:var(--fond);padding:10px 14px;font:400 14px/1.4 var(--mono);opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
 .toast.on{opacity:1}
+.cases{display:flex;flex-direction:column;margin:.3em 0 0}
+.cases label{display:grid;grid-template-columns:30px 1fr;gap:.4em;align-items:start;color:var(--encre);font:400 16px/1.45 var(--sans);letter-spacing:0;margin:0;padding:7px 0;cursor:pointer}
+.cases input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--orange)}
+.score{font:400 26px/1.1 var(--serif);color:var(--orange);margin:.5em 0 0}
+.quatre{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.quatre>div{border-top:2px solid var(--orange);padding-top:.6em;display:flex;flex-direction:column;gap:.4em;min-width:0}
+.quatre h3{font:400 21px/1.2 var(--serif);margin:0}
+.quatre .vide{color:var(--sourd);font:400 15px/1.4 var(--sans);margin:0}
 dialog{background:var(--fond);color:var(--encre);border:0;border-top:2px solid var(--orange);border-radius:0;max-width:520px;width:calc(100% - 36px);padding:1.2em}
 dialog::backdrop{background:rgba(0,0,0,.6)}
-@media (max-width:700px){.deux,.aide{grid-template-columns:1fr}.num{grid-template-columns:repeat(2,minmax(0,1fr))}textarea.corps{min-height:320px}}
+@media (max-width:700px){.deux,.aide,.quatre{grid-template-columns:1fr}.num{grid-template-columns:repeat(2,minmax(0,1fr))}textarea.corps{min-height:320px}}
 @media print{.hd,button,.sommaire{display:none!important}}
 </style>
 </head>
@@ -106,7 +114,7 @@ var MODELE={nom:"lieu-v0",description:"Skill d'un binôme ESAR pour interroger u
 var h=JA.h, lang=JA.lang();
 var T={
  fr:{titre:"L'atelier Skill",intro:"Écrire la Skill de votre lieu, garder chacune de ses versions, la charger dans Claude ou ChatGPT, et noter au banc ce qu'elle change. Tout reste dans ce navigateur ; exportez le dossier en bas de page.",
-  sBinome:"le binôme",sEditeur:"l'éditeur",sVersions:"les versions",sComparer:"comparer",sExporter:"exporter et charger",sBanc:"le banc",sDossier:"le dossier · 40 %",
+  sBinome:"le binôme",sEditeur:"l'éditeur",sVersions:"les versions",sComparer:"comparer",sExporter:"exporter et charger",sBanc:"le banc",sQuatre:"les quatre conditions",sDossier:"le dossier · 40 %",
   noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",
   nom:"name : le nom de la Skill",nomAide:"Minuscules, chiffres et tirets ; 64 caractères au plus. Le dossier du zip porte ce nom.",nomMal:"Minuscules, chiffres et tirets seulement ; sera exporté comme : ",nomReserve:"Claude refuse un nom qui contient « claude » ou « anthropic ».",
   desc:"description : quand l'utiliser",descAide:"200 caractères au plus : c'est la limite de Claude. Le modèle lit cette phrase pour décider de charger la Skill.",trop:"trop long de {n}",
@@ -128,9 +136,12 @@ var T={
   gagne:"Ce qui a été gagné",perdu:"Ce qui a été perdu",decision:"La décision : garder, réviser ou abandonner quelle instruction, et pourquoi",
   enreg:"ENREGISTRER L'ESSAI",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",pasDeV:"Figez d'abord une version : l'essai dit quelle version a été chargée.",
   essai:"Essai",aucunE:"Aucun essai.",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",annuler:"Annuler",
+  condition:"Condition de l'essai",condAucune:"— (sans puis avec, un seul essai)",source:"Nom ou source de la Skill",reponse:"La réponse (entière)",
+  cases:"les six cases, cochées par un autre binôme",score:"{n} / 6",pasNote:"pas encore noté",
+  qIntro:"La même question sous les quatre conditions : pour chacune, le dernier essai enregistré et sa note.",qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
   saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème"},
  en:{titre:"The Skill workshop",intro:"Write your place's Skill, keep each of its versions, load it in Claude or ChatGPT, and record on the bench what it changes. Everything stays in this browser; export the dossier at the bottom of the page.",
-  sBinome:"the pair",sEditeur:"the editor",sVersions:"versions",sComparer:"compare",sExporter:"export and load",sBanc:"the bench",sDossier:"the dossier · 40 %",
+  sBinome:"the pair",sEditeur:"the editor",sVersions:"versions",sComparer:"compare",sExporter:"export and load",sBanc:"the bench",sQuatre:"the four conditions",sDossier:"the dossier · 40 %",
   noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",
   nom:"name: the Skill's name",nomAide:"Lowercase letters, digits and hyphens; 64 characters at most. The zip folder carries this name.",nomMal:"Lowercase letters, digits and hyphens only; will be exported as: ",nomReserve:"Claude refuses a name containing “claude” or “anthropic”.",
   desc:"description: when to use it",descAide:"200 characters at most: Claude's limit. The model reads this sentence to decide whether to load the Skill.",trop:"{n} too long",
@@ -152,6 +163,9 @@ var T={
   gagne:"What was gained",perdu:"What was lost",decision:"The decision: keep, revise or drop which instruction, and why",
   enreg:"RECORD THE RUN",manqueE:"Missing: ",enregistre:"Run {n} recorded",pasDeV:"Freeze a version first: the run says which version was loaded.",
   essai:"Run",aucunE:"No runs.",suppr:"Delete",supprQ:"Delete this run?",annuler:"Cancel",
+  condition:"Condition of the run",condAucune:"— (without then with, one run)",source:"The Skill's name or source",reponse:"The answer (whole)",
+  cases:"the six boxes, ticked by another pair",score:"{n} / 6",pasNote:"not scored yet",
+  qIntro:"The same question under the four conditions: for each, the last recorded run and its score.",qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
   saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme"}
 };
 function t(k){return T[lang][k];}
@@ -161,10 +175,11 @@ function r(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
 var D=JA.charger();
 var ed=D.skill.brouillon?JA.lireSkill(D.skill.brouillon):{nom:MODELE.nom,description:MODELE.description,corps:MODELE.corps};
 var BKEY="judging-ai-skill-brouillons";
-function nouvelEssai(){var p=D.essais[D.essais.length-1]||{};return {version:D.skill.versions.length?D.skill.versions.length-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:p.mode||"chargée",question:p.question||D.binome.question||"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:""};}
+function nouvelEssai(){var p=D.essais[D.essais.length-1]||{};return {version:D.skill.versions.length?D.skill.versions.length-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:p.mode||"chargée",question:p.question||D.binome.question||"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:"",skill_source:"",reponse:"",cases:[false,false,false,false,false,false],note_par:""};}
 var B={change:"",pourquoi:"",essai:null,cmpA:"",cmpB:"",exp:""};
 try{var rb=JSON.parse(localStorage.getItem(BKEY)||"null");if(rb&&typeof rb==="object")Object.keys(B).forEach(function(k){if(rb[k]!=null)B[k]=rb[k];});}catch(e){}
 if(!B.essai||typeof B.essai!=="object")B.essai=nouvelEssai();
+else{var ne=nouvelEssai();Object.keys(ne).forEach(function(k){if(B.essai[k]==null)B.essai[k]=ne[k];});}
 function save(){
   D.skill.brouillon=JA.skillMd(ed.nom,ed.description,ed.corps);
   var ok=JA.enregistrer(D);try{localStorage.setItem(BKEY,JSON.stringify(B));}catch(e){ok=false;}
@@ -177,7 +192,7 @@ function problemes(v){var p=[];if(!v.nom||v.nom!==nomExport(v.nom)||v.nom.length
 var fid=0;
 function top(l){return h("div",{class:"top"},[h("span",{class:"k",text:l.toLowerCase()})]);}
 function fld(lbl,type,val,set,ex){ex=ex||{};var i=type==="textarea"?h("textarea",ex):h("input",Object.assign({type:type},ex));i.id=i.id||"f-"+(++fid);i.value=val==null?"":val;i.addEventListener("input",function(){set(i.value,i);save();});return h("div",null,[h("label",{text:lbl,for:i.id}),i]);}
-function seg(val,opts,set){return h("div",{class:"seg"},opts.map(function(o){return h("button",{type:"button",class:"opt","aria-pressed":String(val===o[0]),text:o[1],on:{click:function(e){set(o[0]);save();Array.prototype.forEach.call(e.target.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.target));});}}});}));}
+function seg(val,opts,set){return h("div",{class:"seg"},opts.map(function(o){return h("button",{type:"button",class:"opt","data-v":o[0],"aria-pressed":String(val===o[0]),text:o[1],on:{click:function(e){set(o[0]);save();Array.prototype.forEach.call(e.target.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.target));});}}});}));}
 function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},2200);}
 function quand(iso){try{return new Date(iso).toLocaleString(lang==="fr"?"fr-FR":"en-GB",{timeZone:"Asia/Beirut",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return iso;}}
 function confirmer(msg,ok,cb){var f=document.getElementById("dlgf");f.innerHTML="";f.appendChild(h("p",{text:msg}));f.appendChild(h("div",{class:"row",style:"justify-content:flex-end"},[h("button",{class:"txtbtn quiet",value:"n",text:t("annuler")}),h("button",{class:"act",value:"y",text:ok})]));var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
@@ -227,13 +242,27 @@ function vueDiff(box){
   box.appendChild(g);
 }
 
+/* ---------- les quatre conditions, côte à côte ---------- */
+function vueQuatre(box){
+  box.innerHTML="";var q=JA.quatre(D),bc=JA.banc(),qs={};
+  box.appendChild(h("div",{class:"quatre",id:"quatre-grille"},JA.CONDS.map(function(c){
+    var i=q[c],e=D.essais[i],col=h("div",{"data-c":c},[h("h3",{text:JA.condLabel(c)})]);
+    if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
+    qs[e.question.trim()]=1;
+    col.appendChild(h("p",{class:"score",text:r(t("score"),{n:JA.score(e)})}));
+    col.appendChild(h("p",{class:"s",text:t("essai")+" "+(i+1)+" · "+(e.note_par?bc.notePar+" : "+e.note_par:t("pasNote"))+(e.skill_source?" · "+e.skill_source:"")}));
+    col.appendChild(h("pre",{class:"m",text:e.reponse}));
+    return col;})));
+  if(Object.keys(qs).length>1)box.appendChild(h("p",{class:"alerte",text:t("qDiff4")}));
+}
+
 /* ---------- vue ---------- */
 var app=document.getElementById("app");
 function render(){
   document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
   app.innerHTML="";
   app.appendChild(h("section",{class:"sec"},[h("p",{class:"mast",text:t("titre")}),h("p",{class:"l",text:t("intro")}),
-    h("nav",{class:"sommaire","aria-label":t("titre")},[["binome","sBinome"],["editeur","sEditeur"],["versions","sVersions"],["comparer","sComparer"],["exporter","sExporter"],["banc","sBanc"],["dossier","sDossier"]].map(function(x){return h("a",{href:"#"+x[0],text:t(x[1])});}))]));
+    h("nav",{class:"sommaire","aria-label":t("titre")},[["binome","sBinome"],["editeur","sEditeur"],["versions","sVersions"],["comparer","sComparer"],["exporter","sExporter"],["banc","sBanc"],["quatre","sQuatre"],["dossier","sDossier"]].map(function(x){return h("a",{href:"#"+x[0],text:t(x[1])});}))]));
 
   /* le binôme */
   var sb=h("section",{class:"sec",id:"binome"},[top(t("sBinome"))]);
@@ -306,35 +335,62 @@ function render(){
     var vs=h("select",{id:"e-version"});D.skill.versions.forEach(function(v,i){vs.appendChild(h("option",{value:String(i),text:"v"+v.n+" · "+(v.nom||"…")}));});
     vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);vs.addEventListener("change",function(){E.version=Number(vs.value);save();});
     var ap=h("select",{id:"e-app"});JA.APPS.forEach(function(a){ap.appendChild(h("option",{value:a,text:a}));});ap.value=E.app;ap.addEventListener("change",function(){E.app=ap.value;save();});
-    sk.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("version"),for:"e-version"}),vs]),h("div",null,[h("label",{text:t("app"),for:"e-app"}),ap])]));
+    var cSeg=seg(E.condition,[["",t("condAucune")]].concat(JA.CONDS.map(function(c){return [c,JA.condLabel(c)];})),function(v){E.condition=v;majC();});cSeg.id="e-condition";
+    sk.appendChild(h("div",null,[h("label",{text:t("condition")}),cSeg]));
+    var srcF=fld(t("source"),"text",E.skill_source,function(v){E.skill_source=v;},{id:"e-source"});sk.appendChild(srcF);
+    var vW=h("div",null,[h("label",{text:t("version"),for:"e-version"}),vs]);
+    sk.appendChild(h("div",{class:"deux"},[vW,h("div",null,[h("label",{text:t("app"),for:"e-app"}),ap])]));
     sk.appendChild(h("div",{class:"deux"},[fld(t("modele"),"text",E.modele,function(v){E.modele=v;},{id:"e-modele"}),fld(t("date"),"date",E.date,function(v){E.date=v;},{id:"e-date"})]));
-    sk.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("web")}),seg(E.web?"o":"n",[["o",t("oui")],["n",t("non")]],function(v){E.web=v==="o";})]),
-      h("div",null,[h("label",{text:t("mode")}),seg(E.mode,[["chargée",t("charg")],["collée",t("coll")]],function(v){E.mode=v;})])]));
+    var mW;sk.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("web")}),seg(E.web?"o":"n",[["o",t("oui")],["n",t("non")]],function(v){E.web=v==="o";})]),
+      mW=h("div",null,[h("label",{text:t("mode")}),seg(E.mode,[["chargée",t("charg")],["collée",t("coll")]],function(v){E.mode=v;})])]));
     var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"alerte",id:"q-diff",text:t("qDiff")});
     function majQ(){warn.hidden=!prev||E.question.trim()===prev.trim();}
     sk.appendChild(fld(t("question"),"textarea",E.question,function(v){E.question=v;majQ();},{id:"e-question"}));sk.appendChild(warn);majQ();
-    sk.appendChild(h("div",{class:"deux"},[fld(t("sans"),"textarea",E.sans,function(v){E.sans=v;},{id:"e-sans",class:"raw"}),fld(t("avec"),"textarea",E.avec,function(v){E.avec=v;},{id:"e-avec",class:"raw"})]));
+    var saW=h("div",{class:"deux"},[fld(t("sans"),"textarea",E.sans,function(v){E.sans=v;},{id:"e-sans",class:"raw"}),fld(t("avec"),"textarea",E.avec,function(v){E.avec=v;},{id:"e-avec",class:"raw"})]);
+    var reW=fld(t("reponse"),"textarea",E.reponse,function(v){E.reponse=v;},{id:"e-reponse",class:"raw"});
+    sk.appendChild(saW);sk.appendChild(reW);
+    function majC(){var c=E.condition;srcF.hidden=c!=="B"&&c!=="C";vW.hidden=!!c&&c!=="D";mW.hidden=c==="A";saW.hidden=!!c;reW.hidden=!c;}majC();
     sk.appendChild(h("label",{text:t("lecture")}));
     sk.appendChild(h("div",{class:"num"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(E[k]),function(v){E[k]=Math.max(0,Math.floor(Number(v))||0);},{id:"e-"+k,min:"0",step:"1",inputmode:"numeric"});})));
     sk.appendChild(h("div",{class:"deux"},[fld(t("gagne"),"textarea",E.gagne,function(v){E.gagne=v;},{id:"e-gagne"}),fld(t("perdu"),"textarea",E.perdu,function(v){E.perdu=v;},{id:"e-perdu"})]));
     sk.appendChild(fld(t("decision"),"textarea",E.decision,function(v){E.decision=v;},{id:"e-decision"}));
     sk.appendChild(h("button",{type:"button",class:"act",id:"enreg",text:t("enreg"),on:{click:function(){
-      var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!E.question.trim())m.push(t("question"));if(!E.sans.trim())m.push(t("sans"));if(!E.avec.trim())m.push(t("avec"));
+      var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!E.question.trim())m.push(t("question"));if(E.condition){if((E.condition==="B"||E.condition==="C")&&!E.skill_source.trim())m.push(t("source"));if(!E.reponse.trim())m.push(t("reponse"));}else{if(!E.sans.trim())m.push(t("sans"));if(!E.avec.trim())m.push(t("avec"));}
       if(m.length){toast(t("manqueE")+m.join(" · "));return;}
       var x=JSON.parse(JSON.stringify(E));x.version=D.skill.versions[E.version].n;D.essais.push(x);
       var nx=nouvelEssai();nx.version=E.version;nx.question=E.question;B.essai=nx;save();render();toast(r(t("enregistre"),{n:D.essais.length}));location.hash="banc";}}}));
   }
   if(!D.essais.length)sk.appendChild(h("p",{class:"s",text:t("aucunE")}));
+  var bc=JA.banc(),q4=h("div");
   D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
-    var e=p[0],i=p[1];
-    sk.appendChild(h("details",{class:"entry essai"},[h("summary",null,[h("span",{class:"t",text:t("essai")+" "+(i+1)+" · v"+e.version+" · "+e.app+(e.modele?" · "+e.modele:"")}),
-      h("div",{class:"sub",text:[e.date,t("web")+" "+(e.web?t("oui"):t("non")),e.mode==="chargée"?t("charg"):t("coll"),t("etayees")+" "+e.etayees,t("contredites")+" "+e.contredites,t("non_resolues")+" "+e.non_resolues,t("utilisables")+" "+e.utilisables].join(" · ")})]),
+    var e=p[0],i=p[1],sc=h("p",{class:"score"}),sub=h("div",{class:"sub"});
+    function majS(){sc.textContent=r(t("score"),{n:JA.score(e)})+(e.note_par?" · "+bc.notePar+" : "+e.note_par:"");
+      sub.textContent=[e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(e.condition==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(e.condition?[r(t("score"),{n:JA.score(e)})]:[t("etayees")+" "+e.etayees,t("contredites")+" "+e.contredites,t("non_resolues")+" "+e.non_resolues,t("utilisables")+" "+e.utilisables]).join(" · ");}
+    var corps=e.condition?[
+      e.skill_source?h("div",{class:"champ"},[h("b",{text:t("source")}),h("span",{text:e.skill_source})]):null,
       h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
-      h("div",{class:"deux"},[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])]),
+      h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),
+      h("div",{class:"champ"},[h("b",{text:t("cases")}),h("div",{class:"cases"},bc.cases.map(function(c,k){
+        var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();vueQuatre(q4);});
+        return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+". "+c})]);}))]),
+      fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();vueQuatre(q4);},{id:"n-"+i}),sc
+    ]:[
+      h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
+      h("div",{class:"deux"},[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])])
+    ];
+    majS();
+    sk.appendChild(h("details",{class:"entry essai",id:"essai-"+i},[h("summary",null,[h("span",{class:"t",text:t("essai")+" "+(i+1)+(e.condition?" · "+JA.condLabel(e.condition):"")+(!e.condition||e.condition==="D"?" · v"+e.version:"")+" · "+e.app+(e.modele?" · "+e.modele:"")}),sub])].concat(corps).concat([
       h("div",{class:"champ"},[h("b",{text:t("gagne")}),h("span",{text:e.gagne||"—"})]),h("div",{class:"champ"},[h("b",{text:t("perdu")}),h("span",{text:e.perdu||"—"})]),h("div",{class:"champ"},[h("b",{text:t("decision")}),h("span",{text:e.decision||"—"})]),
-      h("div",{class:"row",style:"margin-top:.8em;justify-content:flex-end"},[h("button",{type:"button",class:"txtbtn quiet",text:t("suppr"),on:{click:function(){confirmer(t("supprQ"),t("suppr"),function(){D.essais.splice(i,1);save();render();});}}})])]));
+      h("div",{class:"row",style:"margin-top:.8em;justify-content:flex-end"},[h("button",{type:"button",class:"txtbtn quiet",text:t("suppr"),on:{click:function(){confirmer(t("supprQ"),t("suppr"),function(){D.essais.splice(i,1);save();render();});}}})])])));
   });
   app.appendChild(sk);
+
+  /* les quatre conditions */
+  var s4=h("section",{class:"sec",id:"quatre"},[top(t("sQuatre")),h("p",{class:"s",text:t("qIntro")}),q4]);
+  vueQuatre(q4);
+  s4.appendChild(h("div",null,[h("label",{text:bc.signer}),(function(){var g=seg(D.signer.condition,JA.CONDS.map(function(c){return [c,JA.condLabel(c)];}),function(v){D.signer.condition=v;});g.id="signer";return g;})()]));
+  s4.appendChild(fld(bc.pourquoi,"textarea",D.signer.pourquoi,function(v){D.signer.pourquoi=v;},{id:"signer-pourquoi"}));
+  app.appendChild(s4);
 
   /* le dossier */
   app.appendChild(h("section",{class:"sec",id:"dossier"},[top(t("sDossier")),JA.criteres(D)]));
