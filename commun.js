@@ -3,10 +3,10 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-2026-09-23.1";
+  var VERSION = "s4-2026-09-23.2";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
-  var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"];
+  var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
 
   var T = {
     fr: {
@@ -32,7 +32,14 @@ var JA = (function () {
       md: { titre: "Dossier", binome: "Binôme", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
         brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "Skill", oui: "oui", non: "non",
         sans: "Sans la Skill", avec: "Avec la Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
-        gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)" }
+        gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)",
+        condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les quatre conditions" },
+      banc: {
+        conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
+        cases: ["chaque affirmation dit d'où elle vient (une source, ou « je déduis »)", "elle nomme un passage précis (auteur, page), pas seulement « une source »",
+          "deux sources qui divergent restent séparées", "là où rien n'appuie une réponse, elle le dit", "aucune référence inventée", "elle répond vraiment à la question"],
+        notePar: "noté par le binôme", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi"
+      }
     },
     en: {
       dossier: "the pair's dossier", exJson: "EXPORT THE DOSSIER", exMd: "readable version (.md)", imp: "import a dossier…", retour: "go back to the state before the import",
@@ -57,7 +64,14 @@ var JA = (function () {
       md: { titre: "Dossier", binome: "Pair", lieu: "Place", question: "Question", versions: "Versions", change: "What we changed", pourquoi: "Why (which run)", figee: "frozen on",
         brouillon: "Current draft", essais: "Runs", essai: "Run", cond: "Conditions", app: "App", modele: "Model", date: "Date", web: "Web", mode: "Skill", oui: "yes", non: "no",
         sans: "Without the Skill", avec: "With the Skill", etayees: "supported", contredites: "contradicted", non_resolues: "unresolved", utilisables: "usable",
-        gagne: "What was gained", perdu: "What was lost", decision: "Decision", lire: "Exercise 1 · Saint-Georges", s3: "Session 3 (worksheets)" }
+        gagne: "What was gained", perdu: "What was lost", decision: "Decision", lire: "Exercise 1 · Saint-Georges", s3: "Session 3 (worksheets)",
+        condition: "Condition", source: "Skill", reponse: "Answer", score: "Score", quatre: "The four conditions" },
+      banc: {
+        conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
+        cases: ["each claim says where it comes from (a source, or “I infer”)", "it names a precise passage (author, page), not just “a source”",
+          "two sources that diverge stay separate", "where nothing supports an answer, it says so", "no invented reference", "it actually answers the question"],
+        notePar: "scored by the pair", signer: "Which one would you sign in your dossier?", pourquoi: "why"
+      }
     }
   };
   function lang() { try { return localStorage.getItem(LANGKEY) === "en" ? "en" : "fr"; } catch (e) { return "fr"; } }
@@ -85,7 +99,9 @@ var JA = (function () {
   /* ---------- le dossier ---------- */
   function S(v) { return typeof v === "string" ? v : ""; }
   function N(v) { v = Number(v); return isFinite(v) && v >= 0 ? Math.floor(v) : 0; }
-  function vide() { return { format: FORMAT, binome: { noms: [], lieu: "", question: "" }, skill: { versions: [], brouillon: "" }, essais: [], lire: {} }; }
+  function vide() { return { format: FORMAT, binome: { noms: [], lieu: "", question: "" }, skill: { versions: [], brouillon: "" }, essais: [], lire: {}, signer: { condition: "", pourquoi: "" } }; }
+  function cases(v) { v = Array.isArray(v) ? v : []; return [0, 1, 2, 3, 4, 5].map(function (i) { return v[i] === true; }); }
+  function score(e) { return e.cases.filter(Boolean).length; }
   function propre(d) {
     var o = vide(); if (!d || typeof d !== "object") return o;
     var b = d.binome || {};
@@ -98,10 +114,13 @@ var JA = (function () {
     o.essais = (Array.isArray(d.essais) ? d.essais : []).map(function (x) {
       x = x || {}; return { version: N(x.version), app: APPS.indexOf(x.app) >= 0 ? x.app : "autre", modele: S(x.modele), date: S(x.date), web: x.web === true, mode: MODES.indexOf(x.mode) >= 0 ? x.mode : "collée",
         question: S(x.question), sans: S(x.sans), avec: S(x.avec), etayees: N(x.etayees), contredites: N(x.contredites), non_resolues: N(x.non_resolues), utilisables: N(x.utilisables),
-        gagne: S(x.gagne), perdu: S(x.perdu), decision: S(x.decision) };
+        gagne: S(x.gagne), perdu: S(x.perdu), decision: S(x.decision),
+        condition: CONDS.indexOf(x.condition) >= 0 ? x.condition : "", skill_source: S(x.skill_source), reponse: S(x.reponse), cases: cases(x.cases), note_par: S(x.note_par) };
     });
     var l = d.lire && typeof d.lire === "object" ? d.lire : {};
     Object.keys(l).forEach(function (k) { var x = l[k] || {}; o.lire[k] = { affirmation: S(x.affirmation), reponse: S(x.reponse) }; });
+    var sg = d.signer || {};
+    o.signer = { condition: CONDS.indexOf(sg.condition) >= 0 ? sg.condition : "", pourquoi: S(sg.pourquoi) };
     return o;
   }
   var persistant = true;
@@ -111,6 +130,10 @@ var JA = (function () {
   function complet() { var d = charger(), s3 = s3Lire(); if (s3) d.s3 = s3; d.exporte_le = beyrouth(); return d; }
   function slug(s) { return String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40); }
   function nomFichier(d, ext) { return "dossier-" + (slug(d.binome.lieu) || "sans-lieu") + "-" + d.exporte_le.slice(0, 10) + "." + ext; }
+
+  /* le dernier essai de chaque condition : { A: index ou -1, … } */
+  function quatre(d) { var o = {}; CONDS.forEach(function (c) { o[c] = -1; }); d.essais.forEach(function (e, i) { if (e.condition) o[e.condition] = i; }); return o; }
+  function condLabel(c) { return c ? c + " · " + t("banc").conds[c] : "—"; }
 
   function fence(s) { s = s || ""; var f = "```"; while (s.indexOf(f) >= 0) f += "`"; return f + "\n" + s + "\n" + f; }
   function markdown(d) {
@@ -124,14 +147,28 @@ var JA = (function () {
     if (d.skill.brouillon) L.push("### " + m.brouillon, "", fence(d.skill.brouillon), "");
     L.push("## " + m.essais, "");
     if (!d.essais.length) L.push("—", "");
+    var bc = t("banc");
     d.essais.forEach(function (e, i) {
-      L.push("### " + m.essai + " " + (i + 1) + " · v" + e.version, "",
+      L.push("### " + m.essai + " " + (i + 1) + (e.condition ? " · " + condLabel(e.condition) : "") + (!e.condition || e.condition === "D" ? " · v" + e.version : ""), "",
         "| " + [m.app, m.modele, m.date, m.web, m.mode].join(" | ") + " |", "|---|---|---|---|---|",
-        "| " + [e.app, e.modele || "—", e.date || "—", e.web ? m.oui : m.non, e.mode].map(function (c) { return String(c).replace(/\|/g, "\\|"); }).join(" | ") + " |", "",
-        "**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "",
+        "| " + [e.app, e.modele || "—", e.date || "—", e.web ? m.oui : m.non, e.mode].map(function (c) { return String(c).replace(/\|/g, "\\|"); }).join(" | ") + " |", "");
+      if (e.condition) {
+        L.push("**" + m.condition + "** : " + condLabel(e.condition), "");
+        if (e.skill_source) L.push("**" + m.source + "** : " + e.skill_source, "");
+        L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.reponse + "**", "", fence(e.reponse), "");
+        e.cases.forEach(function (x, k) { L.push("- [" + (x ? "x" : " ") + "] " + (k + 1) + ". " + bc.cases[k]); });
+        L.push("", "**" + m.score + "** : " + score(e) + " / 6 · " + bc.notePar + " : " + (e.note_par || "—"), "");
+      } else L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "");
+      L.push(
         m.etayees + " " + e.etayees + " · " + m.contredites + " " + e.contredites + " · " + m.non_resolues + " " + e.non_resolues + " · " + m.utilisables + " " + e.utilisables, "",
         "**" + m.gagne + "** : " + (e.gagne || "—"), "", "**" + m.perdu + "** : " + (e.perdu || "—"), "", "**" + m.decision + "** : " + (e.decision || "—"), "");
     });
+    var q4 = quatre(d);
+    if (CONDS.some(function (c) { return q4[c] >= 0; }) || d.signer.condition) {
+      L.push("## " + m.quatre, "", "| " + [m.condition, m.essai, m.score, bc.notePar].join(" | ") + " |", "|---|---|---|---|");
+      CONDS.forEach(function (c) { var i = q4[c], e = d.essais[i]; L.push("| " + [condLabel(c), e ? String(i + 1) : "—", e ? score(e) + " / 6" : "—", e ? e.note_par || "—" : "—"].map(function (x) { return String(x).replace(/\|/g, "\\|"); }).join(" | ") + " |"); });
+      L.push("", "**" + bc.signer + "** " + condLabel(d.signer.condition), "", "**" + bc.pourquoi + "** : " + (d.signer.pourquoi || "—"), "");
+    }
     var lk = Object.keys(d.lire);
     if (lk.length) { L.push("## " + m.lire, ""); lk.forEach(function (k) { L.push("### " + (d.lire[k].affirmation || k), "", d.lire[k].reponse || "—", ""); }); }
     if (d.s3) { L.push("## " + m.s3, ""); Object.keys(d.s3).forEach(function (k) { if (d.s3[k]) L.push("**" + k + "** : " + d.s3[k].replace(/\n/g, "  \n"), ""); }); }
@@ -159,7 +196,7 @@ var JA = (function () {
     var vs = d.skill.versions, es = d.essais;
     return {
       versions: [vs.filter(function (v) { return v.change.trim() && v.pourquoi.trim(); }).length, vs.length],
-      essais: [es.filter(function (e) { return e.modele.trim() && e.date && e.question.trim() && e.sans.trim() && e.avec.trim(); }).length, es.length],
+      essais: [es.filter(function (e) { return e.modele.trim() && e.date && e.question.trim() && (e.condition ? e.reponse.trim() : e.sans.trim() && e.avec.trim()); }).length, es.length],
       bilan: [es.filter(function (e) { return e.gagne.trim() && e.perdu.trim(); }).length, es.length],
       decision: [es.filter(function (e) { return e.decision.trim(); }).length, es.length]
     };
@@ -288,6 +325,6 @@ var JA = (function () {
     return new Blob(parts.concat(central, [new Uint8Array(fin.buffer)]), { type: "application/zip" });
   }
 
-  return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
+  return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, CONDS: CONDS, banc: function () { return t("banc"); }, condLabel: condLabel, score: score, quatre: quatre, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
     pied: pied, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
 })();
