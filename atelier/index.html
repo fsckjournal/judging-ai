@@ -82,6 +82,7 @@ main{max-width:1000px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right
 <body>
 <div class="hd"><a href="../">judging ai</a><span class="sp"></span><button id="lang" class="lg"><b>fr</b> · en</button><button id="theme">◐</button></div>
 <main id="app"></main>
+<script src="../commun.js"></script>
 <script>
 (function(){
 "use strict";
@@ -143,6 +144,7 @@ document.getElementById("lang").onclick=function(){lang=lang==="fr"?"en":"fr";tr
 document.getElementById("theme").onclick=function(){var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;theme=dark?"light":"dark";applyTheme();try{localStorage.setItem("judging-ai-journal-theme",theme);}catch(e){}};
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
 })();
+JA.pied();
 </script>
 </body>
 </html>
