@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Judging AI">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" href="../icon-192.png">
+<title>Judging AI · Lire Saint-Georges</title>
+<style>
+/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
+
+:root{
+  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
+  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
+  --serif:Georgia,'Times New Roman',serif;
+  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
+  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+}
+:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
+button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
+.hd{padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
+.hd .sp{flex:1}
+.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none;display:inline-flex;align-items:center}
+.hd .lg b{color:var(--encre);font-weight:600}
+.save{font-size:11px;opacity:.8}.save.err{color:var(--orange)}
+.tete{padding:.6em max(18px,env(safe-area-inset-right,0px)) .9em max(18px,env(safe-area-inset-left,0px));border-bottom:2px solid var(--orange)}
+.k{font:500 13px/1.3 var(--mono);letter-spacing:.08em;color:var(--sourd);margin:0}
+.mast{font:400 clamp(26px,5vw,38px)/1.15 var(--serif);margin:.15em 0 .3em}
+.consigne{font:400 16px/1.5 var(--sans);color:var(--encre2);margin:0;max-width:95ch}
+.trois{margin:.4em 0 0;padding-left:1.3em;font:400 15px/1.45 var(--sans);color:var(--encre2);max-width:95ch}
+.panneau{padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px))}
+.panneau>h2{font:500 13px/1.3 var(--mono);letter-spacing:.08em;color:var(--sourd);margin:1.2em 0 .4em;text-transform:lowercase}
+.aff{border-top:1px solid var(--trait);padding:1em 0 1.2em;scroll-margin-top:12px}
+.aff.actif .num{color:var(--encre)}
+.aff .num{font:400 26px/1 var(--serif);color:var(--orange);margin-right:.3em}
+.aff .phrase{font:400 21px/1.35 var(--serif);margin:0}
+.renvois{display:flex;flex-wrap:wrap;gap:6px 10px;margin:.6em 0 0;align-items:center}
+.renvois span{font:500 12px/1.3 var(--mono);color:var(--sourd)}
+.renvois a{font:500 13px/1.3 var(--mono);color:var(--encre);text-decoration:none;border-bottom:2px solid var(--orange);padding:6px 0}
+label{display:block;color:var(--sourd);font:500 13px/1.3 var(--mono);letter-spacing:.04em;margin:.9em 0 .4em}
+textarea{width:100%;background:var(--fond);color:var(--encre);border:0;border-left:2px solid var(--orange);background:var(--boite);border-radius:0;padding:.5em .7em;font:400 16px/1.45 var(--sans);min-height:120px;resize:vertical}
+textarea:focus{outline:0;border-left-color:var(--encre)}
+.source{border-top:2px solid var(--encre);padding:.9em 0 .2em;margin-top:1em}
+.source h3{font:400 22px/1.25 var(--serif);margin:0}
+.source .qui{font:400 13px/1.5 var(--mono);color:var(--sourd);margin:.3em 0 0}
+.passage{border-top:1px solid var(--trait);padding:.8em 0;scroll-margin-top:12px}
+.passage .ref{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font:500 12.5px/1.4 var(--mono);color:var(--sourd)}
+.passage .ref b{color:var(--encre);font-weight:600}
+.statut{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border:1px solid var(--trait)}
+.statut.cite{color:var(--orange);border-color:var(--orange)}
+blockquote{margin:.5em 0 0;padding:.1em 0 .1em .9em;border-left:2px solid var(--trait);font:400 17px/1.55 var(--serif)}
+.passage.eclaire blockquote{border-left-color:var(--orange);background:var(--boite)}
+.collant{display:none}
+@media (min-width:900px){
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
+  .split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+  .panneau{overflow-y:auto;overscroll-behavior:contain;padding-bottom:30px}
+  #sources{border-left:1px solid var(--trait)}
+  .tete{flex:0 0 auto}
+}
+@media (max-width:899.98px){
+  .collant{display:flex;position:sticky;top:0;z-index:5;background:var(--fond);border-bottom:2px solid var(--orange);padding:.5em max(12px,env(safe-area-inset-right,0px)) .5em max(12px,env(safe-area-inset-left,0px));gap:8px;align-items:center}
+  .collant p{flex:1;margin:0;font:400 16px/1.35 var(--serif)}
+  .collant b{color:var(--orange);font:400 18px/1 var(--serif);margin-right:.25em}
+  .collant button{flex:0 0 auto;background:none;border:1px solid var(--trait);color:var(--encre);min-width:44px;min-height:44px;font:500 18px/1 var(--mono)}
+  .collant button:disabled{opacity:.3}
+}
+@media print{.hd,.collant,button{display:none!important}body{display:block;height:auto;overflow:visible}.panneau{overflow:visible}}
+</style>
+</head>
+<body>
+<div class="hd"><a href="../">judging ai</a><span class="sp"></span><span id="save" class="save"></span><button id="lang" class="lg"><b>fr</b> · en</button><button id="theme">◐</button></div>
+<header class="tete" id="tete"></header>
+<div class="collant" id="collant" aria-live="polite"></div>
+<div class="split">
+  <section class="panneau" id="affirmations"></section>
+  <section class="panneau" id="sources"></section>
+</div>
+<script src="../commun.js"></script>
+<script>
+(function(){
+"use strict";
+/* Exercice 1 de la S4, sans IA. Affirmations : 06_EXERCICE_ANGLAIS (S3, 18 septembre), sans la cinquième (Perret) :
+   la phrase de l'Orient Palace à laquelle appartient la note 183 d'Arbid n'est citée dans aucune des pièces, donc l'affirmation ne peut pas être jugée ici.
+   Passages : pièces S3 « Dossier Saint-Georges · huit sources » et « Clé · Arbid 2002 · Portrait de ville 2001 », extraits courts et attribués. */
+var h=JA.h, lang=JA.lang();
+var T={
+ fr:{k:"exercice 1 · sans IA · hôtel Saint-Georges, Beyrouth",titre:"Ce que chaque passage permet d'écrire",
+  consigne:"Quatre affirmations, et les passages des sources en entier. Pour chaque affirmation, écrivez ce que chaque passage vous permet d'écrire, et ce qu'il ne permet pas d'écrire. Pas de vrai ou faux : ce que c'est, et ce qui le trancherait.",
+  q:["Une source l'affirme-t-elle, montre-t-elle un document, ou quelqu'un l'a-t-il conclu ?","Quel passage le trancherait ? Pas « une source » : quel texte, quelle page, quels mots.","Si vous l'acceptez, qu'écrivez-vous dans une notice ? Qu'est-ce que vous ne pouvez toujours pas écrire ?"],
+  affs:"les affirmations",srcs:"les passages",renv:"passages cités dans l'exercice :",rep:"Notre réponse : ce que ces passages permettent d'écrire, et ce qu'ils ne permettent pas",
+  direct:"ouvert directement",cite:"cité par un autre",par:"cité par ",prec:"affirmation précédente",suiv:"affirmation suivante",saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème"},
+ en:{k:"exercise 1 · no AI · Hôtel Saint-Georges, Beirut",titre:"What each passage lets you write",
+  consigne:"Four claims, and the passages from the sources in full. For each claim, write what each passage lets you write, and what it does not. Not true or false: what it is, and what would settle it.",
+  q:["Does a source state this, does a source show a document for it, or did someone conclude it?","Which passage would settle it? Not “a source”: which text, which page, which words.","If you accept it, what may you now write in a notice? What may you still not write?"],
+  affs:"the claims",srcs:"the passages",renv:"passages named in the exercise:",rep:"Our answer: what these passages let us write, and what they do not",
+  direct:"opened directly",cite:"quoted by another",par:"quoted by ",prec:"previous claim",suiv:"next claim",saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme"}
+};
+function t(k){return T[lang][k];}
+
+var AFF=[
+ {id:"sg1",fr:"L'hôtel Saint-Georges a été conçu par Antoine Tabet.",en:"The Hôtel Saint-Georges was designed by Antoine Tabet.",p:["pv1","ar1"]},
+ {id:"sg2",fr:"Le bâtiment a été conçu en 1931.",en:"The building was designed in 1931.",p:["ar3","ar4","ar6"]},
+ {id:"sg3",fr:"L'hôtel a ouvert en 1934.",en:"The hotel opened in 1934.",p:["wp1","ac1"]},
+ {id:"sg4",fr:"Tabet a conçu l'extension de 1946.",en:"Tabet designed the 1946 extension.",p:["ar5","ar7"]}
+];
+var SRC=[
+ {id:"ar",titre:"Georges Joseph Arbid, Practicing Modernism in Beirut: Architecture in Lebanon, 1946–1970",qui:"Thèse, Doctor of Design, Harvard GSD, juin 2002 · reproduction ProQuest.",passages:[
+  {id:"ar1",page:"p. 80 (PDF 90)",st:"direct",txt:"Tabet's brief stay at Perret's atelier probably earned him the mission of local architect for the construction of the Hôtel Saint-Georges in Beirut, a modernist exposed concrete building designed in 1931, by the French firm—close to Perret—of J. Poirrier, A. Lotte & G. Bordes with André Lotte as architect in charge.¹⁵⁶ Later, in 1946, Tabet was responsible for the enlargement of the third floor and the addition of a fourth floor, as well as the extension of the restaurant, which explains why he was understood to be the author of the original building.¹⁵⁷"},
+  {id:"ar2",page:"p. 80–81 (PDF 90–91)",st:"direct",txt:"As for the Hôtel Saint-Georges, if not the actual designer, Tabet was the field agent who enabled the realization of the job."},
+  {id:"ar3",page:"note 156, p. 80",st:"direct",txt:"Besides the drawings that bear the firm's signature and stamp, a conclusive document that certifies authorship is the contract with the Société des Grands Hôtels du Levant (archives of Fouad El Khoury, contractor of the concrete blocks for the project). In a letter sent by the Société des Grands Hôtels du Levant to the Régie Générale des Chemins de Fer et Travaux Publics, dated May 27, 1931, Mr. Philippat confirms their assignment as contractors, and mentions the architects who designed the building: […]"},
+  {id:"ar4",lg:"fr",page:"lettre du 27 mai 1931, dans la note 156, p. 80",st:"cite",par:"Arbid, note 156 ; l'original n'a pas été consulté",txt:"« Nous avons l'honneur de vous confirmer les accords intervenus entre notre Société et la vôtre concernant la construction d'un hôtel à Beyrouth (Liban). Nous avons fait dresser les plans de cet hôtel par MM. Poirrier, Lotte, Bordes, architectes à Paris, 18 Rue Monge, chargés de la direction et de la surveillance des travaux. »"},
+  {id:"ar5",page:"note 157, p. 80",st:"direct",txt:"For the first part, built in 1931, Tabet was architecte d'opérations (architect on site). He designed the second part, as is testified by his stamp and signature on the plans and other documents dated 1946-47."},
+  {id:"ar6",page:"p. 90 (PDF 100)",st:"direct",txt:"[…] designed by the French firm of Poirrier, Lotte and Bordes in 1931–32 […]"},
+  {id:"ar7",page:"liste des œuvres d'Antoine Tabet, PDF 204",st:"direct",txt:"1946 Hôtel Saint-Georges (extension)"},
+  {id:"ar8",page:"p. 91 (PDF 101)",st:"direct",txt:"The massive water tank was built from the start at roof level, taking into consideration the extension of the third and fourth floors; it also carries the hotel sign, executed in relief with concrete blocks."}
+ ]},
+ {id:"pv",titre:"Jad Tabet, avec Marlène Ghorayeb, Éric Huybrechts et Éric Verdeil, Beyrouth",qui:"Collection « Portrait de ville », Institut français d'architecture, octobre 2001 (supplément à Archiscopie n° 17). « Rédaction de ce numéro : Jade Tabet, avec Marlène Ghorayeb, Éric Huybrechts et Éric Verdeil. »",passages:[
+  {id:"pv1",page:"p. 17, colonne 3",st:"direct",txt:"[…] Antoine Tabet (1907-1964) qui, après des études à l'École supérieure d'ingénieurs de Beyrouth, rejoint l'atelier parisien d'Auguste Perret […], puis rentre au Liban, […] signe trois œuvres qui apparaissent alors comme les icônes d'une modernité architecturale en rupture avec l'éclectisme ambiant. Ce sont l'hôtel Saint-Georges à Minet el-Hosn, construit en 1931 en association avec les architectes français Poirrier, Bordes et Lotte, le collège de la Sagesse à Achrafyeh en 1936 et l'extension du lycée français de jeunes filles à Zokak el-Blatt en 1938."},
+  {id:"pv2",page:"p. 17, suite",st:"direct",txt:"Dans ces trois œuvres apparaissent les thèmes chers au rationalisme constructif de Perret : utilisation du béton brut, distinction entre éléments d'ossature et panneaux de remplissage, […]"},
+  {id:"pv3",page:"légende, p. 19",st:"direct",txt:"hôtel St-Georges, Poirrier, Bordes, Lotte et A. Tabet arch."},
+  {id:"pv4",page:"légende 109, p. 62",st:"direct",txt:"109. Hôtel Saint-Georges, 1931, Poirrier, Bordes, Lotte et Antoine Tabet arch., rue Ahmad Chaouqui. Une nouvelle aile, respectueuse de l'architecture de ce bâtiment remarquable, a été ajoutée en 2000 (Jacques Liger-Belair, Jean-Pierre Mogharbané et Georges Khayat arch.)."},
+  {id:"pv5",page:"remerciements, p. 2",st:"direct",txt:"Pour ses remarques précieuses : George Arbid."}
+ ]},
+ {id:"ac",titre:"Arab Center for Architecture, deux notices signées George Arbid",qui:"arab-architecture.org, consultées le 17 septembre 2026 (17h21, heure de Beyrouth).",passages:[
+  {id:"ac1",page:"notice « Hôtel Saint-Georges (1) » · champs et notes",st:"direct",txt:"Architect/Engineer/Team : (Team) Poirrier, Lotte, Bordes, with A. Tabet · Construction : 1930/1932. — Strategically located at the tip of the bay of Saint-Georges in Beirut, the Hôtel Saint-Georges is an icon of modern architecture in Lebanon, designed by the French firm of Poirrier, Lotte and Bordes with Lebanese engineer-architect Antoine Tabet as architect on site.[1] The building clearly bears the influence of Auguste Perret with its rational organization of space and exposed concrete."},
+  {id:"ac2",page:"notice « Hôtel Saint-Georges (1) » · note [1]",st:"direct",txt:"Later, in 1946-47, Tabet was in charge of adding to the building the third and fourth floors, and enlarging the restaurant."},
+  {id:"ac3",page:"notice « Antoine Tabet » · notes et table Work",st:"direct",txt:"Upon his return to Beirut, he was architect on site for the construction of Hotel Saint-Georges, an iconic modernist building in Beirut designed by French architects close to Perret. — Work : 1946 · Hôtel Saint-Georges (extension) · Beirut."}
+ ]},
+ {id:"wp",titre:"Wikipédia (anglais), « St. Georges Hotel, Beirut »",qui:"Paragraphe d'ouverture, texte source consulté le 17 septembre 2026 (17h21, heure de Beyrouth).",passages:[
+  {id:"wp1",page:"paragraphe d'ouverture",st:"direct",txt:"The Hotel St. Georges is a historic resort hotel in Beirut, Lebanon, opened in 1934. It was constructed by a French investment group, the Société Des Grands Hotels Du Levant (SGHL), during the period of the French mandate. Parisian architect Auguste Perret came to Beirut to design the hotel with local architect Antun Tabet."},
+  {id:"wp2",lg:"fr",page:"les deux notes de la dernière phrase",st:"cite",par:"Wikipédia ; ni l'un ni l'autre n'a été ouvert",txt:"« came to Beirut to design the hotel » → Ching, Jarzombek et Prakash, A Global History of Architecture, p. 712. « with local architect Antun Tabet » → Alex Rowell, Daily Beast, 24 mars 2018."}
+ ]}
+];
+
+var D=JA.charger(), actif=0;
+function save(){var ok=JA.enregistrer(D);var el=document.getElementById("save");el.textContent=ok?t("saved"):t("notsaved");el.className=ok?"save":"save err";}
+function rep(a){return (D.lire[a.id]&&D.lire[a.id].reponse)||"";}
+function montrer(pid){
+  var el=document.getElementById("p-"+pid);if(!el)return;
+  document.querySelectorAll(".passage.eclaire").forEach(function(x){x.classList.remove("eclaire");});
+  el.classList.add("eclaire");el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function setActif(i,defiler){
+  actif=Math.max(0,Math.min(AFF.length-1,i));
+  document.querySelectorAll(".aff").forEach(function(x,j){x.classList.toggle("actif",j===actif);});
+  var a=AFF[actif],c=document.getElementById("collant");c.innerHTML="";
+  c.appendChild(h("button",{type:"button","aria-label":t("prec"),disabled:actif===0,text:"‹",on:{click:function(){setActif(actif-1,true);}}}));
+  c.appendChild(h("p",null,[h("b",{text:String(actif+1)}),a[lang]]));
+  c.appendChild(h("button",{type:"button","aria-label":t("suiv"),disabled:actif===AFF.length-1,text:"›",on:{click:function(){setActif(actif+1,true);}}}));
+  if(defiler)document.getElementById("a-"+a.id).scrollIntoView({behavior:"smooth",block:"start"});
+}
+function render(){
+  document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
+  var te=document.getElementById("tete");te.innerHTML="";
+  te.appendChild(h("p",{class:"k",text:t("k")}));te.appendChild(h("h1",{class:"mast",text:t("titre")}));te.appendChild(h("p",{class:"consigne",text:t("consigne")}));
+  te.appendChild(h("ol",{class:"trois"},t("q").map(function(q){return h("li",{text:q});})));
+  var L=document.getElementById("affirmations");L.innerHTML="";L.appendChild(h("h2",{text:t("affs")}));
+  AFF.forEach(function(a,i){
+    var ta=h("textarea",{id:"r-"+a.id});ta.value=rep(a);
+    ta.addEventListener("input",function(){D.lire[a.id]={affirmation:AFF[i].fr,reponse:ta.value};save();});
+    ta.addEventListener("focus",function(){setActif(i,false);});
+    L.appendChild(h("article",{class:"aff",id:"a-"+a.id},[
+      h("p",{class:"phrase"},[h("span",{class:"num",text:String(i+1)}),a[lang]]),
+      h("div",{class:"renvois"},[h("span",{text:t("renv")})].concat(a.p.map(function(pid){return h("a",{href:"#p-"+pid,text:pid.toUpperCase(),on:{click:function(e){e.preventDefault();setActif(i,false);montrer(pid);}}});}))),
+      h("label",{for:"r-"+a.id,text:t("rep")}),ta]));
+  });
+  var R=document.getElementById("sources");R.innerHTML="";R.appendChild(h("h2",{text:t("srcs")}));
+  SRC.forEach(function(s){
+    var box=h("div",{class:"source",id:"s-"+s.id},[h("h3",{text:s.titre}),h("p",{class:"qui",text:s.qui})]);
+    s.passages.forEach(function(p){
+      box.appendChild(h("div",{class:"passage",id:"p-"+p.id},[
+        h("div",{class:"ref"},[h("b",{text:p.id.toUpperCase()}),h("span",{text:p.page}),h("span",{class:"statut"+(p.st==="cite"?" cite":""),text:p.st==="cite"?t("cite"):t("direct")})].concat(p.par?[h("span",{text:t("par")+p.par})]:[])),
+        h("blockquote",{lang:p.lg||(s.id==="pv"?"fr":"en"),text:p.txt})]));
+    });
+    R.appendChild(box);
+  });
+  JA.pied(R);
+  setActif(actif,false);
+  observer();
+}
+var io=null;
+function observer(){
+  if(io)io.disconnect();
+  if(!("IntersectionObserver" in window)||!matchMedia("(max-width:899.98px)").matches)return;
+  io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=AFF.findIndex(function(a){return "a-"+a.id===e.target.id;});if(i>=0)setActif(i,false);}});},{rootMargin:"-30% 0px -60% 0px"});
+  document.querySelectorAll(".aff").forEach(function(x){io.observe(x);});
+}
+render();
+document.getElementById("lang").onclick=function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem("judging-ai-journal-lang",lang);}catch(e){}render();};
+var theme="";try{theme=localStorage.getItem("judging-ai-journal-theme")||"";}catch(e){}
+function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}applyTheme();
+document.getElementById("theme").onclick=function(){var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;theme=dark?"light":"dark";applyTheme();try{localStorage.setItem("judging-ai-journal-theme",theme);}catch(e){}};
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
+})();
+</script>
+</body>
+</html>
