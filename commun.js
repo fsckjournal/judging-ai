@@ -37,6 +37,7 @@ var JA = (function () {
       banc: {
         conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
         cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
+        c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte",
         notePar: "noté par le binôme", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi"
       }
     },
@@ -68,6 +69,7 @@ var JA = (function () {
       banc: {
         conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
         cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
+        c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened",
         notePar: "scored by the pair", signer: "Which one would you sign in your dossier?", pourquoi: "why"
       }
     }
@@ -98,8 +100,10 @@ var JA = (function () {
   function S(v) { return typeof v === "string" ? v : ""; }
   function N(v) { v = Number(v); return isFinite(v) && v >= 0 ? Math.floor(v) : 0; }
   function vide() { return { format: FORMAT, binome: { noms: [], lieu: "", question: "" }, skill: { versions: [], brouillon: "" }, essais: [], lire: {}, signer: { condition: "", pourquoi: "" } }; }
-  function cases(v) { v = Array.isArray(v) ? v : []; return [0, 1, 2, 3, 4, 5].map(function (i) { return v[i] === true; }); }
+  /* case 5 (index 4) a un troisième état, null : « non ouverte », ni 0 ni 1 ; elle sort alors du total */
+  function cases(v) { v = Array.isArray(v) ? v : []; return [0, 1, 2, 3, 4, 5].map(function (i) { return i === 4 && v[i] === null ? null : v[i] === true; }); }
   function score(e) { return e.cases.filter(Boolean).length; }
+  function sur(e) { return e.cases.filter(function (x) { return x !== null; }).length; }
   function propre(d) {
     var o = vide(); if (!d || typeof d !== "object") return o;
     var b = d.binome || {};
@@ -154,8 +158,8 @@ var JA = (function () {
         L.push("**" + m.condition + "** : " + condLabel(e.condition), "");
         if (e.skill_source) L.push("**" + m.source + "** : " + e.skill_source, "");
         L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.reponse + "**", "", fence(e.reponse), "");
-        e.cases.forEach(function (x, k) { L.push("- [" + (x ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k]); });
-        L.push("", "**" + m.score + "** : " + score(e) + " / 6 · " + bc.notePar + " : " + (e.note_par || "—"), "");
+        e.cases.forEach(function (x, k) { L.push("- [" + (x === null ? "-" : x ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k] + (x === null ? " · " + bc.nonOuverte : "")); });
+        L.push("", "**" + m.score + "** : " + score(e) + " / " + sur(e) + " · " + bc.notePar + " : " + (e.note_par || "—"), "");
       } else L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "");
       L.push(
         m.etayees + " " + e.etayees + " · " + m.contredites + " " + e.contredites + " · " + m.non_resolues + " " + e.non_resolues + " · " + m.utilisables + " " + e.utilisables, "",
@@ -164,7 +168,7 @@ var JA = (function () {
     var q4 = quatre(d);
     if (CONDS.some(function (c) { return q4[c] >= 0; }) || d.signer.condition) {
       L.push("## " + m.quatre, "", "| " + [m.condition, m.essai, m.score, bc.notePar].join(" | ") + " |", "|---|---|---|---|");
-      CONDS.forEach(function (c) { var i = q4[c], e = d.essais[i]; L.push("| " + [condLabel(c), e ? String(i + 1) : "—", e ? score(e) + " / 6" : "—", e ? e.note_par || "—" : "—"].map(function (x) { return String(x).replace(/\|/g, "\\|"); }).join(" | ") + " |"); });
+      CONDS.forEach(function (c) { var i = q4[c], e = d.essais[i]; L.push("| " + [condLabel(c), e ? String(i + 1) : "—", e ? score(e) + " / " + sur(e) : "—", e ? e.note_par || "—" : "—"].map(function (x) { return String(x).replace(/\|/g, "\\|"); }).join(" | ") + " |"); });
       L.push("", "**" + bc.signer + "** " + condLabel(d.signer.condition), "", "**" + bc.pourquoi + "** : " + (d.signer.pourquoi || "—"), "");
     }
     var lk = Object.keys(d.lire);
@@ -323,6 +327,6 @@ var JA = (function () {
     return new Blob(parts.concat(central, [new Uint8Array(fin.buffer)]), { type: "application/zip" });
   }
 
-  return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, CONDS: CONDS, banc: function () { return t("banc"); }, condLabel: condLabel, score: score, quatre: quatre, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
+  return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, CONDS: CONDS, banc: function () { return t("banc"); }, condLabel: condLabel, score: score, sur: sur, quatre: quatre, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
     pied: pied, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
 })();

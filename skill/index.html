@@ -88,6 +88,7 @@ pre.m{font:400 13px/1.5 var(--mono);margin:0;padding:.5em .7em;border-left:2px s
 .toast.on{opacity:1}
 .cases{display:flex;flex-direction:column;margin:.3em 0 0}
 .cases label{display:grid;grid-template-columns:30px 1fr;gap:.4em;align-items:start;color:var(--encre);font:400 16px/1.45 var(--sans);letter-spacing:0;margin:0;padding:7px 0;cursor:pointer}
+.cases .c5{padding:7px 0 0 calc(30px + .4em);font:400 16px/1.45 var(--sans)}.cases .c5 .seg{gap:4px 14px}
 .cases input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--orange)}
 .score{font:400 26px/1.1 var(--serif);color:var(--orange);margin:.5em 0 0}
 .quatre{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
@@ -137,7 +138,7 @@ var T={
   enreg:"ENREGISTRER L'ESSAI",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",pasDeV:"Figez d'abord une version : un essai D (ou sans puis avec) dit quelle version de votre Skill a été chargée. A, B et C s'enregistrent sans.",
   essai:"Essai",aucunE:"Aucun essai.",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",annuler:"Annuler",
   condition:"Condition de l'essai",condAucune:"— (sans puis avec, un seul essai)",source:"Nom ou source de la Skill",reponse:"La réponse (entière)",
-  cases:"les six cases, cochées par un autre binôme",score:"{n} / 6",pasNote:"pas encore noté",
+  cases:"les six cases, cochées par un autre binôme",score:"{n} / {d}",pasNote:"pas encore noté",
   qIntro:"La même question sous les quatre conditions : pour chacune, le dernier essai enregistré et sa note.",qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
   saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème"},
  en:{titre:"The Skill workshop",intro:"Write your place's Skill, keep each of its versions, load it in Claude or ChatGPT, and record on the bench what it changes. Everything stays in this browser; export the dossier at the bottom of the page.",
@@ -164,7 +165,7 @@ var T={
   enreg:"RECORD THE RUN",manqueE:"Missing: ",enregistre:"Run {n} recorded",pasDeV:"Freeze a version first: a D run (or without then with) says which version of your Skill was loaded. A, B and C record without one.",
   essai:"Run",aucunE:"No runs.",suppr:"Delete",supprQ:"Delete this run?",annuler:"Cancel",
   condition:"Condition of the run",condAucune:"— (without then with, one run)",source:"The Skill's name or source",reponse:"The answer (whole)",
-  cases:"the six boxes, ticked by another pair",score:"{n} / 6",pasNote:"not scored yet",
+  cases:"the six boxes, ticked by another pair",score:"{n} / {d}",pasNote:"not scored yet",
   qIntro:"The same question under the four conditions: for each, the last recorded run and its score.",qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
   saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme"}
 };
@@ -249,7 +250,7 @@ function vueQuatre(box){
     var i=q[c],e=D.essais[i],col=h("div",{"data-c":c},[h("h3",{text:JA.condLabel(c)})]);
     if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
     qs[e.question.trim()]=1;
-    col.appendChild(h("p",{class:"score",text:r(t("score"),{n:JA.score(e)})}));
+    col.appendChild(h("p",{class:"score",text:r(t("score"),{n:JA.score(e),d:JA.sur(e)})}));
     col.appendChild(h("p",{class:"s",text:t("essai")+" "+(i+1)+" · "+(e.note_par?bc.notePar+" : "+e.note_par:t("pasNote"))+(e.skill_source?" · "+e.skill_source:"")}));
     col.appendChild(h("pre",{class:"m",text:e.reponse}));
     return col;})));
@@ -364,13 +365,15 @@ function render(){
   var bc=JA.banc(),q4=h("div");
   D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
     var e=p[0],i=p[1],sc=h("p",{class:"score"}),sub=h("div",{class:"sub"});
-    function majS(){sc.textContent=r(t("score"),{n:JA.score(e)})+(e.note_par?" · "+bc.notePar+" : "+e.note_par:"");
-      sub.textContent=[e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(e.condition==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(e.condition?[r(t("score"),{n:JA.score(e)})]:[t("etayees")+" "+e.etayees,t("contredites")+" "+e.contredites,t("non_resolues")+" "+e.non_resolues,t("utilisables")+" "+e.utilisables]).join(" · ");}
+    function majS(){sc.textContent=r(t("score"),{n:JA.score(e),d:JA.sur(e)})+(e.note_par?" · "+bc.notePar+" : "+e.note_par:"");
+      sub.textContent=[e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(e.condition==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(e.condition?[r(t("score"),{n:JA.score(e),d:JA.sur(e)})]:[t("etayees")+" "+e.etayees,t("contredites")+" "+e.contredites,t("non_resolues")+" "+e.non_resolues,t("utilisables")+" "+e.utilisables]).join(" · ");}
     var corps=e.condition?[
       e.skill_source?h("div",{class:"champ"},[h("b",{text:t("source")}),h("span",{text:e.skill_source})]):null,
       h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
       h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),
       h("div",{class:"champ"},[h("b",{text:t("cases")}),h("div",{class:"cases"},bc.cases.map(function(c,k){
+        if(k===4){var g=seg(e.cases[4]===null?"n":e.cases[4]?"1":"0",bc.c5,function(v){e.cases[4]=v==="n"?null:v==="1";majS();vueQuatre(q4);});g.id="c-"+i+"-4";
+          return h("div",{class:"c5"},[h("span",{text:(k+1)+" · "+c}),g]);}
         var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();vueQuatre(q4);});
         return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+" · "+c})]);}))]),
       fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();vueQuatre(q4);},{id:"n-"+i}),sc
