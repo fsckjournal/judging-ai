@@ -3,7 +3,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-24.4";
+  var VERSION = "s4-v3-2026-09-24.5";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -29,7 +29,7 @@ var JA = (function () {
           ["decision", "Une décision que vous pouvez défendre."]
         ]
       },
-      md: { titre: "Dossier", binome: "Binôme", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
+      md: { titre: "Dossier", binome: "Binôme", seul: "Seul", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
         brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "Skill", oui: "oui", non: "non",
         sans: "Sans la Skill", avec: "Avec la Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
         gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)",
@@ -37,7 +37,7 @@ var JA = (function () {
       banc: {
         conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
         cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
-        c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte",
+        c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte", pasNotee: "pas encore notée",
         notePar: "noté par le binôme", citer: "La citeriez-vous telle quelle ?", citerPq: "pourquoi : une ligne, qui nomme une ligne de la réponse", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi", oui: { oui: "oui", non: "non" }
       }
     },
@@ -61,7 +61,7 @@ var JA = (function () {
           ["decision", "A decision you can defend."]
         ]
       },
-      md: { titre: "Dossier", binome: "Pair", lieu: "Place", question: "Question", versions: "Versions", change: "What we changed", pourquoi: "Why (which run)", figee: "frozen on",
+      md: { titre: "Dossier", binome: "Pair", seul: "Alone", lieu: "Place", question: "Question", versions: "Versions", change: "What we changed", pourquoi: "Why (which run)", figee: "frozen on",
         brouillon: "Current draft", essais: "Runs", essai: "Run", cond: "Conditions", app: "App", modele: "Model", date: "Date", web: "Web", mode: "Skill", oui: "yes", non: "no",
         sans: "Without the Skill", avec: "With the Skill", etayees: "supported", contredites: "contradicted", non_resolues: "unresolved", utilisables: "usable",
         gagne: "What was gained", perdu: "What was lost", decision: "Decision", lire: "Exercise 1 · Saint-Georges", s3: "Session 3 (worksheets)",
@@ -69,7 +69,7 @@ var JA = (function () {
       banc: {
         conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
         cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
-        c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened",
+        c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened", pasNotee: "not graded yet",
         notePar: "scored by the pair", citer: "Would you cite it as it stands?", citerPq: "why: one line, naming one line of the answer", signer: "Which one would you sign in your dossier?", pourquoi: "why", oui: { oui: "yes", non: "no" }
       }
     }
@@ -99,22 +99,23 @@ var JA = (function () {
   /* ---------- le dossier ---------- */
   function S(v) { return typeof v === "string" ? v : ""; }
   function N(v) { v = Number(v); return isFinite(v) && v >= 0 ? Math.floor(v) : 0; }
-  function vide() { return { format: FORMAT, binome: { noms: [], lieu: "", question: "" }, skill: { versions: [], brouillon: "" }, essais: [], lire: {}, signer: { condition: "", pourquoi: "" } }; }
-  /* case 5 (index 4) a un troisième état, null : « non ouverte », ni 0 ni 1 ; elle sort alors du total */
-  function cases(v) { v = Array.isArray(v) ? v : []; return [0, 1, 2, 3, 4, 5].map(function (i) { return i === 4 && v[i] === null ? null : v[i] === true; }); }
-  function score(e) { return e.cases.filter(Boolean).length; }
-  function sur(e) { return e.cases.filter(function (x) { return x !== null; }).length; }
+  function vide() { return { format: FORMAT, binome: { seul: null, noms: [], lieu: "", question: "" }, skill: { versions: [], brouillon: "" }, essais: [], lire: {}, signer: { condition: "", pourquoi: "" } }; }
+  /* case 5 (index 4) a quatre états : true (1), false (0), null (« non ouverte », ni 0 ni 1), "" (pas encore notée, la case vide).
+     Le score se compte sur les cases posées : null et "" sortent du total. */
+  function cases(v) { v = Array.isArray(v) ? v : []; return [0, 1, 2, 3, 4, 5].map(function (i) { return i === 4 && (v[i] === null || v[i] === true || v[i] === false) ? v[i] : i === 4 ? "" : v[i] === true; }); }
+  function score(e) { return e.cases.filter(function (x) { return x === true; }).length; }
+  function sur(e) { return e.cases.filter(function (x) { return x === true || x === false; }).length; }
   function propre(d) {
     var o = vide(); if (!d || typeof d !== "object") return o;
     var b = d.binome || {};
-    o.binome = { noms: (Array.isArray(b.noms) ? b.noms : []).map(S).filter(Boolean), lieu: S(b.lieu), question: S(b.question) };
+    o.binome = { seul: typeof b.seul === "boolean" ? b.seul : null, noms: (Array.isArray(b.noms) ? b.noms : []).map(S).filter(Boolean), lieu: S(b.lieu), question: S(b.question) };
     var sk = d.skill || {};
     o.skill.brouillon = S(sk.brouillon);
     o.skill.versions = (Array.isArray(sk.versions) ? sk.versions : []).map(function (v, i) {
       v = v || {}; return { n: typeof v.n === "number" ? v.n : i, nom: S(v.nom), description: S(v.description), corps: S(v.corps), change: S(v.change), pourquoi: S(v.pourquoi), figee_le: S(v.figee_le) };
     });
     o.essais = (Array.isArray(d.essais) ? d.essais : []).map(function (x) {
-      x = x || {}; return { version: N(x.version), app: APPS.indexOf(x.app) >= 0 ? x.app : "autre", modele: S(x.modele), date: S(x.date), web: x.web === true, mode: MODES.indexOf(x.mode) >= 0 ? x.mode : "collée",
+      x = x || {}; return { version: N(x.version), app: APPS.indexOf(x.app) >= 0 ? x.app : "autre", modele: S(x.modele), date: S(x.date), web: x.web === true, mode: x.condition === "A" ? "" : MODES.indexOf(x.mode) >= 0 ? x.mode : "collée",
         question: S(x.question), sans: S(x.sans), avec: S(x.avec), etayees: N(x.etayees), contredites: N(x.contredites), non_resolues: N(x.non_resolues), utilisables: N(x.utilisables),
         gagne: S(x.gagne), perdu: S(x.perdu), decision: S(x.decision),
         condition: CONDS.indexOf(x.condition) >= 0 ? x.condition : "", skill_source: S(x.skill_source), reponse: S(x.reponse), cases: cases(x.cases), note_par: S(x.note_par), citer: x.citer === "oui" || x.citer === "non" ? x.citer : "", citer_pourquoi: S(x.citer_pourquoi) };
@@ -140,7 +141,7 @@ var JA = (function () {
   function fence(s) { s = s || ""; var f = "```"; while (s.indexOf(f) >= 0) f += "`"; return f + "\n" + s + "\n" + f; }
   function markdown(d) {
     var m = t("md"), L = ["# " + m.titre + " · " + (d.binome.lieu || t("sansLieu")), ""];
-    L.push(m.binome + " : " + (d.binome.noms.join(", ") || "—"), "", m.lieu + " : " + (d.binome.lieu || "—"), "", m.question + " : " + (d.binome.question || "—"), "", t("exporteLe") + " " + d.exporte_le + " · " + FORMAT + " · " + VERSION, "");
+    L.push((d.binome.seul === true ? m.seul : m.binome) + " : " + (d.binome.noms.join(", ") || "—"), "", m.lieu + " : " + (d.binome.lieu || "—"), "", m.question + " : " + (d.binome.question || "—"), "", t("exporteLe") + " " + d.exporte_le + " · " + FORMAT + " · " + VERSION, "");
     L.push("## " + m.versions, "");
     if (!d.skill.versions.length) L.push("—", "");
     d.skill.versions.forEach(function (v) {
@@ -153,12 +154,12 @@ var JA = (function () {
     d.essais.forEach(function (e, i) {
       L.push("### " + m.essai + " " + (i + 1) + (e.condition ? " · " + condLabel(e.condition) : "") + (!e.condition || e.condition === "D" ? " · v" + e.version : ""), "",
         "| " + [m.app, m.modele, m.date, m.web, m.mode].join(" | ") + " |", "|---|---|---|---|---|",
-        "| " + [e.app, e.modele || "—", e.date || "—", e.web ? m.oui : m.non, e.mode].map(function (c) { return String(c).replace(/\|/g, "\\|"); }).join(" | ") + " |", "");
+        "| " + [e.app, e.modele || "—", e.date || "—", e.web ? m.oui : m.non, e.mode || "—"].map(function (c) { return String(c).replace(/\|/g, "\\|"); }).join(" | ") + " |", "");
       if (e.condition) {
         L.push("**" + m.condition + "** : " + condLabel(e.condition), "");
         if (e.skill_source) L.push("**" + m.source + "** : " + e.skill_source, "");
         L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.reponse + "**", "", fence(e.reponse), "");
-        e.cases.forEach(function (x, k) { L.push("- [" + (x === null ? "-" : x ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k] + (x === null ? " · " + bc.nonOuverte : "")); });
+        e.cases.forEach(function (x, k) { L.push("- [" + (x === null ? "-" : x === true ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k] + (x === null ? " · " + bc.nonOuverte : x === "" ? " · " + bc.pasNotee : "")); });
         L.push("", "**" + m.score + "** : " + score(e) + " / " + sur(e) + " · " + bc.notePar + " : " + (e.note_par || "—"), "");
         if (e.citer || e.citer_pourquoi) L.push("**" + bc.citer + "** " + (e.citer ? t("banc").oui[e.citer] : "—") + " · " + (e.citer_pourquoi || "—"), "");
       } else L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "");
@@ -198,7 +199,7 @@ var JA = (function () {
   function bilan(d) {
     var vs = d.skill.versions, es = d.essais;
     return {
-      versions: [vs.filter(function (v) { return v.change.trim() && v.pourquoi.trim(); }).length, vs.length],
+      versions: [vs.filter(function (v) { return v.n === 0 || v.change.trim() && v.pourquoi.trim(); }).length, vs.length],
       essais: [es.filter(function (e) { return e.modele.trim() && e.date && e.question.trim() && (e.condition ? e.reponse.trim() : e.sans.trim() && e.avec.trim()); }).length, es.length],
       bilan: [es.filter(function (e) { return e.gagne.trim() && e.perdu.trim(); }).length, es.length],
       decision: [es.filter(function (e) { return e.decision.trim(); }).length, es.length]

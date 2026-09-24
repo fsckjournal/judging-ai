@@ -412,3 +412,23 @@ html[data-theme="dark"][data-paire="petrole"]:not(#ds){--accent:#6CB3BA;--bande:
 .hd #paire i{display:block;width:16px;height:16px;background:var(--accent)}
 /* the five older pages (lire, journal, s3, entrainement, atelier): their own --serif/--mono follow V3 */
 :root:not(#ds){--serif:Archivo,"Helvetica Neue",Arial,sans-serif;--mono:Archivo,"Helvetica Neue",Arial,sans-serif}
+/* fixes of 24 Sept (cold test): the dossier's names in the header; a placeholder that reads as one; links in pasted answers;
+   the step strip wraps on a phone (the gap before « la Skill » becomes the line break); the home page asks alone or as a pair first */
+.hd>*{flex-shrink:0;white-space:nowrap}
+.hd .qui{flex:0 1 auto;font-family:var(--f-voix);font-style:italic;font-size:16px;color:var(--encre);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media (max-width:480px){.hd{gap:var(--e-3)}}
+#b-question::placeholder{color:var(--encre-2);opacity:.55;font-style:italic}
+.reponse-bloc a,.historique pre a{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px;word-break:break-all}
+@media (max-width:759px){
+ .etapes{flex-wrap:wrap;overflow-x:visible;row-gap:var(--filet)}
+ .etapes .sep{flex:0 0 100%;height:0}
+ .etapes a{padding:0 var(--e-3);min-height:44px}
+ .etapes a .l+span{display:none}
+}
+.qui-form{display:grid;gap:var(--e-3);padding-top:var(--e-5)}
+.qui-form .noms{display:grid;grid-template-columns:1fr;gap:0 var(--e-5)}
+@media (min-width:760px){.qui-form .noms.deux-noms{grid-template-columns:1fr 1fr}}
+.qui-form input{font-family:var(--f-voix)!important;font-style:italic;font-size:20px}
+.qui-form label{margin-top:var(--e-3)}
+.vues{flex-wrap:wrap}
+.vues button{flex:1 1 0;min-width:0;text-align:left;line-height:1.25;padding:10px var(--e-4);color:var(--encre)}

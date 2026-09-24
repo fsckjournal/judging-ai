@@ -25,13 +25,15 @@
 var C=JSON.parse(document.getElementById("cours").textContent), K=JSON.parse(document.getElementById("carte").textContent);
 var h=JA.h, lang=JA.lang();
 var T={
- fr:{vSeance:"Séance S4",vCours:"Le cours",seance:"séance",lire:"la question",lireTxt:"Un bâtiment à Beyrouth que l'un de vous a vu. En cinq lignes au plus : sa hauteur, sa surface de plancher, son nombre de niveaux.",lireGo:"écrire la question →",
+ fr:{vSeance:"Séance {n} · aujourd'hui",vCours:"Le cours · calendrier, carte, notes",seance:"séance",lire:"la question",lireGo:"écrire la question →",
+  vous:"Vous travaillez",seul:"seul",binome:"en binôme",votreNom:"Votre nom",nom1:"Nom 1",nom2:"Nom 2",
   skill:"la Skill",skillTxt:"L'écrire avec un agent, la figer en v0.",skillAFiger:"v0 à figer",skillFige:"figée : ",skillGo:"écrire, figer →",
   banc:"le banc",bancTxt:"La même question sans Skill (A), avec la Skill du prof (C), avec la vôtre (D). Un autre binôme coche les six cases.",bancGo:"commencer →",
   dossier:"le dossier · 40 %",dossierTxt:"Un fichier par binôme, rendu le 9 octobre (S6), défendu au viva.",dossierGo:"les critères →",
   autres:"les autres pages",journal:"le journal",s3:"la séance S3 (fiches)",entr:"s'entraîner",atelier:"l'atelier S3",
   semaine:"cette semaine",semestre:"le semestre",carte:"la carte",travaux:"les travaux notés",voir:"voir la carte en entier →",langL:"langue",themeL:"thème"},
- en:{vSeance:"Session S4",vCours:"The course",seance:"session",lire:"the question",lireTxt:"A Beirut building one of you has seen. In five lines at most: its height, its floor area, its number of levels.",lireGo:"write the question →",
+ en:{vSeance:"Session {n} · today",vCours:"The course · calendar, card, grades",seance:"session",lire:"the question",lireGo:"write the question →",
+  vous:"You are working",seul:"alone",binome:"as a pair",votreNom:"Your name",nom1:"Name 1",nom2:"Name 2",
   skill:"the Skill",skillTxt:"Write it with an agent, freeze it as v0.",skillAFiger:"v0 to freeze",skillFige:"frozen: ",skillGo:"write, freeze →",
   banc:"the bench",bancTxt:"The same question with no Skill (A), with the teacher's Skill (C), with yours (D). Another pair ticks the six boxes.",bancGo:"start →",
   dossier:"the dossier · 40 %",dossierTxt:"One file per pair, handed in on 9 October (S6), defended at the viva.",dossierGo:"the criteria →",
@@ -39,6 +41,9 @@ var T={
   semaine:"this week",semestre:"the semester",carte:"the card",travaux:"graded work",voir:"see the whole card →",langL:"language",themeL:"theme"}
 };
 function t(k){return T[lang][k];}
+/* la question telle qu'au mur (FR/Le mur S4.html) ; elle se pose en français dans les deux langues */
+var QUESTION="En cinq lignes au plus : [nom usuel, rue, Beyrouth]. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";
+function num(id){return String(id).replace(/^S/,"");}
 function jour(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{weekday:"long",day:"numeric",month:"long"});}
 function jourCourt(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"numeric",month:"long"});}
 function mk(c){return h("span",{class:"mk "+c,"aria-hidden":"true"});}
@@ -48,11 +53,11 @@ function seance(box){
   var D=JA.charger(),cur=C.seances.filter(function(s){return s.id===C.semaine;})[0]||C.seances[0],q=JA.quatre(D),n=D.skill.versions.length;
   function etat(c){var i=q[c];if(i<0)return "pas-vu";var e=D.essais[i];return (e.note_par.trim()||e.cases.some(Boolean))?"note":"vu";}
   box.appendChild(h("section",{class:"accueil-tete"},[
-    h("p",{class:"etiq",text:t("seance")+" "+cur.id+" · "+jour(cur.date)}),
+    h("p",{class:"etiq",text:t("seance")+" "+num(cur.id)+" · "+jour(cur.date)}),
     h("h1",{class:"geant",text:cur[lang].titre}),
     h("p",{class:"calme",text:cur[lang].detail})]));
   var plan=h("div",{class:"plan"});
-  plan.appendChild(h("a",{class:"bloc indigo b1",href:"skill/#question"},[h("span",{class:"no",text:"1"}),h("div",null,[h("p",{class:"titre",text:t("lire")}),h("p",{class:"calme",text:t("lireTxt")})]),h("span",{class:"fleche",text:t("lireGo")})]));
+  plan.appendChild(h("a",{class:"bloc indigo b1",href:"skill/#question"},[h("span",{class:"no",text:"1"}),h("div",null,[h("p",{class:"titre",text:t("lire")}),h("p",{class:"calme",id:"accueil-question",text:QUESTION})]),h("span",{class:"fleche",text:t("lireGo")})]));
   var v=n?D.skill.versions[n-1]:null;
   plan.appendChild(h("a",{class:"bloc b2 "+(n?"plein":"pas-vu"),href:"skill/#ecrire"},[h("span",{class:"no",text:"2"}),h("div",null,[h("p",{class:"titre",text:t("skill")}),h("p",{class:"calme",text:n?t("skillFige")+"v"+v.n+" · "+(v.nom||"…"):t("skillTxt")})]),h("span",{class:"fleche",text:t("skillGo")})]));
   plan.appendChild(h("a",{class:"bloc gris b3",href:"skill/"},[h("span",{class:"no",text:"3"}),h("div",null,[h("p",{class:"titre",text:t("banc")}),h("p",{class:"calme",text:t("bancTxt")})]),
@@ -63,6 +68,28 @@ function seance(box){
     h("a",{class:"txt",href:"journal/",text:t("journal")}),h("a",{class:"txt",href:"s3/",text:t("s3")}),h("a",{class:"txt",href:"entrainement/",text:t("entr")}),h("a",{class:"txt",href:"atelier/",text:t("atelier")})])]));
   box.appendChild(plan);
   void cr;
+}
+/* d'abord : seul ou en binôme, et les noms ; ils vont dans le dossier (binome.seul, binome.noms), les mêmes que skill/#question */
+function qui(box){
+  var D=JA.charger(),s=h("section",{class:"qui-form",id:"qui"});
+  function garder(){JA.enregistrer(D);}
+  function champ(id,lbl,val,set){var i=h("input",{type:"text",id:id,autocomplete:"name"});i.value=val||"";i.addEventListener("input",function(){set(i.value);garder();});return h("div",null,[h("label",{for:id,text:lbl}),i]);}
+  function noms(){
+    var box=h("div",{class:"noms"+(D.binome.seul===false?" deux-noms":"")});
+    if(D.binome.seul===true)box.appendChild(champ("q-nom1",t("votreNom"),D.binome.noms[0],function(v){D.binome.noms=v.trim()?[v.trim()]:[];}));
+    else if(D.binome.seul===false){var a=[D.binome.noms[0]||"",D.binome.noms[1]||""],reste=D.binome.noms.slice(2);
+      function poser(){D.binome.noms=a.map(function(x){return x.trim();}).filter(Boolean).concat(reste);}
+      box.appendChild(champ("q-nom1",t("nom1"),a[0],function(v){a[0]=v;poser();}));box.appendChild(champ("q-nom2",t("nom2"),a[1],function(v){a[1]=v;poser();}));}
+    return box;}
+  var zone=noms();
+  s.appendChild(h("p",{class:"etiq",text:t("vous")}));
+  s.appendChild(h("div",{class:"seg",id:"q-seul",role:"group","aria-label":t("vous")},[["seul",true],["binome",false]].map(function(o){
+    return h("button",{type:"button",class:"opt","data-v":o[0],"aria-pressed":String(D.binome.seul===o[1]),text:t(o[0]),on:{click:function(e){
+      D.binome.seul=o[1];if(o[1])D.binome.noms=D.binome.noms.slice(0,1);garder();
+      Array.prototype.forEach.call(e.currentTarget.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.currentTarget));});
+      var nz=noms();zone.replaceWith(nz);zone=nz;var f=nz.querySelector("input");if(f)f.focus();}}});})));
+  s.appendChild(zone);
+  box.appendChild(s);
 }
 function cours(box){
   var s=h("section",{class:"cours"}),cur=C.seances.filter(function(x){return x.id===C.semaine;})[0];
@@ -85,7 +112,8 @@ function cours(box){
 function render(){
   document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
   var app=document.getElementById("app");app.innerHTML="";
-  var nav=h("nav",{class:"vues","aria-label":lang==="fr"?"Vues de l’app":"App views"},[["seance",t("vSeance")],["cours",t("vCours")]].map(function(x){return h("button",{type:"button","aria-pressed":String(vue===x[0]),text:x[1],on:{click:function(){vue=x[0];history.replaceState(null,"",x[0]==="cours"?"#cours":location.pathname);render();window.scrollTo(0,0);}}});}));
+  var nav=h("nav",{class:"vues","aria-label":lang==="fr"?"Vues de l’app":"App views"},[["seance",t("vSeance").replace("{n}",num(C.semaine))],["cours",t("vCours")]].map(function(x){return h("button",{type:"button","aria-pressed":String(vue===x[0]),text:x[1],on:{click:function(){vue=x[0];history.replaceState(null,"",x[0]==="cours"?"#cours":location.pathname);render();window.scrollTo(0,0);}}});}));
+  qui(app);
   app.appendChild(nav);
   if(vue==="cours")cours(app);else seance(app);
 }
