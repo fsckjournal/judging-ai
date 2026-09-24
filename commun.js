@@ -3,7 +3,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-2026-09-24.1";
+  var VERSION = "s4-v3-2026-09-24.1";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -33,12 +33,12 @@ var JA = (function () {
         brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "Skill", oui: "oui", non: "non",
         sans: "Sans la Skill", avec: "Avec la Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
         gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)",
-        condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les quatre conditions" },
+        condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les conditions" },
       banc: {
         conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
         cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
         c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte",
-        notePar: "noté par le binôme", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi"
+        notePar: "noté par le binôme", citer: "La citeriez-vous telle quelle ?", citerPq: "pourquoi : une ligne, qui nomme une ligne de la réponse", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi", oui: { oui: "oui", non: "non" }
       }
     },
     en: {
@@ -70,7 +70,7 @@ var JA = (function () {
         conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
         cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
         c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened",
-        notePar: "scored by the pair", signer: "Which one would you sign in your dossier?", pourquoi: "why"
+        notePar: "scored by the pair", citer: "Would you cite it as it stands?", citerPq: "why: one line, naming one line of the answer", signer: "Which one would you sign in your dossier?", pourquoi: "why", oui: { oui: "yes", non: "no" }
       }
     }
   };
@@ -117,7 +117,7 @@ var JA = (function () {
       x = x || {}; return { version: N(x.version), app: APPS.indexOf(x.app) >= 0 ? x.app : "autre", modele: S(x.modele), date: S(x.date), web: x.web === true, mode: MODES.indexOf(x.mode) >= 0 ? x.mode : "collée",
         question: S(x.question), sans: S(x.sans), avec: S(x.avec), etayees: N(x.etayees), contredites: N(x.contredites), non_resolues: N(x.non_resolues), utilisables: N(x.utilisables),
         gagne: S(x.gagne), perdu: S(x.perdu), decision: S(x.decision),
-        condition: CONDS.indexOf(x.condition) >= 0 ? x.condition : "", skill_source: S(x.skill_source), reponse: S(x.reponse), cases: cases(x.cases), note_par: S(x.note_par) };
+        condition: CONDS.indexOf(x.condition) >= 0 ? x.condition : "", skill_source: S(x.skill_source), reponse: S(x.reponse), cases: cases(x.cases), note_par: S(x.note_par), citer: x.citer === "oui" || x.citer === "non" ? x.citer : "", citer_pourquoi: S(x.citer_pourquoi) };
     });
     var l = d.lire && typeof d.lire === "object" ? d.lire : {};
     Object.keys(l).forEach(function (k) { var x = l[k] || {}; o.lire[k] = { affirmation: S(x.affirmation), reponse: S(x.reponse) }; });
@@ -160,6 +160,7 @@ var JA = (function () {
         L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.reponse + "**", "", fence(e.reponse), "");
         e.cases.forEach(function (x, k) { L.push("- [" + (x === null ? "-" : x ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k] + (x === null ? " · " + bc.nonOuverte : "")); });
         L.push("", "**" + m.score + "** : " + score(e) + " / " + sur(e) + " · " + bc.notePar + " : " + (e.note_par || "—"), "");
+        if (e.citer || e.citer_pourquoi) L.push("**" + bc.citer + "** " + (e.citer ? t("banc").oui[e.citer] : "—") + " · " + (e.citer_pourquoi || "—"), "");
       } else L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "");
       L.push(
         m.etayees + " " + e.etayees + " · " + m.contredites + " " + e.contredites + " · " + m.non_resolues + " " + e.non_resolues + " · " + m.utilisables + " " + e.utilisables, "",
@@ -168,7 +169,7 @@ var JA = (function () {
     var q4 = quatre(d);
     if (CONDS.some(function (c) { return q4[c] >= 0; }) || d.signer.condition) {
       L.push("## " + m.quatre, "", "| " + [m.condition, m.essai, m.score, bc.notePar].join(" | ") + " |", "|---|---|---|---|");
-      CONDS.forEach(function (c) { var i = q4[c], e = d.essais[i]; L.push("| " + [condLabel(c), e ? String(i + 1) : "—", e ? score(e) + " / " + sur(e) : "—", e ? e.note_par || "—" : "—"].map(function (x) { return String(x).replace(/\|/g, "\\|"); }).join(" | ") + " |"); });
+      CONDS.forEach(function (c) { var i = q4[c], e = d.essais[i]; if (c === "B" && !e) return; L.push("| " + [condLabel(c), e ? String(i + 1) : "—", e ? score(e) + " / " + sur(e) : "—", e ? e.note_par || "—" : "—"].map(function (x) { return String(x).replace(/\|/g, "\\|"); }).join(" | ") + " |"); });
       L.push("", "**" + bc.signer + "** " + condLabel(d.signer.condition), "", "**" + bc.pourquoi + "** : " + (d.signer.pourquoi || "—"), "");
     }
     var lk = Object.keys(d.lire);

@@ -19,21 +19,21 @@
 <dialog id="dlg"><form method="dialog" id="dlgf"></form></dialog>
 <script src="../commun.js"></script>
 <script>
-/* Le modèle de départ : _toolkit/juger-ia/skills/lieu-v0/SKILL.md, tel quel. */
-var MODELE={nom:"lieu-v0",description:"Skill d'un binôme ESAR pour interroger un modèle sur son lieu à Beyrouth : qui l'a conçu, quand, sur quelle source ; séparer ce qui est rapporté de ce qui est conclu.",corps:"# Skill v0 · [nom de votre lieu]\n\nVersion 0, écrite en S3. Elle sera reprise en S4 (v1) et en S5 (v2).\nRemplacez `lieu-v0` par `<votre-lieu>-v0` dans le nom du dossier **et** dans `name` ci-dessus : les deux doivent être identiques.\n\n## Usage\n\n[Pour quel travail, sur quel lieu ?]\n\n## Données disponibles\n\n[Ce que le modèle peut effectivement consulter : accès web ou non, documents fournis, rien d'autre.]\n\n## Instructions\n\nContrat, valable pour chaque ligne ci-dessous :\n**une instruction testable : une phrase, impérative, vérifiable ; pas un vœu.**\nUn autre binôme doit pouvoir dire, en lisant une réponse, si l'instruction a été suivie ou non.\n\nExemple d'instruction qui remplit le contrat :\n*Sépare l'attribution rapportée de la conclusion sur l'auteur du bâtiment.*\nExemple qui ne le remplit pas : *sois fiable*.\n\nCinq au plus : c'est un plafond, pas un quota. Chacune vient d'un défaut que vous avez\nobservé sur **votre** lieu, pas d'une idée générale sur les modèles.\n\n1.\n\n2.\n\n3.\n\n4.\n\n5.\n\n## Sortie attendue\n\n[Quel format doit permettre l'examen ? Par exemple, pour chaque affirmation :\nAffirmation : … / Référence : … (ou aucune) / Non vérifié : …]\n\n## Limites à signaler\n\n[Que doit écrire le modèle quand les données ne permettent pas de répondre ?]\n\n## Conditions de l'essai\n\nÀ remplir au moment du banc, avant la première réponse.\n\n- Outil : [Claude · ChatGPT · autre]\n- État : [Skill chargée par l'outil] ou [instructions collées]\n- Modèle affiché : [nom tel qu'il apparaît à l'écran ; sinon « non indiquée »]\n- Date : [jj/mm/aaaa]\n- Accès web : [oui / non]\n- Ordre des deux essais : [sans d'abord / avec d'abord]\n- Mémoire de l'outil : [désactivée / non désactivable — le noter]\n"};
+/* S4 : l'éditeur part vide ; le binôme y colle le SKILL.md entier que le modèle lui a donné (le nom et la description se remplissent seuls). */
+var MODELE={nom:"notre-batiment-v0",description:"",corps:""};
 </script>
 <script>
 (function(){
 "use strict";
 /* Juger l'IA · skill/ v3 · une chose par écran.
-   Le banc : la question → A → C → D → les trois côte à côte → celle à signer. B reste possible, en retrait.
+   Le banc : la question → A → C → D → les trois côte à côte → celle à signer. B (générique) n'est plus proposé ; les anciens essais B restent dans le dossier.
    La Skill : écrire et figer → les versions et la comparaison → charger. Le dossier : les critères et tous les essais.
    Les données ne changent pas : JA.charger / JA.enregistrer, format juger-ia-dossier/1 (commun.js). */
 var h=JA.h, lang=JA.lang();
 var T={
  fr:{titre:"L'atelier Skill",
   eQuestion:"la question",eTrois:"les trois",eSkill:"la Skill",eVersions:"versions",eCharger:"charger",eDossier:"le dossier",eB:"générique",
-  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",questionVide:"Écrivez d'abord la question.",modifier:"modifier la question",
+  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",questionVide:"Écrivez d'abord la question.",qModele:"En cinq lignes au plus : [bâtiment, rue, Beyrouth]. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"modifier la question",
   qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les essais ne se comparent pas.",
   commencer:"Commencer : A, sans Skill →",
   consigne:{A:"Nouvelle conversation, sans Skill. La question telle quelle.",B:"La Skill générique chargée ou collée, puis la question.",C:"La Skill du prof collée comme premier message, puis la question.",D:"Votre Skill figée, chargée ou collée, puis la question."},
@@ -48,7 +48,7 @@ var T={
   qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
   nom:"name : le nom de la Skill",nomAide:"Minuscules, chiffres et tirets ; 64 caractères au plus. Le dossier du zip porte ce nom.",nomMal:"Minuscules, chiffres et tirets seulement ; sera exporté comme : ",nomReserve:"Claude refuse un nom qui contient « claude » ou « anthropic ».",
   desc:"description : quand l'utiliser",descAide:"200 caractères au plus : c'est la limite de Claude. Le modèle lit cette phrase pour décider de charger la Skill.",trop:"trop long de {n}",
-  corps:"Le corps de SKILL.md (Markdown)",corpsAide:"Cinq instructions testables au plus : une phrase, impérative, vérifiable.",fm:"frontmatter généré",
+  corps:"Le corps de SKILL.md (Markdown)",corpsAide:"Cinq instructions testables au plus : une phrase, impérative, vérifiable.",collerIci:"Collez ici le SKILL.md entier que le modèle vous a donné (de --- à la fin) : le nom et la description se remplissent seuls.",fm:"frontmatter généré",
   nvIntro:"Fige le texte actuel de l'éditeur. Une version figée ne se modifie plus ; l'éditeur reste libre pour la suivante.",
   change:"Ce que nous avons changé",pourquoi:"Pourquoi (quel essai l'a montré)",figer:"Figer v{n}",manque:"Écrivez ce qui a changé et pourquoi.",fige:"v{n} figée",
   aucune:"Aucune version figée. La première sera v0.",figeeLe:"figée le",brouillon:"brouillon (éditeur)",
@@ -62,7 +62,7 @@ var T={
   saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes"},
  en:{titre:"The Skill workshop",
   eQuestion:"the question",eTrois:"the three",eSkill:"the Skill",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
-  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"Write the question first.",modifier:"edit the question",
+  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"Write the question first.",qModele:"In five lines at most: [building, street, Beirut]. What are its height, its floor area and its number of levels?",modifier:"edit the question",
   qDiff:"This is not the previous run's question. Without the same question, the runs do not compare.",
   commencer:"Start: A, no Skill →",
   consigne:{A:"New conversation, no Skill. The question as it is.",B:"The generic Skill loaded or pasted, then the question.",C:"The teacher's Skill pasted as the first message, then the question.",D:"Your frozen Skill, loaded or pasted, then the question."},
@@ -77,7 +77,7 @@ var T={
   qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
   nom:"name: the Skill's name",nomAide:"Lowercase letters, digits and hyphens; 64 characters at most. The zip folder carries this name.",nomMal:"Lowercase letters, digits and hyphens only; will be exported as: ",nomReserve:"Claude refuses a name containing “claude” or “anthropic”.",
   desc:"description: when to use it",descAide:"200 characters at most: Claude's limit. The model reads this sentence to decide whether to load the Skill.",trop:"{n} too long",
-  corps:"The body of SKILL.md (Markdown)",corpsAide:"Five testable instructions at most: one sentence, imperative, checkable.",fm:"generated frontmatter",
+  corps:"The body of SKILL.md (Markdown)",corpsAide:"Five testable instructions at most: one sentence, imperative, checkable.",collerIci:"Paste the whole SKILL.md the model gave you (from --- to the end): the name and description fill themselves in.",fm:"generated frontmatter",
   nvIntro:"Freezes the editor's current text. A frozen version no longer changes; the editor stays free for the next one.",
   change:"What we changed",pourquoi:"Why (which run showed it)",figer:"Freeze v{n}",manque:"Write what changed and why.",fige:"v{n} frozen",
   aucune:"No frozen version. The first will be v0.",figeeLe:"frozen on",brouillon:"draft (editor)",
@@ -99,7 +99,7 @@ var D=JA.charger();
 var ed=D.skill.brouillon?JA.lireSkill(D.skill.brouillon):{nom:MODELE.nom,description:MODELE.description,corps:MODELE.corps};
 var BKEY="judging-ai-skill-brouillons";
 function nv(){return D.skill.versions.length;}
-function nouvelEssai(c){var p=D.essais[D.essais.length-1]||{};return {version:nv()?nv()-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:(c==="B"||c==="C")?"collée":"chargée",question:"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:c,skill_source:"",reponse:"",cases:[false,false,false,false,false,false],note_par:""};}
+function nouvelEssai(c){var p=D.essais[D.essais.length-1]||{};return {version:nv()?nv()-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:"collée",question:"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:c,skill_source:"",reponse:"",cases:[false,false,false,false,false,false],note_par:"",citer:"",citer_pourquoi:""};}
 var B={change:"",pourquoi:"",cmpA:"",cmpB:"",exp:"",brouillons:{},refaire:{}};
 try{var rb=JSON.parse(localStorage.getItem(BKEY)||"null");if(rb&&typeof rb==="object")Object.keys(B).forEach(function(k){if(rb[k]!=null)B[k]=rb[k];});
   if(rb&&rb.essai&&rb.essai.condition&&!B.brouillons[rb.essai.condition])B.brouillons[rb.essai.condition]=rb.essai;}catch(e){}
@@ -125,7 +125,7 @@ function copier(s){function fb(){var x=h("textarea",{style:"position:fixed;top:0
 function textes(){var o=[{v:"b",l:t("brouillon"),s:ed}];D.skill.versions.forEach(function(v,i){o.push({v:String(i),l:"v"+v.n+" · "+(v.nom||"…"),s:v});});return o;}
 function texteDe(k){var s=k==="b"||!D.skill.versions[k]?ed:D.skill.versions[k];return {nom:s.nom,description:s.description,corps:s.corps,md:JA.skillMd(s.nom,s.description,s.corps)};}
 function choix(id,val,set){var s=h("select",{id:id});textes().forEach(function(o){s.appendChild(h("option",{value:o.v,text:o.l}));});s.value=val;if(s.value!==val)s.value=s.options[s.options.length-1].value;s.addEventListener("change",function(){set(s.value);save();});return s;}
-function jauge(n){return h("span",{class:"jauge","aria-hidden":"true"},[0,1,2,3,4,5].map(function(k){return h("i",{class:k<n?"on":null});}));}
+function jauge(n,d){d=d||6;var ks=[];for(var k=0;k<d;k++)ks.push(k);return h("span",{class:"jauge","aria-hidden":"true"},ks.map(function(k){return h("i",{class:k<n?"on":null});}));}
 function mark(c){return h("span",{class:"mk "+MARKS[c],"aria-hidden":"true"});}
 function sansL(c){return JA.condLabel(c).replace(/^[A-D] · /,"");}
 
@@ -170,7 +170,7 @@ function vueDiff(box){
 }
 
 /* ---------- la bande des étapes ---------- */
-var VUES=["question","a","c","d","trois","b","ecrire","versions","charger","dossier"];
+var VUES=["question","a","c","d","trois","ecrire","versions","charger","dossier"];
 function route(){var v=(location.hash||"").replace(/^#/,"");return VUES.indexOf(v)>=0?v:"question";}
 function aller(v){if(location.hash!=="#"+v)location.hash=v;else render();}
 function bande(){
@@ -179,7 +179,6 @@ function bande(){
   nav.appendChild(lien("question",[h("span",{text:t("eQuestion")})],D.binome.question.trim()?null:"pas-vu"));
   ["A","C","D"].forEach(function(c){nav.appendChild(lien(c.toLowerCase(),[h("span",{class:"l",text:c}),h("span",{text:sansL(c)})],etat(c)));});
   nav.appendChild(lien("trois",[h("span",{text:t("eTrois")})],D.signer.condition?"note":null));
-  nav.appendChild(lien("b",[h("span",{class:"l",text:"B"}),h("span",{text:t("eB")})],"discret "+etat("B")));
   nav.appendChild(h("span",{class:"sep"}));
   nav.appendChild(lien("ecrire",[h("span",{text:t("eSkill")})],nv()?"note":"pas-vu"));
   nav.appendChild(lien("versions",[h("span",{text:t("eVersions")})]));
@@ -192,7 +191,7 @@ function bande(){
 function vueQuestion(box){
   var s=h("section",{class:"ecran",id:"ecran-question"});
   s.appendChild(h("div",{class:"ecran-tete"},[h("p",{class:"etiq",text:t("titre")+" · "+t("eQuestion")}),h("h1",{class:"vis-cache",text:t("question")})]));
-  var q=fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;majQ();bande();},{id:"b-question",class:"grande",rows:"3"});
+  var q=fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;majQ();bande();},{id:"b-question",class:"grande",rows:"3",placeholder:t("qModele")});
   s.appendChild(q);
   var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"alerte",id:"q-diff",text:t("qDiff")});
   function majQ(){warn.hidden=!prev||D.binome.question.trim()===prev.trim();}
@@ -248,13 +247,18 @@ function blocEssai(i,c){
   w.appendChild(h("div",{class:"bloc gris"},[h("p",{class:"etiq",text:t("essai")+" "+(i+1)+" · "+[e.app,e.modele,e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(c==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(c==="D"?["v"+e.version]:[]).concat(e.skill_source?[e.skill_source]:[]).join(" · ")}),
     h("p",{class:"reponse-bloc",text:e.reponse})]));
   var sc=h("p",{class:"score"}),jg=h("span"),sub=h("p",{class:"etiq"});
-  function majS(){sc.textContent=r("{n} / 6",{n:JA.score(e)});var nj=jauge(JA.score(e));jg.replaceWith(nj);jg=nj;sub.textContent=e.note_par?bc.notePar+" : "+e.note_par:t("pasNote");}
+  function majS(){sc.textContent=r("{n} / {d}",{n:JA.score(e),d:JA.sur(e)});var nj=jauge(JA.score(e),JA.sur(e));jg.replaceWith(nj);jg=nj;sub.textContent=e.note_par?bc.notePar+" : "+e.note_par:t("pasNote");}
   w.appendChild(h("p",{class:"lab",text:t("cases")}));
   w.appendChild(h("div",{class:"cases"},bc.cases.map(function(txt,k){
+    if(k===4){var g=seg(e.cases[4]===null?"n":e.cases[4]?"1":"0",bc.c5,function(v){e.cases[4]=v==="n"?null:v==="1";majS();bande();});g.id="c-"+i+"-4";
+      return h("div",{class:"c5"},[h("span",{text:(k+1)+" · "+txt}),g]);}
     var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();bande();});
-    return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+". "+txt})]);})));
+    return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+" · "+txt})]);})));
   w.appendChild(h("div",{class:"note-ligne"},[h("div",{style:"flex:1 1 260px"},[fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();bande();},{id:"n-"+i})]),h("div",{class:"score-ligne"},[sc,jg,sub])]));
   majS();
+  w.appendChild(h("div",{class:"cite",id:"cite-"+i},[h("p",{class:"lab",text:bc.citer}),
+    (function(){var g=seg(e.citer,[["oui",t("oui")],["non",t("non")]],function(v){e.citer=v;});g.id="cit-"+i;return g;})(),
+    h("div",{class:"cite-pq"},[fld(bc.citerPq,"textarea",e.citer_pourquoi,function(v){e.citer_pourquoi=v;},{id:"cp-"+i,rows:"2"})])]));
   var bl=h("details",{class:"repli"},[h("summary",{text:t("bilan")}),
     h("div",{class:"num"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(e[k]),function(v){e[k]=Math.max(0,Math.floor(Number(v))||0);},{id:k+"-"+i,min:"0",step:"1",inputmode:"numeric"});})),
     h("div",{class:"deux"},[fld(t("gagne"),"textarea",e.gagne,function(v){e.gagne=v;},{id:"g-"+i,rows:"2"}),fld(t("perdu"),"textarea",e.perdu,function(v){e.perdu=v;},{id:"p-"+i,rows:"2"})]),
@@ -272,14 +276,14 @@ function vueTrois(box){
   var s=h("section",{class:"ecran",id:"quatre"}),q=JA.quatre(D),bc=JA.banc(),qs={};
   s.appendChild(h("p",{class:"question-lue",text:D.binome.question||"—"}));
   s.appendChild(h("h2",{class:"etiq",id:"signer-titre",text:bc.signer}));
-  var conds=["A","C","D"].concat(q.B>=0?["B"]:[]);
+  var conds=["A","C","D"];
   var g=h("div",{class:"quatre",id:"quatre-grille",role:"group","aria-labelledby":"signer-titre"},conds.map(function(c){
     var i=q[c],e=D.essais[i],col=h("div",{"data-c":c,"data-v":c,role:"button",tabindex:"0","aria-pressed":String(D.signer.condition===c),class:(i<0?"pas-vu":"")+(D.signer.condition===c?" signe":""),
       on:{click:function(){choisir(c);},keydown:function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();choisir(c);}}}},
       [h("span",{class:"grand-l",text:c,"aria-hidden":"true"}),h("h3",{class:"etiq"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))])]);
     if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
     qs[e.question.trim()]=1;
-    col.appendChild(h("p",{class:"score",text:r("{n} / 6",{n:JA.score(e)})}));
+    col.appendChild(h("p",{class:"score",text:r("{n} / {d}",{n:JA.score(e),d:JA.sur(e)})}));
     col.appendChild(h("p",{class:"m",text:e.reponse}));
     return col;}));
   s.appendChild(g);
@@ -306,7 +310,7 @@ function vueEcrire(box){
   s.appendChild(fld(t("desc"),"textarea",ed.description,function(v){ed.description=v;compte();},{id:"s-desc",rows:"3"}));
   s.appendChild(cd);s.appendChild(h("p",{class:"aide",text:t("descAide")}));
   s.appendChild(h("details",{class:"repli"},[h("summary",{text:t("fm")}),fm]));
-  s.appendChild(fld(t("corps"),"textarea",ed.corps,function(v){ed.corps=v;},{id:"s-corps",class:"mono",rows:"18",spellcheck:"false"}));
+  s.appendChild(fld(t("corps"),"textarea",ed.corps,function(v,el){if(/^\s*---\r?\n[\s\S]*?\r?\n---/.test(v)){var p=JA.lireSkill(v.replace(/^\s+/,""));ed.nom=p.nom||ed.nom;ed.description=p.description||ed.description;ed.corps=p.corps;el.value=p.corps;document.getElementById("s-nom").value=ed.nom;document.getElementById("s-desc").value=ed.description;compte();}else ed.corps=v;},{id:"s-corps",class:"mono",rows:"18",spellcheck:"false",placeholder:t("collerIci")}));
   s.appendChild(h("p",{class:"aide",text:t("corpsAide")}));
   compte();
   var fg=h("div",{class:"bloc gris fige",id:"versions-figer"},[h("h2",{class:"tres",text:r(t("figer"),{n:n})}),h("p",{class:"calme",text:t("nvIntro")}),
@@ -368,7 +372,7 @@ function vueDossier(box){
   D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
     var e=p[0],i=p[1];
     var titre=t("essai")+" "+(i+1)+(e.condition?" · "+JA.condLabel(e.condition):" · "+t("sansAvec"))+(!e.condition||e.condition==="D"?" · v"+e.version:"")+" · "+e.app+(e.modele?" · "+e.modele:"");
-    var corps=e.condition?[h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),h("p",{class:"etiq",text:r("{n} / 6",{n:JA.score(e)})+(e.note_par?" · "+JA.banc().notePar+" : "+e.note_par:"")})]
+    var corps=e.condition?[h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),h("p",{class:"etiq",text:r("{n} / {d}",{n:JA.score(e),d:JA.sur(e)})+(e.note_par?" · "+JA.banc().notePar+" : "+e.note_par:"")})]
       :[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])];
     hs.appendChild(h("details",{class:"essai"},[h("summary",{text:titre}),h("p",{class:"sub",text:[e.date,e.question].join(" · ")})].concat(corps).concat([
       h("div",{class:"champ"},[h("b",{text:t("gagne")}),h("span",{text:e.gagne||"—"})]),h("div",{class:"champ"},[h("b",{text:t("perdu")}),h("span",{text:e.perdu||"—"})]),h("div",{class:"champ"},[h("b",{text:t("decision")}),h("span",{text:e.decision||"—"})]),
@@ -383,7 +387,7 @@ function render(){
   document.getElementById("etapes").setAttribute("aria-label",t("etapes"));
   var v=route(),box=document.getElementById("app");box.innerHTML="";
   if(v==="question")vueQuestion(box);
-  else if(v==="a"||v==="b"||v==="c"||v==="d")vueCond(box,v.toUpperCase());
+  else if(v==="a"||v==="c"||v==="d")vueCond(box,v.toUpperCase());
   else if(v==="trois")vueTrois(box);
   else if(v==="ecrire")vueEcrire(box);
   else if(v==="versions")vueVersions(box);

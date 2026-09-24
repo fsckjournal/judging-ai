@@ -336,3 +336,64 @@ html body .ja-compte{font:500 var(--t-etiq)/1 var(--f-mono);color:var(--encre-2)
 @media (min-width:1600px){:root{--large:1500px}}
 @media (prefers-contrast:more){body{background-image:none}}
 @media print{.etapes,.hd,.toast{display:none!important}body{background-image:none}}
+
+/* ==========================================================================
+   V3 · design system « Juger l'IA » (d9271ff6, 24 Sept 2026), laid over the
+   recomposed pages. Archivo for the course and the machine, Source Serif 4
+   italic for the pair's own words; ink on cold paper; one pair (vermillon):
+   the band is the one large quiet plane, the accent marks the current step
+   and focus only; rose marks the answer the pair signs. No mono, no boxes,
+   no coloured states: an objection is its words in ink.
+   ========================================================================== */
+@font-face{font-family:Archivo;src:url("fonts/archivo-latin-400-700.woff2") format("woff2");font-weight:400 700;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url("fonts/source-serif-4-latin-italic-400.woff2") format("woff2");font-style:italic;font-weight:400;font-display:swap}
+:root:not(#ds),:root[data-theme="light"]:not(#ds){
+  --f-sans:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-mono:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-serif:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-voix:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --fond:#E9EAE8; --gris:#DDDEDB; --encre:#1C1A17; --encre-2:#484B50;
+  --plein:#1C1A17; --sur-plein:#E9EAE8;
+  --accent:#E0482A; --bande:#BEC2C5; --rose:#E4418A;
+  --indigo:var(--bande); --sur-indigo:var(--encre);
+  --garance:var(--encre); --sur-garance:var(--fond); --garance-fort:#000;
+  --ocre:var(--encre); --sur-ocre:var(--fond);
+  color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not(#ds){
+  --fond:#18191B; --gris:#232528; --encre:#D9DBD8; --encre-2:#A1A5A2;
+  --plein:#D9DBD8; --sur-plein:#18191B;
+  --accent:#D98468; --bande:#2A2D30; --rose:#D06A98;
+  --garance-fort:#fff; color-scheme:dark}}
+:root[data-theme="dark"]:not(#ds){
+  --fond:#18191B; --gris:#232528; --encre:#D9DBD8; --encre-2:#A1A5A2;
+  --plein:#D9DBD8; --sur-plein:#18191B;
+  --accent:#D98468; --bande:#2A2D30; --rose:#D06A98;
+  --garance-fort:#fff; color-scheme:dark}
+body{background-image:none!important}
+:focus-visible{outline:3px solid var(--accent)}
+::selection{background:var(--bande);color:var(--encre)}
+/* labels in sentence case, no letter-spacing */
+.etiq,.hd,.save,.lab{letter-spacing:0;text-transform:none}
+/* the steps: flat, the current one carries the accent bar */
+.etapes a{background:transparent;border-bottom:1px solid var(--encre)}
+.etapes a.note{background:transparent;color:var(--encre);font-weight:600}
+.etapes a.pas-vu{outline:0;border-bottom:1px dashed var(--encre-2);color:var(--encre-2)}
+.etapes a[aria-current=true]{background:var(--bande);color:var(--encre);box-shadow:inset 0 -4px 0 var(--accent)}
+.hd .lg b{background:transparent;color:var(--encre);text-decoration:underline 2px var(--accent);text-underline-offset:4px}
+/* the one action: an ink block */
+.act{background:var(--encre);color:var(--fond)}
+.act:hover{background:var(--garance-fort)}
+/* fields: no box, an ink line under */
+input[type=text],input[type=date],input[type=number],textarea,select{background:transparent!important;border:0!important;border-bottom:1px solid var(--encre)!important;border-radius:0!important}
+/* the pair's own words */
+#b-noms,#b-lieu,#signer-pourquoi,#v-change,#v-pourquoi,.cite-pq textarea,.pourquoi-lu{font-family:var(--f-voix)!important;font-style:italic;font-size:20px}
+/* the signed answer: a 4px rose frame, nothing else changes colour */
+.quatre>div.signe{background:transparent;color:var(--encre);outline:4px solid var(--rose);outline-offset:-4px}
+.quatre>div.signe .etiq,.quatre>div.signe .vide{color:var(--encre-2)}
+/* the score: figure in ink, « /6 » quiet; bar segments in ink, empty in band */
+.jauge i{background:var(--bande)}.jauge i.on{background:var(--encre)}
+/* case 5, three states */
+.cases .c5{display:flex;flex-direction:column;gap:6px;padding:7px 0}
+/* the grader's verdict */
+.cite{border-top:2px solid var(--encre);padding-top:var(--e-4);margin-top:var(--e-4)}
+.cite .seg{margin:6px 0 var(--e-3)}
