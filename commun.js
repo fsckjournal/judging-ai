@@ -36,8 +36,7 @@ var JA = (function () {
         condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les quatre conditions" },
       banc: {
         conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
-        cases: ["chaque affirmation dit d'où elle vient (une source, ou « je déduis »)", "elle nomme un passage précis (auteur, page), pas seulement « une source »",
-          "deux sources qui divergent restent séparées", "là où rien n'appuie une réponse, elle le dit", "aucune référence inventée", "elle répond vraiment à la question"],
+        cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
         notePar: "noté par le binôme", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi"
       }
     },
@@ -68,8 +67,7 @@ var JA = (function () {
         condition: "Condition", source: "Skill", reponse: "Answer", score: "Score", quatre: "The four conditions" },
       banc: {
         conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
-        cases: ["each claim says where it comes from (a source, or “I infer”)", "it names a precise passage (author, page), not just “a source”",
-          "two sources that diverge stay separate", "where nothing supports an answer, it says so", "no invented reference", "it actually answers the question"],
+        cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
         notePar: "scored by the pair", signer: "Which one would you sign in your dossier?", pourquoi: "why"
       }
     }
@@ -156,7 +154,7 @@ var JA = (function () {
         L.push("**" + m.condition + "** : " + condLabel(e.condition), "");
         if (e.skill_source) L.push("**" + m.source + "** : " + e.skill_source, "");
         L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.reponse + "**", "", fence(e.reponse), "");
-        e.cases.forEach(function (x, k) { L.push("- [" + (x ? "x" : " ") + "] " + (k + 1) + ". " + bc.cases[k]); });
+        e.cases.forEach(function (x, k) { L.push("- [" + (x ? "x" : " ") + "] " + (k + 1) + " · " + bc.cases[k]); });
         L.push("", "**" + m.score + "** : " + score(e) + " / 6 · " + bc.notePar + " : " + (e.note_par || "—"), "");
       } else L.push("**" + m.question + "**", "", fence(e.question), "", "**" + m.sans + "**", "", fence(e.sans), "", "**" + m.avec + "**", "", fence(e.avec), "");
       L.push(

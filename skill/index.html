@@ -372,7 +372,7 @@ function render(){
       h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),
       h("div",{class:"champ"},[h("b",{text:t("cases")}),h("div",{class:"cases"},bc.cases.map(function(c,k){
         var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();vueQuatre(q4);});
-        return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+". "+c})]);}))]),
+        return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+" · "+c})]);}))]),
       fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();vueQuatre(q4);},{id:"n-"+i}),sc
     ]:[
       h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
