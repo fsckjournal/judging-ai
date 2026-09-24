@@ -410,3 +410,5 @@ html[data-theme="dark"][data-paire="violet"]:not(#ds){--accent:#AE92DA;--bande:#
 html[data-theme="dark"][data-paire="petrole"]:not(#ds){--accent:#6CB3BA;--bande:#2E2A29}
 .hd #paire{width:44px;min-height:44px;justify-content:center}
 .hd #paire i{display:block;width:16px;height:16px;background:var(--accent)}
+/* the five older pages (lire, journal, s3, entrainement, atelier): their own --serif/--mono follow V3 */
+:root:not(#ds){--serif:Archivo,"Helvetica Neue",Arial,sans-serif;--mono:Archivo,"Helvetica Neue",Arial,sans-serif}

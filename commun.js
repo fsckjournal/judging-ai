@@ -3,7 +3,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-24.3";
+  var VERSION = "s4-v3-2026-09-24.4";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
