@@ -284,7 +284,7 @@ function render(){
   se.appendChild(fld(t("desc"),"textarea",ed.description,function(v){ed.description=v;compte();},{id:"s-desc"}));
   se.appendChild(cd);se.appendChild(h("p",{class:"s",text:t("descAide")}));
   se.appendChild(h("label",{text:t("fm")}));se.appendChild(fm);
-  se.appendChild(fld(t("corps"),"textarea",ed.corps,function(v){ed.corps=v;},{id:"s-corps",class:"raw corps",spellcheck:"false"}));
+  se.appendChild(fld(t("corps"),"textarea",ed.corps,function(v,el){if(/^\s*---\r?\n[\s\S]*?\r?\n---/.test(v)){var p=JA.lireSkill(v.replace(/^\s+/,""));ed.nom=p.nom||ed.nom;ed.description=p.description||ed.description;ed.corps=p.corps;el.value=p.corps;document.getElementById("s-nom").value=ed.nom;document.getElementById("s-desc").value=ed.description;compte();}else ed.corps=v;},{id:"s-corps",class:"raw corps",spellcheck:"false"}));
   se.appendChild(h("p",{class:"s",text:t("corpsAide")}));
   compte();
   app.appendChild(se);
