@@ -3,7 +3,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-24.1";
+  var VERSION = "s4-v3-2026-09-24.2";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -280,6 +280,21 @@ var JA = (function () {
     ".ja-crit{display:flex;flex-direction:column;gap:.55em}.ja-li{display:grid;grid-template-columns:1.6em 1fr;gap:.6em;font:400 16px/1.45 var(--sans)}.ja-n{color:var(--orange);font:400 22px/1.1 var(--serif)}.ja-compte{font:500 13px/1 var(--mono);color:var(--orange);white-space:nowrap}" +
     "@media print{.ja-pied{display:none}}";
   var parent = null, fileIn;
+  /* la paire de couleurs (V3) : un petit carré dans l'en-tête, qui change de paire à chaque clic ; seulement sur les pages qui chargent ds.css */
+  var PAIRES = ["vermillon", "outremer", "violet", "petrole"], PKEY = "judging-ai-paire";
+  function paire() { var v = ""; try { v = localStorage.getItem(PKEY) || ""; } catch (e) {} return PAIRES.indexOf(v) >= 0 ? v : "vermillon"; }
+  function poserPaire(v) { document.documentElement.setAttribute("data-paire", v); }
+  poserPaire(paire());
+  function carrePaire() {
+    var hd = document.querySelector(".hd"), th = document.getElementById("theme");
+    if (!hd || !th || document.getElementById("paire") || !document.querySelector('link[href$="ds.css"]')) return;
+    var b = document.createElement("button"); b.id = "paire"; b.type = "button"; b.setAttribute("aria-label", lang() === "fr" ? "couleur" : "colour");
+    b.appendChild(document.createElement("i"));
+    b.addEventListener("click", function () { var v = PAIRES[(PAIRES.indexOf(paire()) + 1) % PAIRES.length]; try { localStorage.setItem(PKEY, v); } catch (e) {} poserPaire(v); });
+    hd.insertBefore(b, th);
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", carrePaire); else carrePaire();
+
   function pied(conteneur) {
     if (conteneur) parent = conteneur;
     if (!document.getElementById("ja-css")) { var st = h("style", { id: "ja-css" }); st.textContent = CSS; document.head.appendChild(st); }

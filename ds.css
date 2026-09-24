@@ -397,3 +397,16 @@ input[type=text],input[type=date],input[type=number],textarea,select{background:
 /* the grader's verdict */
 .cite{border-top:2px solid var(--encre);padding-top:var(--e-4);margin-top:var(--e-4)}
 .cite .seg{margin:6px 0 var(--e-3)}
+/* the pair's colour: a small square in the header changes pair on each tap (V3 § 2); the band follows the accent */
+html[data-paire="outremer"]:not(#ds){--accent:#2D46C8;--bande:#C6C2BB}
+html[data-paire="violet"]:not(#ds){--accent:#7440B8;--bande:#C7C2BA}
+html[data-paire="petrole"]:not(#ds){--accent:#0F7C88;--bande:#C6C0BD}
+@media (prefers-color-scheme:dark){
+ html:not([data-theme="light"])[data-paire="outremer"]:not(#ds){--accent:#8E9BE0;--bande:#2E2C29}
+ html:not([data-theme="light"])[data-paire="violet"]:not(#ds){--accent:#AE92DA;--bande:#2E2C2A}
+ html:not([data-theme="light"])[data-paire="petrole"]:not(#ds){--accent:#6CB3BA;--bande:#2E2A29}}
+html[data-theme="dark"][data-paire="outremer"]:not(#ds){--accent:#8E9BE0;--bande:#2E2C29}
+html[data-theme="dark"][data-paire="violet"]:not(#ds){--accent:#AE92DA;--bande:#2E2C2A}
+html[data-theme="dark"][data-paire="petrole"]:not(#ds){--accent:#6CB3BA;--bande:#2E2A29}
+.hd #paire{width:44px;min-height:44px;justify-content:center}
+.hd #paire i{display:block;width:16px;height:16px;background:var(--accent)}
