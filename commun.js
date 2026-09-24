@@ -10,7 +10,7 @@ var JA = (function () {
 
   var T = {
     fr: {
-      dossier: "le dossier du binôme", exJson: "EXPORTER LE DOSSIER", exMd: "version lisible (.md)", imp: "importer un dossier…", retour: "revenir à l'état d'avant l'import",
+      dossier: "le dossier du binôme", exJson: "Exporter le dossier", exMd: "version lisible (.md)", imp: "importer un dossier…", retour: "revenir à l'état d'avant l'import",
       pied: "Tout reste dans ce navigateur. Le fichier exporté est votre copie : il se réimporte sur n'importe quelle page de l'app.",
       version: "version", illisible: "Fichier illisible : ce n'est pas du JSON. Rien n'a été changé.",
       inconnu: "Format inconnu ({f}) : ce fichier n'est pas un dossier Juger l'IA. Rien n'a été changé.",
@@ -42,7 +42,7 @@ var JA = (function () {
       }
     },
     en: {
-      dossier: "the pair's dossier", exJson: "EXPORT THE DOSSIER", exMd: "readable version (.md)", imp: "import a dossier…", retour: "go back to the state before the import",
+      dossier: "the pair's dossier", exJson: "Export the dossier", exMd: "readable version (.md)", imp: "import a dossier…", retour: "go back to the state before the import",
       pied: "Everything stays in this browser. The exported file is your copy: it re-imports on any page of the app.",
       version: "version", illisible: "Unreadable file: this is not JSON. Nothing was changed.",
       inconnu: "Unknown format ({f}): this file is not a Judging AI dossier. Nothing was changed.",

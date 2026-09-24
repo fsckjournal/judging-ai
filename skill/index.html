@@ -10,177 +10,100 @@
 <link rel="apple-touch-icon" href="../icon-180.png">
 <link rel="icon" href="../icon-192.png">
 <title>Judging AI · Atelier Skill</title>
-<style>
-/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
-
-:root{
-  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
-  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0; --plus:#2f7d4f;
-  --serif:Georgia,'Times New Roman',serif;
-  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
-  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;--plus:#6cc28f;color-scheme:dark}
-}
-:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;--plus:#6cc28f;color-scheme:dark}
-
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
-.top{position:relative;height:2px;background:var(--orange);margin-top:2.6em}
-.top .k{position:absolute;left:0;top:-2.0em;color:var(--sourd);font:500 15px/1 var(--mono);letter-spacing:.08em;padding:.5em 0}
-.s{font:400 14px/1.4 var(--sans);color:var(--sourd);margin:0}
-.l{font:400 clamp(17px,4.2vw,20px)/1.5 var(--sans);margin:0;color:var(--encre2)}
-.mast{font:400 clamp(30px,7vw,46px)/1.12 var(--serif);margin:0}
-button,input,textarea,select{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{max-width:980px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
-.hd .sp{flex:1}
-.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none;display:inline-flex;align-items:center}
-.hd .lg b{color:var(--encre);font-weight:600}
-.save{font-size:11px;opacity:.8}.save.err{color:var(--orange)}
-main{max-width:980px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) 30px max(18px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:.9em}
-.sec{display:flex;flex-direction:column;gap:.8em;padding-top:1.4em}
-.sommaire{display:flex;flex-wrap:wrap;gap:4px 16px;font:500 14px/1 var(--mono)}
-.sommaire a{color:var(--encre);text-decoration:underline;text-decoration-color:var(--orange);text-underline-offset:4px;padding:8px 0}
-label{display:block;color:var(--sourd);font:500 14px/1.3 var(--mono);letter-spacing:.04em;margin:1em 0 .45em}
-input[type=text],input[type=date],input[type=number],textarea,select{width:100%;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}
-select{border:1px solid var(--trait);padding:8px;min-height:44px}
-textarea{min-height:64px;resize:vertical}
-textarea.raw{font:400 14px/1.5 var(--mono);border:0;border-left:2px solid var(--orange);background:var(--boite);padding:.5em .7em;min-height:120px}
-textarea.corps{min-height:420px}
-input:focus,textarea:focus,select:focus{outline:0;border-bottom-color:var(--orange)}
-.compteur{font:500 12px/1.3 var(--mono);color:var(--sourd);margin:.3em 0 0}
-.compteur.trop{color:var(--orange);font-weight:700}
-pre.m{font:400 13px/1.5 var(--mono);margin:0;padding:.5em .7em;border-left:2px solid var(--trait);background:var(--boite);white-space:pre-wrap;word-break:break-word;max-height:360px;overflow:auto}
-.act{background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 16px/1 var(--serif);letter-spacing:.12em;padding:0 1.2em;min-height:52px;align-self:flex-start}
-.txtbtn{background:none;border:0;border-bottom:2px solid var(--orange);border-radius:0;color:var(--encre);font:500 15px/1.4 var(--sans);padding:0 0 5px;min-height:44px;align-self:flex-start}
-.txtbtn.quiet{color:var(--sourd)}
-.row{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
-.deux{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 22px}
-.seg{display:flex;gap:14px;flex-wrap:wrap}
-.opt{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;color:var(--sourd);font:400 16px/1.3 var(--sans);padding:6px 0;min-height:44px}
-.opt[aria-pressed=true]{color:var(--encre);border-bottom-color:var(--orange)}
-.num{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px 16px}
-.num label{margin:.7em 0 .2em}
-.alerte{border-left:2px solid var(--orange);background:var(--boite);padding:.6em .8em;font:400 15px/1.45 var(--sans);color:var(--encre);margin:.5em 0 0}
-.entry{border-top:1px solid var(--trait);padding:.8em 0}
-.entry summary{list-style:none;cursor:pointer}
-.entry summary::-webkit-details-marker{display:none}
-.entry .t{font:400 20px/1.3 var(--serif)}
-.entry .sub{font:400 13px/1.55 var(--mono);color:var(--sourd);word-break:break-word}
-.entry .champ{margin:.8em 0 0}
-.entry .champ b{display:block;font:500 13px/1.3 var(--mono);color:var(--sourd);letter-spacing:.04em;margin-bottom:.25em}
-.aide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.aide div{border-top:2px solid var(--orange);padding-top:.6em}
-.aide h3{font:400 21px/1.2 var(--serif);margin:0 0 .4em}
-.aide ol{margin:0;padding-left:1.2em;font:400 15px/1.5 var(--sans);color:var(--encre2)}
-.aide li{margin:.25em 0}
-.diff{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border-top:1px solid var(--trait);font:400 13px/1.5 var(--mono)}
-.diff .en{font:500 12px/1.3 var(--mono);color:var(--sourd);padding:.5em .4em;border-bottom:1px solid var(--trait)}
-.diff div.c{padding:1px .4em;white-space:pre-wrap;word-break:break-word;min-height:1.5em;border-left:3px solid transparent}
-.diff .moins{background:color-mix(in srgb,var(--orange) 16%,transparent);border-left-color:var(--orange)}
-.diff .plus{background:color-mix(in srgb,var(--plus) 16%,transparent);border-left-color:var(--plus)}
-.diff .moins:before{content:"− ";color:var(--orange)}.diff .plus:before{content:"+ ";color:var(--plus)}
-.diff .vide{background:var(--boite)}
-.diff .saut{color:var(--sourd);border-top:1px dashed var(--trait);border-bottom:1px dashed var(--trait);padding:.2em .4em}
-.toast{position:fixed;left:18px;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));max-width:600px;margin:0 auto;background:var(--encre);color:var(--fond);padding:10px 14px;font:400 14px/1.4 var(--mono);opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
-.toast.on{opacity:1}
-.cases{display:flex;flex-direction:column;margin:.3em 0 0}
-.cases label{display:grid;grid-template-columns:30px 1fr;gap:.4em;align-items:start;color:var(--encre);font:400 16px/1.45 var(--sans);letter-spacing:0;margin:0;padding:7px 0;cursor:pointer}
-.cases .c5{padding:7px 0 0 calc(30px + .4em);font:400 16px/1.45 var(--sans)}.cases .c5 .seg{gap:4px 14px}
-.cases input{width:22px;height:22px;margin:1px 0 0;accent-color:var(--orange)}
-.score{font:400 26px/1.1 var(--serif);color:var(--orange);margin:.5em 0 0}
-.quatre{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
-.quatre>div{border-top:2px solid var(--orange);padding-top:.6em;display:flex;flex-direction:column;gap:.4em;min-width:0}
-.quatre h3{font:400 21px/1.2 var(--serif);margin:0}
-.quatre .vide{color:var(--sourd);font:400 15px/1.4 var(--sans);margin:0}
-dialog{background:var(--fond);color:var(--encre);border:0;border-top:2px solid var(--orange);border-radius:0;max-width:520px;width:calc(100% - 36px);padding:1.2em}
-dialog::backdrop{background:rgba(0,0,0,.6)}
-@media (max-width:700px){.deux,.aide,.quatre{grid-template-columns:1fr}.num{grid-template-columns:repeat(2,minmax(0,1fr))}textarea.corps{min-height:320px}}
-@media print{.hd,button,.sommaire{display:none!important}}
-</style>
+<link rel="stylesheet" href="../ds.css">
 </head>
 <body>
 <div class="hd"><a href="../">judging ai</a><span class="sp"></span><span id="save" class="save"></span><button id="lang" class="lg"><b>fr</b> · en</button><button id="theme">◐</button></div>
-<main id="app"></main>
+<main><nav class="etapes" id="etapes"></nav><div id="app"></div></main>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <dialog id="dlg"><form method="dialog" id="dlgf"></form></dialog>
 <script src="../commun.js"></script>
 <script>
 /* Le modèle de départ : _toolkit/juger-ia/skills/lieu-v0/SKILL.md, tel quel. */
 var MODELE={nom:"lieu-v0",description:"Skill d'un binôme ESAR pour interroger un modèle sur son lieu à Beyrouth : qui l'a conçu, quand, sur quelle source ; séparer ce qui est rapporté de ce qui est conclu.",corps:"# Skill v0 · [nom de votre lieu]\n\nVersion 0, écrite en S3. Elle sera reprise en S4 (v1) et en S5 (v2).\nRemplacez `lieu-v0` par `<votre-lieu>-v0` dans le nom du dossier **et** dans `name` ci-dessus : les deux doivent être identiques.\n\n## Usage\n\n[Pour quel travail, sur quel lieu ?]\n\n## Données disponibles\n\n[Ce que le modèle peut effectivement consulter : accès web ou non, documents fournis, rien d'autre.]\n\n## Instructions\n\nContrat, valable pour chaque ligne ci-dessous :\n**une instruction testable : une phrase, impérative, vérifiable ; pas un vœu.**\nUn autre binôme doit pouvoir dire, en lisant une réponse, si l'instruction a été suivie ou non.\n\nExemple d'instruction qui remplit le contrat :\n*Sépare l'attribution rapportée de la conclusion sur l'auteur du bâtiment.*\nExemple qui ne le remplit pas : *sois fiable*.\n\nCinq au plus : c'est un plafond, pas un quota. Chacune vient d'un défaut que vous avez\nobservé sur **votre** lieu, pas d'une idée générale sur les modèles.\n\n1.\n\n2.\n\n3.\n\n4.\n\n5.\n\n## Sortie attendue\n\n[Quel format doit permettre l'examen ? Par exemple, pour chaque affirmation :\nAffirmation : … / Référence : … (ou aucune) / Non vérifié : …]\n\n## Limites à signaler\n\n[Que doit écrire le modèle quand les données ne permettent pas de répondre ?]\n\n## Conditions de l'essai\n\nÀ remplir au moment du banc, avant la première réponse.\n\n- Outil : [Claude · ChatGPT · autre]\n- État : [Skill chargée par l'outil] ou [instructions collées]\n- Modèle affiché : [nom tel qu'il apparaît à l'écran ; sinon « non indiquée »]\n- Date : [jj/mm/aaaa]\n- Accès web : [oui / non]\n- Ordre des deux essais : [sans d'abord / avec d'abord]\n- Mémoire de l'outil : [désactivée / non désactivable — le noter]\n"};
+</script>
+<script>
 (function(){
 "use strict";
+/* Juger l'IA · skill/ v3 · une chose par écran.
+   Le banc : la question → A → C → D → les trois côte à côte → celle à signer. B reste possible, en retrait.
+   La Skill : écrire et figer → les versions et la comparaison → charger. Le dossier : les critères et tous les essais.
+   Les données ne changent pas : JA.charger / JA.enregistrer, format juger-ia-dossier/1 (commun.js). */
 var h=JA.h, lang=JA.lang();
 var T={
- fr:{titre:"L'atelier Skill",intro:"Écrire la Skill de votre lieu, garder chacune de ses versions, la charger dans Claude ou ChatGPT, et noter au banc ce qu'elle change. Tout reste dans ce navigateur ; exportez le dossier en bas de page.",
-  sBinome:"le binôme",sEditeur:"l'éditeur",sVersions:"les versions",sComparer:"comparer",sExporter:"exporter et charger",sBanc:"le banc",sQuatre:"les quatre conditions",sDossier:"le dossier · 40 %",
-  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",
+ fr:{titre:"L'atelier Skill",
+  eQuestion:"la question",eTrois:"les trois",eSkill:"la Skill",eVersions:"versions",eCharger:"charger",eDossier:"le dossier",eB:"générique",
+  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",questionVide:"Écrivez d'abord la question.",modifier:"modifier la question",
+  qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les essais ne se comparent pas.",
+  commencer:"Commencer : A, sans Skill →",
+  consigne:{A:"Nouvelle conversation, sans Skill. La question telle quelle.",B:"La Skill générique chargée ou collée, puis la question.",C:"La Skill du prof collée comme premier message, puis la question.",D:"Votre Skill figée, chargée ou collée, puis la question."},
+  version:"Version essayée",app:"App",modele:"Modèle affiché (et version)",date:"Date",web:"Accès web",oui:"oui",non:"non",mode:"La Skill était",charg:"chargée",coll:"collée",
+  source:"Nom ou source de la Skill",reponse:"La réponse (entière)",
+  enreg:"Enregistrer l'essai",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",
+  pasDeV:"Figez d'abord une version : un essai D dit quelle version de votre Skill a été chargée. A, B et C s'enregistrent sans.",allerFiger:"figer v0 →",
+  essai:"Essai",cases:"les six cases, cochées par un autre binôme",pasNote:"pas encore noté",
+  bilan:"le bilan de cet essai",etayees:"étayées",contredites:"contredites",non_resolues:"non résolues",utilisables:"utilisables",
+  gagne:"Ce qui a été gagné",perdu:"Ce qui a été perdu",decision:"La décision : garder, réviser ou abandonner quelle instruction, et pourquoi",
+  refaire:"nouvel essai sous {c}",annuler:"annuler",suivant:{A:"C →",B:"les trois →",C:"D →",D:"les trois →"},
+  qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
   nom:"name : le nom de la Skill",nomAide:"Minuscules, chiffres et tirets ; 64 caractères au plus. Le dossier du zip porte ce nom.",nomMal:"Minuscules, chiffres et tirets seulement ; sera exporté comme : ",nomReserve:"Claude refuse un nom qui contient « claude » ou « anthropic ».",
   desc:"description : quand l'utiliser",descAide:"200 caractères au plus : c'est la limite de Claude. Le modèle lit cette phrase pour décider de charger la Skill.",trop:"trop long de {n}",
   corps:"Le corps de SKILL.md (Markdown)",corpsAide:"Cinq instructions testables au plus : une phrase, impérative, vérifiable.",fm:"frontmatter généré",
-  nv:"nouvelle version",nvIntro:"Fige le texte actuel de l'éditeur. Une version figée ne se modifie plus ; l'éditeur reste libre pour la suivante.",
-  change:"Ce que nous avons changé",pourquoi:"Pourquoi (quel essai l'a montré)",figer:"FIGER v{n}",manque:"Écrivez ce qui a changé et pourquoi.",fige:"v{n} figée",
+  nvIntro:"Fige le texte actuel de l'éditeur. Une version figée ne se modifie plus ; l'éditeur reste libre pour la suivante.",
+  change:"Ce que nous avons changé",pourquoi:"Pourquoi (quel essai l'a montré)",figer:"Figer v{n}",manque:"Écrivez ce qui a changé et pourquoi.",fige:"v{n} figée",
   aucune:"Aucune version figée. La première sera v0.",figeeLe:"figée le",brouillon:"brouillon (éditeur)",
-  cmpIntro:"Deux versions, ligne à ligne : à gauche ce qui a été retiré, à droite ce qui a été ajouté.",a:"de",b:"à",retire:"{n} retirées",ajoute:"{n} ajoutées",identiques:"Les deux textes sont identiques.",pareil:"… {n} lignes identiques",
-  exIntro:"Choisissez la version à charger. Le zip contient un dossier au nom de la Skill, avec SKILL.md dedans.",quoi:"Version à exporter",zip:"TÉLÉCHARGER {nom}.zip",md:"SKILL.md seul",copier:"copier le texte",copie:"Copié",
+  cmp:"comparer",cmpIntro:"Deux versions, ligne à ligne : à gauche ce qui a été retiré, à droite ce qui a été ajouté.",a:"de",b:"à",retire:"{n} retirées",ajoute:"{n} ajoutées",identiques:"Les deux textes sont identiques.",pareil:"… {n} lignes identiques",
+  exIntro:"Choisissez la version à charger. Le zip contient un dossier au nom de la Skill, avec SKILL.md dedans.",quoi:"Version à exporter",zip:"Télécharger {nom}.zip",md:"SKILL.md seul",copier:"copier le texte",copie:"Copié",
   invalide:"Pas d'export tant que le nom ou la description ne tiennent pas dans les limites.",
   aide:[["Claude","claude.ai, toutes les offres, y compris gratuite",["Dans les réglages, l'exécution de code doit être activée.","Customize > Skills : importez le fichier .zip.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
    ["ChatGPT","Plus ou Pro",["Onglet Skills (Plugins · Skills · GPTs) : importez.","Essayez le .zip ; s'il est refusé, SKILL.md seul.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
    ["Coller","toute app, Gemini compris",["Bouton « copier le texte ».","Nouvelle conversation : collez-le comme premier message, puis la question exacte.","Au banc : « collée ». Ce n'est pas un chargement de Skill."]]],
-  bIntro:"Un essai : la même question, sans puis avec la Skill, dans les mêmes conditions. Collez les deux réponses entières, puis lisez-les.",
-  version:"Version essayée",app:"App",modele:"Modèle affiché (et version)",date:"Date",web:"Accès web",oui:"oui",non:"non",mode:"La Skill était",charg:"chargée",coll:"collée",
-  qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les deux essais ne se comparent pas.",
-  sans:"Réponse sans la Skill (entière)",avec:"Réponse avec la Skill (entière)",lecture:"la lecture des deux réponses (affirmations de la réponse avec)",
-  etayees:"étayées",contredites:"contredites",non_resolues:"non résolues",utilisables:"utilisables",
-  gagne:"Ce qui a été gagné",perdu:"Ce qui a été perdu",decision:"La décision : garder, réviser ou abandonner quelle instruction, et pourquoi",
-  enreg:"ENREGISTRER L'ESSAI",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",pasDeV:"Figez d'abord une version : un essai D (ou sans puis avec) dit quelle version de votre Skill a été chargée. A, B et C s'enregistrent sans.",
-  essai:"Essai",aucunE:"Aucun essai.",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",annuler:"Annuler",
-  condition:"Condition de l'essai",condAucune:"— (sans puis avec, un seul essai)",source:"Nom ou source de la Skill",reponse:"La réponse (entière)",
-  cases:"les six cases, cochées par un autre binôme",score:"{n} / {d}",pasNote:"pas encore noté",
-  qIntro:"La même question sous les quatre conditions : pour chacune, le dernier essai enregistré et sa note.",qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
-  saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème"},
- en:{titre:"The Skill workshop",intro:"Write your place's Skill, keep each of its versions, load it in Claude or ChatGPT, and record on the bench what it changes. Everything stays in this browser; export the dossier at the bottom of the page.",
-  sBinome:"the pair",sEditeur:"the editor",sVersions:"versions",sComparer:"compare",sExporter:"export and load",sBanc:"the bench",sQuatre:"the four conditions",sDossier:"the dossier · 40 %",
-  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",
+  tous:"tous les essais",aucunE:"Aucun essai.",sansAvec:"sans puis avec",sans:"Réponse sans la Skill",avec:"Réponse avec la Skill",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",
+  saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes"},
+ en:{titre:"The Skill workshop",
+  eQuestion:"the question",eTrois:"the three",eSkill:"the Skill",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
+  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"Write the question first.",modifier:"edit the question",
+  qDiff:"This is not the previous run's question. Without the same question, the runs do not compare.",
+  commencer:"Start: A, no Skill →",
+  consigne:{A:"New conversation, no Skill. The question as it is.",B:"The generic Skill loaded or pasted, then the question.",C:"The teacher's Skill pasted as the first message, then the question.",D:"Your frozen Skill, loaded or pasted, then the question."},
+  version:"Version tried",app:"App",modele:"Displayed model (and version)",date:"Date",web:"Web access",oui:"yes",non:"no",mode:"The Skill was",charg:"loaded",coll:"pasted",
+  source:"The Skill's name or source",reponse:"The answer (whole)",
+  enreg:"Record the run",manqueE:"Missing: ",enregistre:"Run {n} recorded",
+  pasDeV:"Freeze a version first: a D run says which version of your Skill was loaded. A, B and C record without one.",allerFiger:"freeze v0 →",
+  essai:"Run",cases:"the six boxes, ticked by another pair",pasNote:"not scored yet",
+  bilan:"this run's review",etayees:"supported",contredites:"contradicted",non_resolues:"unresolved",utilisables:"usable",
+  gagne:"What was gained",perdu:"What was lost",decision:"The decision: keep, revise or drop which instruction, and why",
+  refaire:"new run under {c}",annuler:"cancel",suivant:{A:"C →",B:"the three →",C:"D →",D:"the three →"},
+  qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
   nom:"name: the Skill's name",nomAide:"Lowercase letters, digits and hyphens; 64 characters at most. The zip folder carries this name.",nomMal:"Lowercase letters, digits and hyphens only; will be exported as: ",nomReserve:"Claude refuses a name containing “claude” or “anthropic”.",
   desc:"description: when to use it",descAide:"200 characters at most: Claude's limit. The model reads this sentence to decide whether to load the Skill.",trop:"{n} too long",
   corps:"The body of SKILL.md (Markdown)",corpsAide:"Five testable instructions at most: one sentence, imperative, checkable.",fm:"generated frontmatter",
-  nv:"new version",nvIntro:"Freezes the editor's current text. A frozen version no longer changes; the editor stays free for the next one.",
-  change:"What we changed",pourquoi:"Why (which run showed it)",figer:"FREEZE v{n}",manque:"Write what changed and why.",fige:"v{n} frozen",
+  nvIntro:"Freezes the editor's current text. A frozen version no longer changes; the editor stays free for the next one.",
+  change:"What we changed",pourquoi:"Why (which run showed it)",figer:"Freeze v{n}",manque:"Write what changed and why.",fige:"v{n} frozen",
   aucune:"No frozen version. The first will be v0.",figeeLe:"frozen on",brouillon:"draft (editor)",
-  cmpIntro:"Two versions, line by line: on the left what was removed, on the right what was added.",a:"from",b:"to",retire:"{n} removed",ajoute:"{n} added",identiques:"The two texts are identical.",pareil:"… {n} identical lines",
-  exIntro:"Choose the version to load. The zip holds a folder named after the Skill, with SKILL.md inside.",quoi:"Version to export",zip:"DOWNLOAD {nom}.zip",md:"SKILL.md only",copier:"copy the text",copie:"Copied",
+  cmp:"compare",cmpIntro:"Two versions, line by line: on the left what was removed, on the right what was added.",a:"from",b:"to",retire:"{n} removed",ajoute:"{n} added",identiques:"The two texts are identical.",pareil:"… {n} identical lines",
+  exIntro:"Choose the version to load. The zip holds a folder named after the Skill, with SKILL.md inside.",quoi:"Version to export",zip:"Download {nom}.zip",md:"SKILL.md only",copier:"copy the text",copie:"Copied",
   invalide:"No export until the name and description fit the limits.",
   aide:[["Claude","claude.ai, every plan including Free",["In the settings, code execution must be on.","Customize > Skills: upload the .zip file.","New conversation, then the exact question. On the bench: “loaded”."]],
    ["ChatGPT","Plus or Pro",["Skills tab (Plugins · Skills · GPTs): upload.","Try the .zip; if it is refused, SKILL.md alone.","New conversation, then the exact question. On the bench: “loaded”."]],
    ["Paste","any app, Gemini included",["“copy the text” button.","New conversation: paste it as the first message, then the exact question.","On the bench: “pasted”. This is not loading a Skill."]]],
-  bIntro:"One run: the same question, without then with the Skill, under the same conditions. Paste both answers whole, then read them.",
-  version:"Version tried",app:"App",modele:"Displayed model (and version)",date:"Date",web:"Web access",oui:"yes",non:"no",mode:"The Skill was",charg:"loaded",coll:"pasted",
-  qDiff:"This is not the previous run's question. Without the same question, the two runs do not compare.",
-  sans:"Answer without the Skill (whole)",avec:"Answer with the Skill (whole)",lecture:"reading the two answers (claims in the answer with)",
-  etayees:"supported",contredites:"contradicted",non_resolues:"unresolved",utilisables:"usable",
-  gagne:"What was gained",perdu:"What was lost",decision:"The decision: keep, revise or drop which instruction, and why",
-  enreg:"RECORD THE RUN",manqueE:"Missing: ",enregistre:"Run {n} recorded",pasDeV:"Freeze a version first: a D run (or without then with) says which version of your Skill was loaded. A, B and C record without one.",
-  essai:"Run",aucunE:"No runs.",suppr:"Delete",supprQ:"Delete this run?",annuler:"Cancel",
-  condition:"Condition of the run",condAucune:"— (without then with, one run)",source:"The Skill's name or source",reponse:"The answer (whole)",
-  cases:"the six boxes, ticked by another pair",score:"{n} / {d}",pasNote:"not scored yet",
-  qIntro:"The same question under the four conditions: for each, the last recorded run and its score.",qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
-  saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme"}
+  tous:"all runs",aucunE:"No runs.",sansAvec:"without then with",sans:"Answer without the Skill",avec:"Answer with the Skill",suppr:"Delete",supprQ:"Delete this run?",
+  saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps"}
 };
 function t(k){return T[lang][k];}
 function r(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
+var MARKS={A:"point",B:"trait",C:"anneau",D:"arc"};
 
 /* ---------- état ---------- */
 var D=JA.charger();
 var ed=D.skill.brouillon?JA.lireSkill(D.skill.brouillon):{nom:MODELE.nom,description:MODELE.description,corps:MODELE.corps};
 var BKEY="judging-ai-skill-brouillons";
-function nouvelEssai(){var p=D.essais[D.essais.length-1]||{};return {version:D.skill.versions.length?D.skill.versions.length-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:p.mode||"chargée",question:p.question||D.binome.question||"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:"",skill_source:"",reponse:"",cases:[false,false,false,false,false,false],note_par:""};}
-var B={change:"",pourquoi:"",essai:null,cmpA:"",cmpB:"",exp:""};
-try{var rb=JSON.parse(localStorage.getItem(BKEY)||"null");if(rb&&typeof rb==="object")Object.keys(B).forEach(function(k){if(rb[k]!=null)B[k]=rb[k];});}catch(e){}
-if(!B.essai||typeof B.essai!=="object")B.essai=nouvelEssai();
-else{var ne=nouvelEssai();Object.keys(ne).forEach(function(k){if(B.essai[k]==null)B.essai[k]=ne[k];});}
+function nv(){return D.skill.versions.length;}
+function nouvelEssai(c){var p=D.essais[D.essais.length-1]||{};return {version:nv()?nv()-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:(c==="B"||c==="C")?"collée":"chargée",question:"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:c,skill_source:"",reponse:"",cases:[false,false,false,false,false,false],note_par:""};}
+var B={change:"",pourquoi:"",cmpA:"",cmpB:"",exp:"",brouillons:{},refaire:{}};
+try{var rb=JSON.parse(localStorage.getItem(BKEY)||"null");if(rb&&typeof rb==="object")Object.keys(B).forEach(function(k){if(rb[k]!=null)B[k]=rb[k];});
+  if(rb&&rb.essai&&rb.essai.condition&&!B.brouillons[rb.essai.condition])B.brouillons[rb.essai.condition]=rb.essai;}catch(e){}
+function brouillon(c){var e=B.brouillons[c];if(!e||typeof e!=="object"){e=nouvelEssai(c);B.brouillons[c]=e;}else{var n=nouvelEssai(c);Object.keys(n).forEach(function(k){if(e[k]==null)e[k]=n[k];});e.condition=c;if(!e.modele&&n.modele){e.modele=n.modele;e.app=n.app;}}return e;}
 function save(){
   D.skill.brouillon=JA.skillMd(ed.nom,ed.description,ed.corps);
   var ok=JA.enregistrer(D);try{localStorage.setItem(BKEY,JSON.stringify(B));}catch(e){ok=false;}
@@ -188,20 +111,23 @@ function save(){
 }
 function nomExport(n){return String(n||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,64)||"skill";}
 function problemes(v){var p=[];if(!v.nom||v.nom!==nomExport(v.nom)||v.nom.length>64)p.push("name");if(/claude|anthropic/.test(v.nom))p.push("name");if(!v.description.trim()||v.description.length>200)p.push("description");return p;}
+function etat(c){var i=JA.quatre(D)[c];if(i<0)return "pas-vu";var e=D.essais[i];return (e.note_par.trim()||e.cases.some(Boolean))?"note":"vu";}
 
 /* ---------- outils ---------- */
 var fid=0;
-function top(l){return h("div",{class:"top"},[h("span",{class:"k",text:l.toLowerCase()})]);}
 function fld(lbl,type,val,set,ex){ex=ex||{};var i=type==="textarea"?h("textarea",ex):h("input",Object.assign({type:type},ex));i.id=i.id||"f-"+(++fid);i.value=val==null?"":val;i.addEventListener("input",function(){set(i.value,i);save();});return h("div",null,[h("label",{text:lbl,for:i.id}),i]);}
-function seg(val,opts,set){return h("div",{class:"seg"},opts.map(function(o){return h("button",{type:"button",class:"opt","data-v":o[0],"aria-pressed":String(val===o[0]),text:o[1],on:{click:function(e){set(o[0]);save();Array.prototype.forEach.call(e.target.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.target));});}}});}));}
-function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},2200);}
+function seg(val,opts,set){return h("div",{class:"seg"},opts.map(function(o){return h("button",{type:"button",class:"opt","data-v":o[0],"aria-pressed":String(val===o[0]),text:o[1],on:{click:function(e){set(o[0]);save();Array.prototype.forEach.call(e.currentTarget.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.currentTarget));});}}});}));}
+function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},2400);}
 function quand(iso){try{return new Date(iso).toLocaleString(lang==="fr"?"fr-FR":"en-GB",{timeZone:"Asia/Beirut",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return iso;}}
-function confirmer(msg,ok,cb){var f=document.getElementById("dlgf");f.innerHTML="";f.appendChild(h("p",{text:msg}));f.appendChild(h("div",{class:"row",style:"justify-content:flex-end"},[h("button",{class:"txtbtn quiet",value:"n",text:t("annuler")}),h("button",{class:"act",value:"y",text:ok})]));var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
-document.getElementById("dlg").addEventListener("click",function(e){var r=this.getBoundingClientRect();if(e.target===this&&(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom))this.close("");});
+function confirmer(msg,ok,cb){var f=document.getElementById("dlgf");f.innerHTML="";f.appendChild(h("p",{text:msg}));f.appendChild(h("div",{class:"rang",style:"justify-content:flex-end"},[h("button",{class:"txt calme",value:"n",text:T[lang].annuler}),h("button",{class:"act",value:"y",text:ok})]));var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
+document.getElementById("dlg").addEventListener("click",function(e){var q=this.getBoundingClientRect();if(e.target===this&&(e.clientX<q.left||e.clientX>q.right||e.clientY<q.top||e.clientY>q.bottom))this.close("");});
 function copier(s){function fb(){var x=h("textarea",{style:"position:fixed;top:0;opacity:0"});x.value=s;document.body.appendChild(x);x.select();try{document.execCommand("copy");toast(t("copie"));}catch(e){}x.remove();}if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(s).then(function(){toast(t("copie"));},fb);else fb();}
 function textes(){var o=[{v:"b",l:t("brouillon"),s:ed}];D.skill.versions.forEach(function(v,i){o.push({v:String(i),l:"v"+v.n+" · "+(v.nom||"…"),s:v});});return o;}
 function texteDe(k){var s=k==="b"||!D.skill.versions[k]?ed:D.skill.versions[k];return {nom:s.nom,description:s.description,corps:s.corps,md:JA.skillMd(s.nom,s.description,s.corps)};}
 function choix(id,val,set){var s=h("select",{id:id});textes().forEach(function(o){s.appendChild(h("option",{value:o.v,text:o.l}));});s.value=val;if(s.value!==val)s.value=s.options[s.options.length-1].value;s.addEventListener("change",function(){set(s.value);save();});return s;}
+function jauge(n){return h("span",{class:"jauge","aria-hidden":"true"},[0,1,2,3,4,5].map(function(k){return h("i",{class:k<n?"on":null});}));}
+function mark(c){return h("span",{class:"mk "+MARKS[c],"aria-hidden":"true"});}
+function sansL(c){return JA.condLabel(c).replace(/^[A-D] · /,"");}
 
 /* ---------- comparaison ligne à ligne ---------- */
 function lignes(a,b){
@@ -226,7 +152,7 @@ function vueDiff(box){
   if(!ta.some(function(o){return o.v===b;}))b=ta.length>1?"b":ta[0].v;
   var la=ta.filter(function(o){return o.v===a;})[0].l,lb=ta.filter(function(o){return o.v===b;})[0].l;
   var d=lignes(texteDe(a).md,texteDe(b).md);
-  box.appendChild(h("p",{class:"s",text:d.moins||d.plus?r(t("retire"),{n:d.moins})+" · "+r(t("ajoute"),{n:d.plus}):t("identiques")}));
+  box.appendChild(h("p",{class:"etiq",text:d.moins||d.plus?r(t("retire"),{n:d.moins})+" · "+r(t("ajoute"),{n:d.plus}):t("identiques")}));
   var g=h("div",{class:"diff",id:"diff"},[h("div",{class:"en",text:la}),h("div",{class:"en",text:lb})]);
   var rows=d.rows,i=0;
   while(i<rows.length){
@@ -243,163 +169,232 @@ function vueDiff(box){
   box.appendChild(g);
 }
 
-/* ---------- les quatre conditions, côte à côte ---------- */
-function vueQuatre(box){
-  box.innerHTML="";var q=JA.quatre(D),bc=JA.banc(),qs={};
-  box.appendChild(h("div",{class:"quatre",id:"quatre-grille"},JA.CONDS.map(function(c){
-    var i=q[c],e=D.essais[i],col=h("div",{"data-c":c},[h("h3",{text:JA.condLabel(c)})]);
-    if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
-    qs[e.question.trim()]=1;
-    col.appendChild(h("p",{class:"score",text:r(t("score"),{n:JA.score(e),d:JA.sur(e)})}));
-    col.appendChild(h("p",{class:"s",text:t("essai")+" "+(i+1)+" · "+(e.note_par?bc.notePar+" : "+e.note_par:t("pasNote"))+(e.skill_source?" · "+e.skill_source:"")}));
-    col.appendChild(h("pre",{class:"m",text:e.reponse}));
-    return col;})));
-  if(Object.keys(qs).length>1)box.appendChild(h("p",{class:"alerte",text:t("qDiff4")}));
+/* ---------- la bande des étapes ---------- */
+var VUES=["question","a","c","d","trois","b","ecrire","versions","charger","dossier"];
+function route(){var v=(location.hash||"").replace(/^#/,"");return VUES.indexOf(v)>=0?v:"question";}
+function aller(v){if(location.hash!=="#"+v)location.hash=v;else render();}
+function bande(){
+  var nav=document.getElementById("etapes");nav.innerHTML="";var cur=route();
+  function lien(v,kids,cls){return h("a",{href:"#"+v,class:cls||null,"aria-current":cur===v?"true":null,"data-v":v},kids);}
+  nav.appendChild(lien("question",[h("span",{text:t("eQuestion")})],D.binome.question.trim()?null:"pas-vu"));
+  ["A","C","D"].forEach(function(c){nav.appendChild(lien(c.toLowerCase(),[h("span",{class:"l",text:c}),h("span",{text:sansL(c)})],etat(c)));});
+  nav.appendChild(lien("trois",[h("span",{text:t("eTrois")})],D.signer.condition?"note":null));
+  nav.appendChild(lien("b",[h("span",{class:"l",text:"B"}),h("span",{text:t("eB")})],"discret "+etat("B")));
+  nav.appendChild(h("span",{class:"sep"}));
+  nav.appendChild(lien("ecrire",[h("span",{text:t("eSkill")})],nv()?"note":"pas-vu"));
+  nav.appendChild(lien("versions",[h("span",{text:t("eVersions")})]));
+  nav.appendChild(lien("charger",[h("span",{text:t("eCharger")})]));
+  nav.appendChild(lien("dossier",[h("span",{text:t("eDossier")})]));
+  var a=nav.querySelector("[aria-current=true]");if(a&&a.scrollIntoView&&nav.scrollWidth>nav.clientWidth)nav.scrollLeft=Math.max(0,a.offsetLeft-24);
 }
 
-/* ---------- vue ---------- */
-var app=document.getElementById("app");
-function render(){
-  document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
-  app.innerHTML="";
-  app.appendChild(h("section",{class:"sec"},[h("p",{class:"mast",text:t("titre")}),h("p",{class:"l",text:t("intro")}),
-    h("nav",{class:"sommaire","aria-label":t("titre")},[["binome","sBinome"],["editeur","sEditeur"],["versions","sVersions"],["comparer","sComparer"],["exporter","sExporter"],["banc","sBanc"],["quatre","sQuatre"],["dossier","sDossier"]].map(function(x){return h("a",{href:"#"+x[0],text:t(x[1])});}))]));
+/* ---------- écran : la question ---------- */
+function vueQuestion(box){
+  var s=h("section",{class:"ecran",id:"ecran-question"});
+  s.appendChild(h("div",{class:"ecran-tete"},[h("p",{class:"etiq",text:t("titre")+" · "+t("eQuestion")}),h("h1",{class:"vis-cache",text:t("question")})]));
+  var q=fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;majQ();bande();},{id:"b-question",class:"grande",rows:"3"});
+  s.appendChild(q);
+  var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"alerte",id:"q-diff",text:t("qDiff")});
+  function majQ(){warn.hidden=!prev||D.binome.question.trim()===prev.trim();}
+  s.appendChild(warn);majQ();
+  s.appendChild(h("div",{class:"deux"},[fld(t("noms"),"text",D.binome.noms.join(", "),function(v){D.binome.noms=v.split(",").map(function(x){return x.trim();}).filter(Boolean);},{id:"b-noms"}),fld(t("lieu"),"text",D.binome.lieu,function(v){D.binome.lieu=v;},{id:"b-lieu"})]));
+  s.appendChild(h("div",{class:"suite"},[h("a",{class:"act",href:"#a",text:t("commencer")})]));
+  box.appendChild(s);
+}
 
-  /* le binôme */
-  var sb=h("section",{class:"sec",id:"binome"},[top(t("sBinome"))]);
-  sb.appendChild(h("div",{class:"deux"},[fld(t("noms"),"text",D.binome.noms.join(", "),function(v){D.binome.noms=v.split(",").map(function(x){return x.trim();}).filter(Boolean);},{id:"b-noms"}),fld(t("lieu"),"text",D.binome.lieu,function(v){D.binome.lieu=v;},{id:"b-lieu"})]));
-  sb.appendChild(fld(t("question"),"textarea",D.binome.question,function(v){var E=B.essai,q=document.getElementById("e-question");if(!E.question||E.question===D.binome.question){E.question=v;if(q)q.value=v;}D.binome.question=v;},{id:"b-question"}));
-  app.appendChild(sb);
+/* ---------- écran : une condition ---------- */
+function vueCond(box,c){
+  var s=h("section",{class:"ecran",id:"banc","data-c":c});var n=nv();
+  s.appendChild(h("div",{class:"cond-tete"},[h("span",{class:"lettre-geante",text:c,"aria-hidden":"true"}),h("div",null,[h("h1",{class:"tres"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))]),h("p",{class:"calme",text:t("consigne")[c]})])]));
+  var qv=D.binome.question.trim();
+  s.appendChild(h("div",{class:"bloc gris"},[h("p",{class:"etiq",text:t("eQuestion")}),h("p",{class:"question-lue",text:qv||t("questionVide")}),h("a",{class:"txt calme",href:"#question",text:t("modifier")})]));
+  var i=JA.quatre(D)[c];
+  if(i>=0&&!B.refaire[c])s.appendChild(blocEssai(i,c));
+  else s.appendChild(formulaire(c,i));
+  box.appendChild(s);
+}
+function formulaire(c,avant){
+  var E=brouillon(c),n=nv(),f=h("div",{class:"pile"});
+  function sansV(){return c==="D"&&!nv();}
+  var pdv=h("p",{class:"alerte",id:"pas-de-v"},[document.createTextNode(t("pasDeV")+" "),h("a",{href:"#ecrire",text:t("allerFiger")})]);pdv.hidden=!sansV();f.appendChild(pdv);
+  var champs=[];
+  if(c==="B"||c==="C")champs.push(fld(t("source"),"text",E.skill_source,function(v){E.skill_source=v;},{id:"e-source"}));
+  if(c==="D"&&n){var vs=h("select",{id:"e-version"});D.skill.versions.forEach(function(v,k){vs.appendChild(h("option",{value:String(k),text:"v"+v.n+" · "+(v.nom||"…")}));});
+    vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);vs.addEventListener("change",function(){E.version=Number(vs.value);save();});
+    champs.push(h("div",null,[h("label",{text:t("version"),for:"e-version"}),vs]));}
+  champs.forEach(function(x){f.appendChild(x);});
+  var ap=h("select",{id:"e-app"});JA.APPS.forEach(function(a){ap.appendChild(h("option",{value:a,text:a}));});ap.value=E.app;ap.addEventListener("change",function(){E.app=ap.value;save();});
+  var fiche=h("div",{class:"fiche",role:"group","aria-label":t("app")+" · "+t("modele")},[
+    h("div",null,[h("label",{text:t("app"),for:"e-app"}),ap]),
+    fld(t("modele"),"text",E.modele,function(v){E.modele=v;},{id:"e-modele"}),
+    fld(t("date"),"date",E.date,function(v){E.date=v;},{id:"e-date"}),
+    h("div",null,[h("label",{text:t("web")}),(function(){var g=seg(E.web?"o":"n",[["o",t("oui")],["n",t("non")]],function(v){E.web=v==="o";});g.id="e-web";return g;})()])]);
+  if(c!=="A")fiche.appendChild(h("div",null,[h("label",{text:t("mode")}),(function(){var g=seg(E.mode,[["chargée",t("charg")],["collée",t("coll")]],function(v){E.mode=v;});g.id="e-mode";return g;})()]));
+  f.appendChild(fiche);
+  f.appendChild(fld(t("reponse"),"textarea",E.reponse,function(v){E.reponse=v;},{id:"e-reponse",class:"mono",rows:"8"}));
+  var suite=h("div",{class:"suite"},[h("button",{type:"button",class:"act",id:"enreg",text:t("enreg"),on:{click:function(){
+    if(sansV()){toast(t("pasDeV"));return;}
+    var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!D.binome.question.trim())m.push(t("question"));
+    if((c==="B"||c==="C")&&!E.skill_source.trim())m.push(t("source"));if(!E.reponse.trim())m.push(t("reponse"));
+    if(m.length){toast(t("manqueE")+m.join(" · "));return;}
+    var x=JSON.parse(JSON.stringify(E));x.condition=c;x.question=D.binome.question;var k=Math.min(E.version,nv()-1);x.version=nv()?D.skill.versions[Math.max(0,k)].n:0;
+    D.essais.push(x);var nx=nouvelEssai(c);nx.version=E.version;B.brouillons[c]=nx;B.refaire[c]=false;save();render();toast(r(t("enregistre"),{n:D.essais.length}));}}})]);
+  if(avant>=0)suite.appendChild(h("button",{type:"button",class:"txt calme",text:t("annuler"),on:{click:function(){B.refaire[c]=false;save();render();}}}));
+  f.appendChild(suite);
+  return f;
+}
+function blocEssai(i,c){
+  var e=D.essais[i],bc=JA.banc(),w=h("div",{class:"pile",id:"essai-"+i});
+  w.appendChild(h("div",{class:"bloc gris"},[h("p",{class:"etiq",text:t("essai")+" "+(i+1)+" · "+[e.app,e.modele,e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(c==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(c==="D"?["v"+e.version]:[]).concat(e.skill_source?[e.skill_source]:[]).join(" · ")}),
+    h("p",{class:"reponse-bloc",text:e.reponse})]));
+  var sc=h("p",{class:"score"}),jg=h("span"),sub=h("p",{class:"etiq"});
+  function majS(){sc.textContent=r("{n} / 6",{n:JA.score(e)});var nj=jauge(JA.score(e));jg.replaceWith(nj);jg=nj;sub.textContent=e.note_par?bc.notePar+" : "+e.note_par:t("pasNote");}
+  w.appendChild(h("p",{class:"lab",text:t("cases")}));
+  w.appendChild(h("div",{class:"cases"},bc.cases.map(function(txt,k){
+    var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();bande();});
+    return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+". "+txt})]);})));
+  w.appendChild(h("div",{class:"note-ligne"},[h("div",{style:"flex:1 1 260px"},[fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();bande();},{id:"n-"+i})]),h("div",{class:"score-ligne"},[sc,jg,sub])]));
+  majS();
+  var bl=h("details",{class:"repli"},[h("summary",{text:t("bilan")}),
+    h("div",{class:"num"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(e[k]),function(v){e[k]=Math.max(0,Math.floor(Number(v))||0);},{id:k+"-"+i,min:"0",step:"1",inputmode:"numeric"});})),
+    h("div",{class:"deux"},[fld(t("gagne"),"textarea",e.gagne,function(v){e.gagne=v;},{id:"g-"+i,rows:"2"}),fld(t("perdu"),"textarea",e.perdu,function(v){e.perdu=v;},{id:"p-"+i,rows:"2"})]),
+    fld(t("decision"),"textarea",e.decision,function(v){e.decision=v;},{id:"d-"+i,rows:"2"})]);
+  w.appendChild(bl);
+  w.appendChild(h("div",{class:"suite"},[h("a",{class:"act",href:"#"+({A:"c",B:"trois",C:"d",D:"trois"})[c],text:(c==="A"?JA.condLabel("C"):c==="C"?JA.condLabel("D"):t("eTrois"))+" →"}),
+    h("button",{type:"button",class:"txt calme",id:"refaire",text:r(t("refaire"),{c:c}),on:{click:function(){B.refaire[c]=true;save();render();}}})]));
+  return w;
+}
 
-  /* l'éditeur */
-  var se=h("section",{class:"sec",id:"editeur"},[top(t("sEditeur"))]);
+/* ---------- écran : les trois côte à côte, celle à signer ---------- */
+function vueTrois(box){
+  /* moins, c'est plus : la question, la demande, trois blocs (B seulement s'il a été essayé), pourquoi.
+     Le bloc est le choix : un bouton, aria-pressed ; le choisi devient le bloc brun. */
+  var s=h("section",{class:"ecran",id:"quatre"}),q=JA.quatre(D),bc=JA.banc(),qs={};
+  s.appendChild(h("p",{class:"question-lue",text:D.binome.question||"—"}));
+  s.appendChild(h("h2",{class:"etiq",id:"signer-titre",text:bc.signer}));
+  var conds=["A","C","D"].concat(q.B>=0?["B"]:[]);
+  var g=h("div",{class:"quatre",id:"quatre-grille",role:"group","aria-labelledby":"signer-titre"},conds.map(function(c){
+    var i=q[c],e=D.essais[i],col=h("div",{"data-c":c,"data-v":c,role:"button",tabindex:"0","aria-pressed":String(D.signer.condition===c),class:(i<0?"pas-vu":"")+(D.signer.condition===c?" signe":""),
+      on:{click:function(){choisir(c);},keydown:function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();choisir(c);}}}},
+      [h("span",{class:"grand-l",text:c,"aria-hidden":"true"}),h("h3",{class:"etiq"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))])]);
+    if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
+    qs[e.question.trim()]=1;
+    col.appendChild(h("p",{class:"score",text:r("{n} / 6",{n:JA.score(e)})}));
+    col.appendChild(h("p",{class:"m",text:e.reponse}));
+    return col;}));
+  s.appendChild(g);
+  if(Object.keys(qs).length>1)s.appendChild(h("p",{class:"alerte",text:t("qDiff4")}));
+  function majSigne(){Array.prototype.forEach.call(g.children,function(d){var on=d.dataset.c===D.signer.condition;d.classList.toggle("signe",on);d.setAttribute("aria-pressed",String(on));});}
+  function choisir(c){D.signer.condition=c;save();majSigne();bande();}
+  s.appendChild(fld(bc.pourquoi,"textarea",D.signer.pourquoi,function(v){D.signer.pourquoi=v;},{id:"signer-pourquoi",rows:"3"}));
+  box.appendChild(s);
+}
+
+/* ---------- écran : écrire et figer ---------- */
+function vueEcrire(box){
+  var s=h("section",{class:"ecran editeur",id:"editeur"}),n=nv();
+  s.appendChild(h("p",{class:"etiq",text:t("titre")+" · SKILL.md"}));
   var cn=h("p",{class:"compteur",id:"c-nom"}),cd=h("p",{class:"compteur",id:"c-desc"}),fm=h("pre",{class:"m",id:"fm"});
   function compte(){
-    var n=ed.nom,ok=n===nomExport(n)&&n.length<=64;
-    cn.textContent=n.length+" / 64"+(ok?"":" · "+t("nomMal")+nomExport(n))+(/claude|anthropic/.test(n)?" · "+t("nomReserve"):"");cn.className="compteur"+(ok&&!/claude|anthropic/.test(n)?"":" trop");
+    var nm=ed.nom,ok=nm===nomExport(nm)&&nm.length<=64;
+    cn.textContent=nm.length+" / 64"+(ok?"":" · "+t("nomMal")+nomExport(nm))+(/claude|anthropic/.test(nm)?" · "+t("nomReserve"):"");cn.className="compteur"+(ok&&!/claude|anthropic/.test(nm)?"":" trop");
     var l=ed.description.length;cd.textContent=l+" / 200"+(l>200?" · "+r(t("trop"),{n:l-200}):"");cd.className="compteur"+(l>200?" trop":"");
     fm.textContent=JA.skillMd(ed.nom,ed.description,"").trim();
   }
-  se.appendChild(fld(t("nom"),"text",ed.nom,function(v){ed.nom=v;compte();},{id:"s-nom",maxlength:"80",autocapitalize:"off",spellcheck:"false"}));
-  se.appendChild(cn);se.appendChild(h("p",{class:"s",text:t("nomAide")}));
-  se.appendChild(fld(t("desc"),"textarea",ed.description,function(v){ed.description=v;compte();},{id:"s-desc"}));
-  se.appendChild(cd);se.appendChild(h("p",{class:"s",text:t("descAide")}));
-  se.appendChild(h("label",{text:t("fm")}));se.appendChild(fm);
-  se.appendChild(fld(t("corps"),"textarea",ed.corps,function(v,el){if(/^\s*---\r?\n[\s\S]*?\r?\n---/.test(v)){var p=JA.lireSkill(v.replace(/^\s+/,""));ed.nom=p.nom||ed.nom;ed.description=p.description||ed.description;ed.corps=p.corps;el.value=p.corps;document.getElementById("s-nom").value=ed.nom;document.getElementById("s-desc").value=ed.description;compte();}else ed.corps=v;},{id:"s-corps",class:"raw corps",spellcheck:"false"}));
-  se.appendChild(h("p",{class:"s",text:t("corpsAide")}));
+  s.appendChild(fld(t("nom"),"text",ed.nom,function(v){ed.nom=v;compte();},{id:"s-nom",class:"grande",maxlength:"80",autocapitalize:"off",spellcheck:"false"}));
+  s.appendChild(cn);s.appendChild(h("p",{class:"aide",text:t("nomAide")}));
+  s.appendChild(fld(t("desc"),"textarea",ed.description,function(v){ed.description=v;compte();},{id:"s-desc",rows:"3"}));
+  s.appendChild(cd);s.appendChild(h("p",{class:"aide",text:t("descAide")}));
+  s.appendChild(h("details",{class:"repli"},[h("summary",{text:t("fm")}),fm]));
+  s.appendChild(fld(t("corps"),"textarea",ed.corps,function(v){ed.corps=v;},{id:"s-corps",class:"mono",rows:"18",spellcheck:"false"}));
+  s.appendChild(h("p",{class:"aide",text:t("corpsAide")}));
   compte();
-  app.appendChild(se);
+  var fg=h("div",{class:"bloc gris fige",id:"versions-figer"},[h("h2",{class:"tres",text:r(t("figer"),{n:n})}),h("p",{class:"calme",text:t("nvIntro")}),
+    h("div",{class:"deux"},[fld(t("change"),"textarea",B.change,function(v){B.change=v;},{id:"v-change",rows:"2"}),fld(t("pourquoi"),"textarea",B.pourquoi,function(v){B.pourquoi=v;},{id:"v-pourquoi",rows:"2"})]),
+    h("div",{class:"suite"},[h("button",{type:"button",class:"act",id:"figer",text:r(t("figer"),{n:n}),on:{click:function(){
+      if(!B.change.trim()||!B.pourquoi.trim()){toast(t("manque"));return;}
+      D.skill.versions.push({n:n,nom:ed.nom,description:ed.description,corps:ed.corps,change:B.change.trim(),pourquoi:B.pourquoi.trim(),figee_le:JA.beyrouth()});
+      B.change="";B.pourquoi="";B.cmpA="";B.cmpB="";Object.keys(B.brouillons).forEach(function(k){B.brouillons[k].version=n;});save();render();toast(r(t("fige"),{n:n}));}}}),
+      h("a",{class:"txt",href:"#versions",text:t("eVersions")+" →"})])]);
+  s.appendChild(fg);
+  box.appendChild(s);
+}
 
-  /* les versions */
-  var n=D.skill.versions.length;
-  var sv=h("section",{class:"sec",id:"versions"},[top(t("sVersions")),h("p",{class:"s",text:t("nvIntro")})]);
-  sv.appendChild(h("div",{class:"deux"},[fld(t("change"),"textarea",B.change,function(v){B.change=v;},{id:"v-change"}),fld(t("pourquoi"),"textarea",B.pourquoi,function(v){B.pourquoi=v;},{id:"v-pourquoi"})]));
-  sv.appendChild(h("button",{type:"button",class:"act",id:"figer",text:r(t("figer"),{n:n}),on:{click:function(){
-    if(!B.change.trim()||!B.pourquoi.trim()){toast(t("manque"));return;}
-    D.skill.versions.push({n:n,nom:ed.nom,description:ed.description,corps:ed.corps,change:B.change.trim(),pourquoi:B.pourquoi.trim(),figee_le:JA.beyrouth()});
-    B.change="";B.pourquoi="";B.cmpA="";B.cmpB="";B.essai.version=n;save();render();toast(r(t("fige"),{n:n}));location.hash="versions";}}}));
-  if(!n)sv.appendChild(h("p",{class:"s",text:t("aucune")}));
+/* ---------- écran : les versions, la comparaison ---------- */
+function vueVersions(box){
+  var s=h("section",{class:"ecran",id:"ecran-versions"}),n=nv();
+  s.appendChild(h("h1",{class:"tres",text:t("eVersions")}));
+  if(!n)s.appendChild(h("div",{class:"bloc pas-vu"},[h("p",{class:"calme",text:t("aucune")}),h("a",{class:"txt",href:"#ecrire",text:t("allerFiger")})]));
+  var l=h("div",{class:"versions"});
   D.skill.versions.slice().reverse().forEach(function(v){
-    sv.appendChild(h("details",{class:"entry"},[h("summary",null,[h("span",{class:"t",text:"v"+v.n+" · "+(v.nom||"…")}),h("div",{class:"sub",text:t("figeeLe")+" "+quand(v.figee_le)+" · "+v.change})]),
-      h("div",{class:"champ"},[h("b",{text:t("change")}),h("span",{text:v.change})]),h("div",{class:"champ"},[h("b",{text:t("pourquoi")}),h("span",{text:v.pourquoi})]),
-      h("div",{class:"champ"},[h("pre",{class:"m",text:JA.skillMd(v.nom,v.description,v.corps)})])]));
+    l.appendChild(h("div",{class:"bloc gris version"},[h("span",{class:"vn",text:"v"+v.n}),h("div",null,[
+      h("p",{class:"moyen",text:v.nom||"…"}),h("p",{class:"etiq",text:t("figeeLe")+" "+quand(v.figee_le)}),
+      h("p",{class:"lab",text:t("change")}),h("p",{text:v.change,style:"margin:0"}),h("p",{class:"lab",text:t("pourquoi")}),h("p",{text:v.pourquoi,style:"margin:0"}),
+      h("details",{class:"repli"},[h("summary",{text:"SKILL.md"}),h("pre",{class:"m",text:JA.skillMd(v.nom,v.description,v.corps)})])])]));
   });
-  app.appendChild(sv);
-
-  /* comparer */
-  var sc=h("section",{class:"sec",id:"comparer"},[top(t("sComparer")),h("p",{class:"s",text:t("cmpIntro")})]),box=h("div");
-  sc.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("a"),for:"cmp-a"}),choix("cmp-a",B.cmpA||(n>1?String(n-2):"b"),function(v){B.cmpA=v;vueDiff(box);})]),h("div",null,[h("label",{text:t("b"),for:"cmp-b"}),choix("cmp-b",B.cmpB||(n?String(n-1):"b"),function(v){B.cmpB=v;vueDiff(box);})])]));
+  s.appendChild(l);
+  var sc=h("div",{id:"comparer"},[h("h2",{class:"tres",text:t("cmp")}),h("p",{class:"calme",text:t("cmpIntro")})]),bx=h("div");
+  sc.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("a"),for:"cmp-a"}),choix("cmp-a",B.cmpA||(n>1?String(n-2):"b"),function(v){B.cmpA=v;vueDiff(bx);})]),h("div",null,[h("label",{text:t("b"),for:"cmp-b"}),choix("cmp-b",B.cmpB||(n?String(n-1):"b"),function(v){B.cmpB=v;vueDiff(bx);})])]));
   if(!B.cmpA)B.cmpA=sc.querySelector("#cmp-a").value;if(!B.cmpB)B.cmpB=sc.querySelector("#cmp-b").value;
-  sc.appendChild(box);vueDiff(box);
-  app.appendChild(sc);
+  sc.appendChild(bx);vueDiff(bx);
+  s.appendChild(sc);box.appendChild(s);
+}
 
-  /* exporter */
-  var sx=h("section",{class:"sec",id:"exporter"},[top(t("sExporter")),h("p",{class:"s",text:t("exIntro")})]);
+/* ---------- écran : charger ---------- */
+function vueCharger(box){
+  var s=h("section",{class:"ecran",id:"exporter"}),n=nv();
+  s.appendChild(h("h1",{class:"tres",text:t("eCharger")}));
+  s.appendChild(h("p",{class:"calme",text:t("exIntro")}));
   var zipB=h("button",{type:"button",class:"act",id:"ex-zip"});
   function majZip(){zipB.textContent=r(t("zip"),{nom:nomExport(texteDe(B.exp).nom)});}
-  sx.appendChild(h("div",null,[h("label",{text:t("quoi"),for:"ex-quoi"}),choix("ex-quoi",B.exp||(n?String(n-1):"b"),function(v){B.exp=v;majZip();})]));
-  if(!B.exp)B.exp=sx.querySelector("#ex-quoi").value;
-  function pret(){var s=texteDe(B.exp);if(problemes(s).length){toast(t("invalide"));return null;}return s;}
-  zipB.addEventListener("click",function(){var s=pret();if(!s)return;var nm=nomExport(s.nom);JA.telecharger(JA.zip([{nom:nm+"/"},{nom:nm+"/SKILL.md",texte:s.md}]),nm+".zip","application/zip");});
+  s.appendChild(h("div",null,[h("label",{text:t("quoi"),for:"ex-quoi"}),choix("ex-quoi",B.exp||(n?String(n-1):"b"),function(v){B.exp=v;majZip();})]));
+  if(!B.exp)B.exp=s.querySelector("#ex-quoi").value;
+  function pret(){var x=texteDe(B.exp);if(problemes(x).length){toast(t("invalide"));return null;}return x;}
+  zipB.addEventListener("click",function(){var x=pret();if(!x)return;var nm=nomExport(x.nom);JA.telecharger(JA.zip([{nom:nm+"/"},{nom:nm+"/SKILL.md",texte:x.md}]),nm+".zip","application/zip");});
   majZip();
-  sx.appendChild(h("div",{class:"row"},[zipB,
-    h("button",{type:"button",class:"txtbtn",id:"ex-md",text:t("md"),on:{click:function(){var s=pret();if(s)JA.telecharger(s.md,"SKILL.md","text/markdown");}}}),
-    h("button",{type:"button",class:"txtbtn",id:"ex-copier",text:t("copier"),on:{click:function(){copier(texteDe(B.exp).md);}}})]));
-  sx.appendChild(h("div",{class:"aide"},t("aide").map(function(a){return h("div",null,[h("h3",{text:a[0]}),h("p",{class:"s",text:a[1]}),h("ol",null,a[2].map(function(x){return h("li",{text:x});}))]);})));
-  app.appendChild(sx);
-
-  /* le banc */
-  var E=B.essai;if(!E.question&&D.binome.question)E.question=D.binome.question;
-  var sk=h("section",{class:"sec",id:"banc"},[top(t("sBanc")),h("p",{class:"s",text:t("bIntro")})]);
-  var pdv=h("p",{class:"alerte",id:"pas-de-v",text:t("pasDeV")});
-  function sansV(){return !n&&(!E.condition||E.condition==="D");}
-    var vs=h("select",{id:"e-version"});D.skill.versions.forEach(function(v,i){vs.appendChild(h("option",{value:String(i),text:"v"+v.n+" · "+(v.nom||"…")}));});
-    if(n){vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);}vs.addEventListener("change",function(){E.version=Number(vs.value);save();});
-    var ap=h("select",{id:"e-app"});JA.APPS.forEach(function(a){ap.appendChild(h("option",{value:a,text:a}));});ap.value=E.app;ap.addEventListener("change",function(){E.app=ap.value;save();});
-    var cSeg=seg(E.condition,[["",t("condAucune")]].concat(JA.CONDS.map(function(c){return [c,JA.condLabel(c)];})),function(v){E.condition=v;majC();});cSeg.id="e-condition";
-    sk.appendChild(h("div",null,[h("label",{text:t("condition")}),cSeg]));sk.appendChild(pdv);
-    var srcF=fld(t("source"),"text",E.skill_source,function(v){E.skill_source=v;},{id:"e-source"});sk.appendChild(srcF);
-    var vW=h("div",null,[h("label",{text:t("version"),for:"e-version"}),vs]);
-    sk.appendChild(h("div",{class:"deux"},[vW,h("div",null,[h("label",{text:t("app"),for:"e-app"}),ap])]));
-    sk.appendChild(h("div",{class:"deux"},[fld(t("modele"),"text",E.modele,function(v){E.modele=v;},{id:"e-modele"}),fld(t("date"),"date",E.date,function(v){E.date=v;},{id:"e-date"})]));
-    var mW;sk.appendChild(h("div",{class:"deux"},[h("div",null,[h("label",{text:t("web")}),seg(E.web?"o":"n",[["o",t("oui")],["n",t("non")]],function(v){E.web=v==="o";})]),
-      mW=h("div",null,[h("label",{text:t("mode")}),seg(E.mode,[["chargée",t("charg")],["collée",t("coll")]],function(v){E.mode=v;})])]));
-    var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"alerte",id:"q-diff",text:t("qDiff")});
-    function majQ(){warn.hidden=!prev||E.question.trim()===prev.trim();}
-    sk.appendChild(fld(t("question"),"textarea",E.question,function(v){E.question=v;majQ();},{id:"e-question"}));sk.appendChild(warn);majQ();
-    var saW=h("div",{class:"deux"},[fld(t("sans"),"textarea",E.sans,function(v){E.sans=v;},{id:"e-sans",class:"raw"}),fld(t("avec"),"textarea",E.avec,function(v){E.avec=v;},{id:"e-avec",class:"raw"})]);
-    var reW=fld(t("reponse"),"textarea",E.reponse,function(v){E.reponse=v;},{id:"e-reponse",class:"raw"});
-    sk.appendChild(saW);sk.appendChild(reW);
-    function majC(){var c=E.condition;srcF.hidden=c!=="B"&&c!=="C";vW.hidden=!n||!!c&&c!=="D";pdv.hidden=!sansV();mW.hidden=c==="A";saW.hidden=!!c;reW.hidden=!c;}majC();
-    sk.appendChild(h("label",{text:t("lecture")}));
-    sk.appendChild(h("div",{class:"num"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(E[k]),function(v){E[k]=Math.max(0,Math.floor(Number(v))||0);},{id:"e-"+k,min:"0",step:"1",inputmode:"numeric"});})));
-    sk.appendChild(h("div",{class:"deux"},[fld(t("gagne"),"textarea",E.gagne,function(v){E.gagne=v;},{id:"e-gagne"}),fld(t("perdu"),"textarea",E.perdu,function(v){E.perdu=v;},{id:"e-perdu"})]));
-    sk.appendChild(fld(t("decision"),"textarea",E.decision,function(v){E.decision=v;},{id:"e-decision"}));
-    sk.appendChild(h("button",{type:"button",class:"act",id:"enreg",text:t("enreg"),on:{click:function(){
-      if(sansV()){toast(t("pasDeV"));return;}
-      var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!E.question.trim())m.push(t("question"));if(E.condition){if((E.condition==="B"||E.condition==="C")&&!E.skill_source.trim())m.push(t("source"));if(!E.reponse.trim())m.push(t("reponse"));}else{if(!E.sans.trim())m.push(t("sans"));if(!E.avec.trim())m.push(t("avec"));}
-      if(m.length){toast(t("manqueE")+m.join(" · "));return;}
-      var x=JSON.parse(JSON.stringify(E));x.version=n?D.skill.versions[E.version].n:0;D.essais.push(x);
-      var nx=nouvelEssai();nx.version=E.version;nx.question=E.question;B.essai=nx;save();render();toast(r(t("enregistre"),{n:D.essais.length}));location.hash="banc";}}}));
-  if(!D.essais.length)sk.appendChild(h("p",{class:"s",text:t("aucunE")}));
-  var bc=JA.banc(),q4=h("div");
-  D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
-    var e=p[0],i=p[1],sc=h("p",{class:"score"}),sub=h("div",{class:"sub"});
-    function majS(){sc.textContent=r(t("score"),{n:JA.score(e),d:JA.sur(e)})+(e.note_par?" · "+bc.notePar+" : "+e.note_par:"");
-      sub.textContent=[e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(e.condition==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(e.condition?[r(t("score"),{n:JA.score(e),d:JA.sur(e)})]:[t("etayees")+" "+e.etayees,t("contredites")+" "+e.contredites,t("non_resolues")+" "+e.non_resolues,t("utilisables")+" "+e.utilisables]).join(" · ");}
-    var corps=e.condition?[
-      e.skill_source?h("div",{class:"champ"},[h("b",{text:t("source")}),h("span",{text:e.skill_source})]):null,
-      h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
-      h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),
-      h("div",{class:"champ"},[h("b",{text:t("cases")}),h("div",{class:"cases"},bc.cases.map(function(c,k){
-        if(k===4){var g=seg(e.cases[4]===null?"n":e.cases[4]?"1":"0",bc.c5,function(v){e.cases[4]=v==="n"?null:v==="1";majS();vueQuatre(q4);});g.id="c-"+i+"-4";
-          return h("div",{class:"c5"},[h("span",{text:(k+1)+" · "+c}),g]);}
-        var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();vueQuatre(q4);});
-        return h("label",{for:cb.id},[cb,h("span",{text:(k+1)+" · "+c})]);}))]),
-      fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();vueQuatre(q4);},{id:"n-"+i}),sc
-    ]:[
-      h("div",{class:"champ"},[h("b",{text:t("question")}),h("pre",{class:"m",text:e.question})]),
-      h("div",{class:"deux"},[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])])
-    ];
-    majS();
-    sk.appendChild(h("details",{class:"entry essai",id:"essai-"+i},[h("summary",null,[h("span",{class:"t",text:t("essai")+" "+(i+1)+(e.condition?" · "+JA.condLabel(e.condition):"")+(!e.condition||e.condition==="D"?" · v"+e.version:"")+" · "+e.app+(e.modele?" · "+e.modele:"")}),sub])].concat(corps).concat([
-      h("div",{class:"champ"},[h("b",{text:t("gagne")}),h("span",{text:e.gagne||"—"})]),h("div",{class:"champ"},[h("b",{text:t("perdu")}),h("span",{text:e.perdu||"—"})]),h("div",{class:"champ"},[h("b",{text:t("decision")}),h("span",{text:e.decision||"—"})]),
-      h("div",{class:"row",style:"margin-top:.8em;justify-content:flex-end"},[h("button",{type:"button",class:"txtbtn quiet",text:t("suppr"),on:{click:function(){confirmer(t("supprQ"),t("suppr"),function(){D.essais.splice(i,1);save();render();});}}})])])));
-  });
-  app.appendChild(sk);
-
-  /* les quatre conditions */
-  var s4=h("section",{class:"sec",id:"quatre"},[top(t("sQuatre")),h("p",{class:"s",text:t("qIntro")}),q4]);
-  vueQuatre(q4);
-  s4.appendChild(h("div",null,[h("label",{text:bc.signer}),(function(){var g=seg(D.signer.condition,JA.CONDS.map(function(c){return [c,JA.condLabel(c)];}),function(v){D.signer.condition=v;});g.id="signer";return g;})()]));
-  s4.appendChild(fld(bc.pourquoi,"textarea",D.signer.pourquoi,function(v){D.signer.pourquoi=v;},{id:"signer-pourquoi"}));
-  app.appendChild(s4);
-
-  /* le dossier */
-  app.appendChild(h("section",{class:"sec",id:"dossier"},[top(t("sDossier")),JA.criteres(D)]));
+  s.appendChild(h("div",{class:"suite"},[zipB,
+    h("button",{type:"button",class:"txt",id:"ex-md",text:t("md"),on:{click:function(){var x=pret();if(x)JA.telecharger(x.md,"SKILL.md","text/markdown");}}}),
+    h("button",{type:"button",class:"txt",id:"ex-copier",text:t("copier"),on:{click:function(){copier(texteDe(B.exp).md);}}})]));
+  s.appendChild(h("div",{class:"aides"},t("aide").map(function(a){return h("div",{class:"bloc gris"},[h("h2",{class:"moyen",text:a[0]}),h("p",{class:"etiq",text:a[1]}),h("ol",null,a[2].map(function(x){return h("li",{text:x});}))]);})));
+  box.appendChild(s);
 }
+
+/* ---------- écran : le dossier ---------- */
+function vueDossier(box){
+  var s=h("section",{class:"ecran"});
+  s.appendChild(h("div",{id:"dossier"},[h("h1",{class:"tres",text:lang==="fr"?"le dossier · 40 %":"the dossier · 40 %"}),JA.criteres(D)]));
+  var hs=h("div",{class:"historique",id:"essais"},[h("h2",{class:"moyen",text:t("tous")})]);
+  if(!D.essais.length)hs.appendChild(h("p",{class:"calme",text:t("aucunE")}));
+  D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
+    var e=p[0],i=p[1];
+    var titre=t("essai")+" "+(i+1)+(e.condition?" · "+JA.condLabel(e.condition):" · "+t("sansAvec"))+(!e.condition||e.condition==="D"?" · v"+e.version:"")+" · "+e.app+(e.modele?" · "+e.modele:"");
+    var corps=e.condition?[h("div",{class:"champ"},[h("b",{text:t("reponse")}),h("pre",{class:"m",text:e.reponse})]),h("p",{class:"etiq",text:r("{n} / 6",{n:JA.score(e)})+(e.note_par?" · "+JA.banc().notePar+" : "+e.note_par:"")})]
+      :[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])];
+    hs.appendChild(h("details",{class:"essai"},[h("summary",{text:titre}),h("p",{class:"sub",text:[e.date,e.question].join(" · ")})].concat(corps).concat([
+      h("div",{class:"champ"},[h("b",{text:t("gagne")}),h("span",{text:e.gagne||"—"})]),h("div",{class:"champ"},[h("b",{text:t("perdu")}),h("span",{text:e.perdu||"—"})]),h("div",{class:"champ"},[h("b",{text:t("decision")}),h("span",{text:e.decision||"—"})]),
+      h("div",{class:"rang",style:"justify-content:flex-end"},[h("button",{type:"button",class:"txt calme",text:t("suppr"),on:{click:function(){confirmer(t("supprQ"),t("suppr"),function(){D.essais.splice(i,1);save();render();});}}})])])));
+  });
+  s.appendChild(hs);box.appendChild(s);
+}
+
+/* ---------- rendu ---------- */
+function render(){
+  document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
+  document.getElementById("etapes").setAttribute("aria-label",t("etapes"));
+  var v=route(),box=document.getElementById("app");box.innerHTML="";
+  if(v==="question")vueQuestion(box);
+  else if(v==="a"||v==="b"||v==="c"||v==="d")vueCond(box,v.toUpperCase());
+  else if(v==="trois")vueTrois(box);
+  else if(v==="ecrire")vueEcrire(box);
+  else if(v==="versions")vueVersions(box);
+  else if(v==="charger")vueCharger(box);
+  else vueDossier(box);
+  bande();
+}
+window.addEventListener("hashchange",function(){render();window.scrollTo(0,0);});
 render();
-var sv0=document.getElementById("save");sv0.textContent="";
+if(location.hash)setTimeout(function(){window.scrollTo(0,0);},0);
+document.getElementById("save").textContent="";
 JA.pied();
 document.getElementById("lang").onclick=function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem("judging-ai-journal-lang",lang);}catch(e){}render();};
 var theme="";try{theme=localStorage.getItem("judging-ai-journal-theme")||"";}catch(e){}
