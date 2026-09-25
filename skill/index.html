@@ -38,7 +38,7 @@ var h=JA.h, lang=JA.lang();
 var T={
  fr:{titre:"L'atelier SKILL.md",
   eQuestion:"la question",eTrois:"les trois",eSkill:"SKILL.md",eVersions:"versions",eCharger:"charger",eDossier:"le dossier",eB:"générique",
-  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",questionVide:"D'abord, la question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"modifier la question",copierQ:"copier la question",copierV:"copier v{n}",
+  noms:"Noms (séparés par des virgules)",lieu:"Lieu du dossier",qSalle:"question de la salle : Issam Fares Institute",qLieu:"même question : lieu du dossier",lieuVide:"D'abord, le lieu du dossier.",question:"La question, identique à chaque essai",questionVide:"D'abord, la question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"modifier la question",copierQ:"copier la question",copierV:"copier v{n}",
   qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les essais ne se comparent pas.",
   commencer:"Commencer : A, sans SKILL.md →",
   consigne:{A:"Nouvelle conversation, sans SKILL.md. La question telle quelle.",B:"SKILL.md générique chargé ou collé, puis la question.",C:"SKILL.md collé comme premier message, puis la question.",D:"Le SKILL.md du binôme, figé, chargé ou collé, puis la question."},
@@ -67,7 +67,7 @@ var T={
   saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →"},
  en:{titre:"The SKILL.md workshop",
   eQuestion:"the question",eTrois:"the three",eSkill:"the SKILL.md",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
-  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"First, the question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
+  noms:"Names (comma separated)",lieu:"The dossier's place",qSalle:"room question: Issam Fares Institute",qLieu:"same question: the dossier's place",lieuVide:"First, the dossier's place.",question:"The question, identical in every run",questionVide:"First, the question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
   qDiff:"This is not the previous run's question. Without the same question, the runs do not compare.",
   commencer:"Start: A, no SKILL.md →",
   consigne:{A:"New conversation, no SKILL.md. The question as it is.",B:"The generic SKILL.md loaded or pasted, then the question.",C:"SKILL.md pasted as the first message, then the question.",D:"The pair's frozen SKILL.md, loaded or pasted, then the question."},
@@ -213,6 +213,11 @@ function vueQuestion(tete,box){
   requestAnimationFrame(ajuster);if(document.fonts)document.fonts.ready.then(ajuster);
   var s=h("section",{id:"ecran-question"});
   s.appendChild(h("div",{class:"ja-deux"},[fld(t("noms"),"text",D.binome.noms.join(", "),function(v){D.binome.noms=v.split(",").map(function(x){return x.trim();}).filter(Boolean);qui();},{id:"b-noms"}),fld(t("lieu"),"text",D.binome.lieu,function(v){D.binome.lieu=v;},{id:"b-lieu"})]));
+  (function(){var QI=t("qModele"),QL=function(v){return "En cinq lignes au plus : "+v+". Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";};
+    function poser(x){D.binome.question=x;ta.value=x;majQ();ajuster();save();}
+    s.appendChild(h("div",{class:"ja-suite",id:"q-choix"},[
+      h("button",{type:"button",class:"ja-btn",id:"q-salle",text:t("qSalle"),on:{click:function(){poser(QI);}}}),
+      h("button",{type:"button",class:"ja-btn",id:"q-lieu",text:t("qLieu"),on:{click:function(){var v=(D.binome.lieu||"").trim();if(!v){toast(t("lieuVide"));return;}poser(QL(v));}}})]));})();
   s.appendChild(h("div",{class:"ja-suite droite"},[h("a",{class:"ja-btn",href:"#a",text:t("commencer")})]));
   box.appendChild(s);
 }
