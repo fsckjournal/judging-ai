@@ -30,14 +30,14 @@ var T={
   skill:"SKILL.md",skillTxt:"L'écrire avec un agent, la figer en v0.",skillFige:"figée : ",skillGo:"écrire, figer →",
   banc:"le banc",bancTxt:"La même question sans SKILL.md (A), avec SKILL.md (C), avec le SKILL.md du binôme (D). Un autre binôme coche les six cases.",bancGo:"commencer →",
   dossier:"le dossier · 40 %",dossierTxt:"Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale.",dossierGo:"les critères →",
-  autres:"les autres pages",journal:"le journal",s3:"la séance S3 (fiches)",entr:"s'entraîner",atelier:"l'atelier S3",
+  autres:"les autres pages",plus:"SKILL.md, le dossier, les autres pages",journal:"le journal",s3:"la séance S3 (fiches)",entr:"s'entraîner",atelier:"l'atelier S3",
   semaine:"cette semaine",semestre:"le semestre",carte:"la carte",travaux:"les travaux notés",voir:"voir la carte en entier →",langL:"langue",themeL:"thème",version:"version",vuesL:"Vues de l’app"},
  en:{vSeance:"Session {n} · today",vCours:"The course · calendar, card, grades",seance:"session",lire:"the question",lireGo:"write the question →",
   vous:"Working",seul:"alone",binome:"as a pair",votreNom:"Name",nom1:"Name 1",nom2:"Name 2",entrer:"enter →",
   skill:"the SKILL.md",skillTxt:"Written with an agent, frozen as v0.",skillFige:"frozen: ",skillGo:"write, freeze →",
   banc:"the bench",bancTxt:"The same question with no SKILL.md (A), with SKILL.md (C), with the pair's SKILL.md (D). Another pair ticks the six boxes.",bancGo:"start →",
   dossier:"the dossier · 40 %",dossierTxt:"One file per pair, handed in on 9 October (S6), defended at the oral presentation.",dossierGo:"the criteria →",
-  autres:"the other pages",journal:"the journal",s3:"session S3 (worksheets)",entr:"practice",atelier:"the S3 workshop",
+  autres:"the other pages",plus:"SKILL.md, the dossier, the other pages",journal:"the journal",s3:"session S3 (worksheets)",entr:"practice",atelier:"the S3 workshop",
   semaine:"this week",semestre:"the semester",carte:"the card",travaux:"graded work",voir:"see the whole card →",langL:"language",themeL:"theme",version:"version",vuesL:"App views"}
 };
 function t(k){return T[lang][k];}
@@ -93,16 +93,12 @@ function bande(box){
     h("h1",{class:"ja-question",text:vue==="cours"?K.cours[lang]:cap(cur[lang].titre)})])]));
 }
 function seance(box){
-  var D=JA.charger(),cur=courante(),q=JA.quatre(D),n=D.skill.versions.length,v=n?D.skill.versions[n-1]:null;
+  var D=JA.charger(),cur=courante(),q=JA.quatre(D);
   box.appendChild(h("p",{class:"ja-consigne",style:"margin:0 0 40px",text:cur[lang].detail}));
   function rangee(no,titre,corps,action){return h("div",null,[h("span",{class:"no","aria-hidden":"true",text:no}),h("div",null,[h("h2",{text:cap(titre)})].concat(corps)),action]);}
   box.appendChild(h("div",{class:"ja-plan"},[
     rangee("1",t("lire"),[h("p",{class:"mur",id:"accueil-question",text:QUESTION})],h("a",{class:"ja-btn",href:"skill/#question",text:t("lireGo")})),
-    rangee("2",t("skill"),[n?h("p",{class:"texte"},[document.createTextNode(t("skillFige")+"v"+v.n+" · "+(v.nom||"…"))]):h("p",{class:"texte",text:t("skillTxt")})],h("a",{class:"ja-lien",href:"skill/#ecrire",text:t("skillGo")})),
-    rangee("3",t("banc"),[h("p",{class:"texte",text:t("bancTxt")}),h("div",{class:"abc","aria-hidden":"true"},["A","C","D"].map(function(c){return h("span",null,[h("i",{class:q[c]>=0?"fait":null}),c]);}))],h("a",{class:"ja-lien",href:"skill/",text:t("bancGo")})),
-    rangee("",t("dossier"),[h("p",{class:"texte",text:t("dossierTxt")})],h("a",{class:"ja-lien",href:"skill/#dossier",text:t("dossierGo")}))]));
-  box.appendChild(h("section",{class:"ja-section"},[h("h2",{class:"ja-lab",text:t("autres")}),h("div",{class:"ja-autres"},[
-    h("a",{class:"ja-lien",href:"journal/",text:t("journal")}),h("a",{class:"ja-lien",href:"s1/",text:"S1 · 4 septembre"}),h("a",{class:"ja-lien",href:"s2/",text:"S2 · 11 septembre"}),h("a",{class:"ja-lien",href:"s3/",text:t("s3")}),h("a",{class:"ja-lien",href:"s4/",text:"S4 · 25 septembre"}),h("a",{class:"ja-lien",href:"entrainement/",text:t("entr")}),h("a",{class:"ja-lien",href:"atelier/",text:t("atelier")})])]));
+    rangee("2",t("banc"),[h("p",{class:"texte",text:t("bancTxt")}),h("div",{class:"abc","aria-hidden":"true"},["A","C","D"].map(function(c){return h("span",null,[h("i",{class:q[c]>=0?"fait":null}),c]);}))],h("a",{class:"ja-lien",href:"skill/",text:t("bancGo")}))]));
 }
 function cours(box){
   var s=h("div",{class:"ja-cours"}),cur=C.seances.filter(function(x){return x.id===C.semaine;})[0];
@@ -117,6 +113,13 @@ function cours(box){
   s.appendChild(liste("carte",t("carte"),K.lettres.map(function(L){return rangee("",L.l,L.nom,[h("span",{class:"def",text:" · "+L[lang].def+"."})]);}),
     [h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"journal/#carte",text:t("voir")})])]));
   s.appendChild(liste("travaux",t("travaux"),C.travaux.map(function(w){return rangee("",w.poids||"·",w[lang].titre,[h("p",{class:"texte",text:w[lang].detail}),h("p",{class:"quand",text:w[lang].quand})]);})));
+  /* retirés de la vue séance (25 Sept, « the app is too complicated ») : SKILL.md (écrire, versions, charger), le dossier, les autres pages */
+  var D=JA.charger(),n=D.skill.versions.length,v=n?D.skill.versions[n-1]:null;
+  s.appendChild(liste("outils",t("plus"),[
+    rangee("","",cap(t("skill")),[n?h("p",{class:"texte"},[document.createTextNode(t("skillFige")+"v"+v.n+" · "+(v.nom||"…"))]):h("p",{class:"texte",text:t("skillTxt")}),h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"skill/#ecrire",text:t("skillGo")})])]),
+    rangee("","",cap(t("dossier")),[h("p",{class:"texte",text:t("dossierTxt")}),h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"skill/#dossier",text:t("dossierGo")})])])],
+    [h("div",{class:"ja-autres"},[
+    h("a",{class:"ja-lien",href:"journal/",text:t("journal")}),h("a",{class:"ja-lien",href:"s1/",text:"S1 · 4 septembre"}),h("a",{class:"ja-lien",href:"s2/",text:"S2 · 11 septembre"}),h("a",{class:"ja-lien",href:"s3/",text:t("s3")}),h("a",{class:"ja-lien",href:"s4/",text:"S4 · 25 septembre"}),h("a",{class:"ja-lien",href:"entrainement/",text:t("entr")}),h("a",{class:"ja-lien",href:"atelier/",text:t("atelier")})])]));
   box.appendChild(s);
 }
 /* le carré de l'en-tête dans la vue séance porte le même nom que #paire */

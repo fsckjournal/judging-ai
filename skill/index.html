@@ -64,7 +64,7 @@ var T={
    ["ChatGPT","Plus ou Pro",["Onglet Skills (Plugins · Skills · GPTs) : import.","D'abord le .zip ; s'il est refusé, SKILL.md seul.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
    ["Coller","toute app, Gemini compris",["Bouton « copier le texte ».","Nouvelle conversation : le texte comme premier message, puis la question exacte.","Au banc : « collée ». Ce n'est pas un chargement du SKILL.md."]]],
   tous:"tous les essais",aucunE:"Aucun essai.",sansAvec:"sans puis avec",sans:"Réponse sans SKILL.md",avec:"Réponse avec SKILL.md",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",
-  saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →"},
+  saved:"✓ enregistré",plus:"plus : SKILL.md, versions, charger",leDossier:"le dossier →",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →"},
  en:{titre:"The SKILL.md workshop",
   eQuestion:"the question",eTrois:"the three",eSkill:"the SKILL.md",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
   noms:"Names (comma separated)",lieu:"The dossier's place",qSalle:"room question: Issam Fares Institute",qLieu:"same question: the dossier's place",lieuVide:"First, the dossier's place.",question:"The question, identical in every run",questionVide:"First, the question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
@@ -93,7 +93,7 @@ var T={
    ["ChatGPT","Plus or Pro",["Skills tab (Plugins · Skills · GPTs): upload.","First the .zip; if it is refused, SKILL.md alone.","New conversation, then the exact question. On the bench: “loaded”."]],
    ["Pasting","any app, Gemini included",["“copy the text” button.","New conversation: the text as the first message, then the exact question.","On the bench: “pasted”. This is not loading the SKILL.md."]]],
   tous:"all runs",aucunE:"No runs.",sansAvec:"without then with",sans:"Answer without the SKILL.md",avec:"Answer with the SKILL.md",suppr:"Delete",supprQ:"Deleting this run?",
-  saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps",skillV:"the SKILL.md · versions",leBanc:"← the bench",ouvrirB:"B · generic SKILL.md: the run →"}
+  saved:"✓ saved",plus:"more: the SKILL.md, versions, load",leDossier:"the dossier →",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps",skillV:"the SKILL.md · versions",leBanc:"← the bench",ouvrirB:"B · generic SKILL.md: the run →"}
 };
 function t(k){return T[lang][k];}
 function r(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
@@ -180,13 +180,13 @@ function vueDiff(box){
 }
 
 /* ---------- les écrans, les étapes (StepSquares) ---------- */
-var VUES=["question","a","c","d","trois","b","ecrire","versions","charger","dossier"],BANC=["question","a","c","d","trois"],SKILL=["ecrire","versions","charger","dossier"];
+var VUES=["question","a","c","d","trois","b","ecrire","versions","charger","dossier"],BANC=["question","a","c","d","trois"],SKILL=["ecrire","versions","charger"];
 var dernier="question";
 function route(){var v=(location.hash||"").replace(/^#/,"");if(v==="b"&&JA.quatre(D).B<0)v="";return VUES.indexOf(v)>=0?v:"question";}
 function pas(){
   var nav=document.getElementById("etapes");nav.innerHTML="";var cur=route();
   if(SKILL.indexOf(cur)>=0){
-    nav.appendChild(h("span",{class:"mots"},[["ecrire",t("eSkill")],["versions",t("eVersions")],["charger",t("eCharger")],["dossier",t("eDossier")]].map(function(x){
+    nav.appendChild(h("span",{class:"mots"},[["ecrire",t("eSkill")],["versions",t("eVersions")],["charger",t("eCharger")]].map(function(x){
       return h("a",{href:"#"+x[0],"data-v":x[0],class:x[0]==="ecrire"&&!nv()?"pas-vu":null,"aria-current":cur===x[0]?"true":null,text:x[1]});})));
     nav.appendChild(h("a",{class:"ailleurs",href:"#"+dernier,"data-v":"banc",text:t("leBanc")}));
     return;
@@ -195,8 +195,9 @@ function pas(){
   var noms={question:t("eQuestion"),a:JA.condLabel("A"),c:JA.condLabel("C"),d:JA.condLabel("D"),trois:t("eTrois"),b:JA.condLabel("B")};
   nav.appendChild(h("span",{class:"q"},BANC.map(function(v){var ici=cur===v;
     return h("a",{href:"#"+v,"data-v":v,class:e[v],"aria-current":ici?"true":null,"aria-label":noms[v],title:noms[v]},[h("i",{class:ici?"ici":e[v]!=="pas-vu"?"fait":null})]);})));
-  nav.appendChild(h("span",{class:"nom",text:noms[cur]}));
-  nav.appendChild(h("a",{class:"ailleurs"+(nv()?"":" pas-vu"),href:"#ecrire","data-v":"ecrire",text:t("skillV")}));
+  /* le chemin du jour : la question, A, C, D, les trois, puis le dossier (à droite) ; SKILL.md, versions et charger passent par « plus », en bas de l'écran */
+  nav.appendChild(h("span",{class:"nom",text:cur==="dossier"?"":noms[cur]}));
+  nav.appendChild(h("a",{class:"ailleurs",href:"#dossier","data-v":"dossier","aria-current":cur==="dossier"?"true":null,text:t("eDossier")}));
 }
 /* le titre de l'écran, dans la bande */
 function titre(tete,txt,cls){var e=h("h1",{class:"ja-question"+(cls?" "+cls:""),text:String(txt).replace(/ ([?!:;»])/g,"\u00a0$1")});tete.appendChild(e);return e;}
@@ -321,6 +322,7 @@ function vueTrois(tete,box){
   var pq=fld(bc.pourquoi,"textarea",D.signer.pourquoi,function(v){D.signer.pourquoi=v;},{id:"signer-pourquoi",rows:"3",class:"long"});
   var lab=pq.querySelector("label");lab.className="ja-lab";
   s.appendChild(h("div",{class:"ja-pourquoi"},[lab,pq]));
+  s.appendChild(h("div",{class:"ja-suite droite"},[h("a",{class:"ja-btn",href:"#dossier",id:"vers-dossier",text:t("leDossier")})]));
   box.appendChild(s);
 }
 
@@ -432,6 +434,7 @@ function render(){
   else if(v==="versions")vueVersions(tete,box);
   else if(v==="charger")vueCharger(tete,box);
   else vueDossier(tete,box);
+  if(SKILL.indexOf(v)<0)box.appendChild(h("p",{class:"ja-plus",style:"margin:56px 0 0"},[h("a",{class:"ja-lien petit",id:"plus",href:"#ecrire",text:t("plus")})]));
   pas();qui();
 }
 window.addEventListener("hashchange",function(){render();window.scrollTo(0,0);});
