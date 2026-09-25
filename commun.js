@@ -4,7 +4,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-25.5";
+  var VERSION = "s4-v3-2026-09-25.6";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -12,22 +12,22 @@ var JA = (function () {
   var T = {
     fr: {
       dossier: "le dossier du binôme", exJson: "Exporter le dossier", exMd: "version lisible (.md)", imp: "importer un dossier…", retour: "revenir à l'état d'avant l'import",
-      pied: "Tout reste dans ce navigateur. Le fichier exporté est votre copie : il se réimporte sur n'importe quelle page de l'app.",
+      pied: "Tout reste dans ce navigateur. Le fichier exporté est la copie du binôme : il se réimporte sur n'importe quelle page de l'app.",
       version: "version", illisible: "Fichier illisible : ce n'est pas du JSON. Rien n'a été changé.",
       inconnu: "Format inconnu ({f}) : ce fichier n'est pas un dossier Juger l'IA. Rien n'a été changé.",
-      journal: "Ce fichier est une sauvegarde du journal : importez-le dans le journal, onglet garder. Rien n'a été changé ici.",
+      journal: "Ce fichier est une sauvegarde du journal : il s'importe dans le journal, onglet garder. Rien n'a été changé ici.",
       remplacer: "Remplacer le dossier de ce navigateur par celui du fichier ?", actuel: "Ici", fichier: "Dans le fichier",
-      copie: "Une copie de l'état actuel est gardée dans ce navigateur ; vous pourrez y revenir.",
+      copie: "Une copie de l'état actuel est gardée dans ce navigateur ; un retour y reste possible.",
       annuler: "Annuler", ok: "Remplacer", retourQ: "Revenir au dossier tel qu'il était avant le dernier import ?", retourOk: "Revenir",
       n: { versions: ["version", "versions"], essais: ["essai", "essais"], reponses: ["réponse", "réponses"] }, sansLieu: "lieu non indiqué", exporteLe: "exporté le",
       crit: {
         titre: "le dossier · 40 %",
         intro: "Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale. Ce qui est regardé :",
         items: [
-          ["versions", "Les versions, chacune avec ce que vous avez changé et pourquoi (quel essai l'a montré)."],
+          ["versions", "Les versions, chacune avec ce qui a changé et pourquoi (quel essai l'a montré)."],
           ["essais", "Les essais, chacun avec ses conditions : app, modèle, date, web, chargée ou collée, la même question."],
           ["bilan", "Ce que chaque version a fait gagner, et ce qu'elle a fait perdre."],
-          ["decision", "Une décision que vous pouvez défendre."]
+          ["decision", "Une décision défendable."]
         ]
       },
       md: { titre: "Dossier", binome: "Binôme", seul: "Seul", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
@@ -39,27 +39,27 @@ var JA = (function () {
         conds: { A: "sans SKILL.md", B: "SKILL.md générique", C: "SKILL.md", D: "SKILL.md du binôme" },
         cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
         c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte", pasNotee: "pas encore notée",
-        notePar: "noté par le binôme", citer: "La citeriez-vous telle quelle ?", citerPq: "pourquoi : une ligne, qui nomme une ligne de la réponse", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi", oui: { oui: "oui", non: "non" }
+        notePar: "noté par le binôme", citer: "À citer telle quelle ?", citerPq: "pourquoi : une ligne, qui nomme une ligne de la réponse", signer: "Laquelle signer dans le dossier ?", pourquoi: "pourquoi", oui: { oui: "oui", non: "non" }
       }
     },
     en: {
-      dossier: "the pair's dossier", exJson: "Export the dossier", exMd: "readable version (.md)", imp: "import a dossier…", retour: "go back to the state before the import",
-      pied: "Everything stays in this browser. The exported file is your copy: it re-imports on any page of the app.",
+      dossier: "the pair's dossier", exJson: "Export the dossier", exMd: "readable version (.md)", imp: "import a dossier…", retour: "back to the state before the import",
+      pied: "Everything stays in this browser. The exported file is the pair's copy: it re-imports on any page of the app.",
       version: "version", illisible: "Unreadable file: this is not JSON. Nothing was changed.",
       inconnu: "Unknown format ({f}): this file is not a Judging AI dossier. Nothing was changed.",
-      journal: "This file is a journal backup: import it in the journal, keep tab. Nothing was changed here.",
-      remplacer: "Replace the dossier in this browser with the one in the file?", actuel: "Here", fichier: "In the file",
-      copie: "A copy of the current state is kept in this browser; you can go back to it.",
-      annuler: "Cancel", ok: "Replace", retourQ: "Go back to the dossier as it was before the last import?", retourOk: "Go back",
+      journal: "This file is a journal backup: it imports in the journal, keep tab. Nothing was changed here.",
+      remplacer: "Replacing the dossier in this browser with the one in the file?", actuel: "Here", fichier: "In the file",
+      copie: "A copy of the current state is kept in this browser; going back to it remains possible.",
+      annuler: "Cancel", ok: "Replace", retourQ: "Back to the dossier as it was before the last import?", retourOk: "Back",
       n: { versions: ["version", "versions"], essais: ["run", "runs"], reponses: ["answer", "answers"] }, sansLieu: "no place given", exporteLe: "exported on",
       crit: {
         titre: "the dossier · 40 %",
         intro: "One file per pair, handed in on 9 October (S6), defended at the oral presentation. What is looked at:",
         items: [
-          ["versions", "The versions, each with what you changed and why (which run showed it)."],
+          ["versions", "The versions, each with what changed and why (which run showed it)."],
           ["essais", "The runs, each with its conditions: app, model, date, web, loaded or pasted, the same question."],
           ["bilan", "What each version gained, and what it lost."],
-          ["decision", "A decision you can defend."]
+          ["decision", "A defensible decision."]
         ]
       },
       md: { titre: "Dossier", binome: "Pair", seul: "Alone", lieu: "Place", question: "Question", versions: "Versions", change: "What we changed", pourquoi: "Why (which run)", figee: "frozen on",
@@ -71,7 +71,7 @@ var JA = (function () {
         conds: { A: "no SKILL.md", B: "generic SKILL.md", C: "SKILL.md", D: "the pair's SKILL.md" },
         cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
         c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened", pasNotee: "not graded yet",
-        notePar: "scored by the pair", citer: "Would you cite it as it stands?", citerPq: "why: one line, naming one line of the answer", signer: "Which one would you sign in your dossier?", pourquoi: "why", oui: { oui: "yes", non: "no" }
+        notePar: "scored by the pair", citer: "Citable as it stands?", citerPq: "why: one line, naming one line of the answer", signer: "Which one to sign in the dossier?", pourquoi: "why", oui: { oui: "yes", non: "no" }
       }
     }
   };

@@ -96,13 +96,13 @@ textarea{min-height:120px;resize:vertical}
 var h=JA.h, lang=JA.lang();
 var T={
  fr:{k:"exercice 1 · sans IA · hôtel Saint-Georges, Beyrouth",titre:"Ce que chaque passage permet d'écrire",
-  consigne:"Quatre affirmations, et les passages des sources en entier. Pour chaque affirmation, écrivez ce que chaque passage vous permet d'écrire, et ce qu'il ne permet pas d'écrire. Pas de vrai ou faux : ce que c'est, et ce qui le trancherait.",
-  q:["Une source l'affirme-t-elle, montre-t-elle un document, ou quelqu'un l'a-t-il conclu ?","Quel passage le trancherait ? Pas « une source » : quel texte, quelle page, quels mots.","Si vous l'acceptez, qu'écrivez-vous dans une notice ? Qu'est-ce que vous ne pouvez toujours pas écrire ?"],
+  consigne:"Quatre affirmations, et les passages des sources en entier. Pour chaque affirmation : ce que chaque passage permet d'écrire, et ce qu'il ne permet pas d'écrire. Pas de vrai ou faux : ce que c'est, et ce qui le trancherait.",
+  q:["Une source l'affirme-t-elle, montre-t-elle un document, ou quelqu'un l'a-t-il conclu ?","Quel passage le trancherait ? Pas « une source » : quel texte, quelle page, quels mots.","Si elle est acceptée, qu'est-ce qui s'écrit dans une notice ? Qu'est-ce qui ne peut toujours pas s'écrire ?"],
   affs:"les affirmations",srcs:"les passages",renv:"passages cités dans l'exercice :",rep:"Notre réponse : ce que ces passages permettent d'écrire, et ce qu'ils ne permettent pas",
   direct:"ouvert directement",cite:"cité par un autre",par:"cité par ",prec:"affirmation précédente",suiv:"affirmation suivante",saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème"},
- en:{k:"exercise 1 · no AI · Hôtel Saint-Georges, Beirut",titre:"What each passage lets you write",
-  consigne:"Four claims, and the passages from the sources in full. For each claim, write what each passage lets you write, and what it does not. Not true or false: what it is, and what would settle it.",
-  q:["Does a source state this, does a source show a document for it, or did someone conclude it?","Which passage would settle it? Not “a source”: which text, which page, which words.","If you accept it, what may you now write in a notice? What may you still not write?"],
+ en:{k:"exercise 1 · no AI · Hôtel Saint-Georges, Beirut",titre:"What each passage allows to be written",
+  consigne:"Four claims, and the passages from the sources in full. For each claim: what each passage allows to be written, and what it does not. Not true or false: what it is, and what would settle it.",
+  q:["Does a source state this, does a source show a document for it, or did someone conclude it?","Which passage would settle it? Not “a source”: which text, which page, which words.","If it is accepted, what may now be written in a notice? What still may not?"],
   affs:"the claims",srcs:"the passages",renv:"passages named in the exercise:",rep:"Our answer: what these passages let us write, and what they do not",
   direct:"opened directly",cite:"quoted by another",par:"quoted by ",prec:"previous claim",suiv:"next claim",saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme"}
 };
@@ -132,12 +132,12 @@ var SRC=[
   {id:"pv4",page:"légende 109, p. 62",st:"direct",txt:"109. Hôtel Saint-Georges, 1931, Poirrier, Bordes, Lotte et Antoine Tabet arch., rue Ahmad Chaouqui. Une nouvelle aile, respectueuse de l'architecture de ce bâtiment remarquable, a été ajoutée en 2000 (Jacques Liger-Belair, Jean-Pierre Mogharbané et Georges Khayat arch.)."},
   {id:"pv5",page:"remerciements, p. 2",st:"direct",txt:"Pour ses remarques précieuses : George Arbid."}
  ]},
- {id:"ac",titre:"Arab Center for Architecture, deux notices signées George Arbid",qui:"arab-architecture.org, consultées le 17 septembre 2026 (17h21, heure de Beyrouth).",passages:[
+ {id:"ac",titre:"Arab Center for Architecture, deux notices signées George Arbid",qui:"arab-architecture.org, consultées le 17 septembre 2026.",passages:[
   {id:"ac1",page:"notice « Hôtel Saint-Georges (1) » · champs et notes",st:"direct",txt:"Architect/Engineer/Team : (Team) Poirrier, Lotte, Bordes, with A. Tabet · Construction : 1930/1932. — Strategically located at the tip of the bay of Saint-Georges in Beirut, the Hôtel Saint-Georges is an icon of modern architecture in Lebanon, designed by the French firm of Poirrier, Lotte and Bordes with Lebanese engineer-architect Antoine Tabet as architect on site.[1] The building clearly bears the influence of Auguste Perret with its rational organization of space and exposed concrete."},
   {id:"ac2",page:"notice « Hôtel Saint-Georges (1) » · note [1]",st:"direct",txt:"Later, in 1946-47, Tabet was in charge of adding to the building the third and fourth floors, and enlarging the restaurant."},
   {id:"ac3",page:"notice « Antoine Tabet » · notes et table Work",st:"direct",txt:"Upon his return to Beirut, he was architect on site for the construction of Hotel Saint-Georges, an iconic modernist building in Beirut designed by French architects close to Perret. — Work : 1946 · Hôtel Saint-Georges (extension) · Beirut."}
  ]},
- {id:"wp",titre:"Wikipédia (anglais), « St. Georges Hotel, Beirut »",qui:"Paragraphe d'ouverture, texte source consulté le 17 septembre 2026 (17h21, heure de Beyrouth).",passages:[
+ {id:"wp",titre:"Wikipédia (anglais), « St. Georges Hotel, Beirut »",qui:"Paragraphe d'ouverture, texte source consulté le 17 septembre 2026.",passages:[
   {id:"wp1",page:"paragraphe d'ouverture",st:"direct",txt:"The Hotel St. Georges is a historic resort hotel in Beirut, Lebanon, opened in 1934. It was constructed by a French investment group, the Société Des Grands Hotels Du Levant (SGHL), during the period of the French mandate. Parisian architect Auguste Perret came to Beirut to design the hotel with local architect Antun Tabet."},
   {id:"wp2",lg:"fr",page:"les deux notes de la dernière phrase",st:"cite",par:"Wikipédia ; ni l'un ni l'autre n'a été ouvert",txt:"« came to Beirut to design the hotel » → Ching, Jarzombek et Prakash, A Global History of Architecture, p. 712. « with local architect Antun Tabet » → Alex Rowell, Daily Beast, 24 mars 2018."}
  ]}
