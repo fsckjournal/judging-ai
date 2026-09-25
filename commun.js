@@ -4,14 +4,14 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-25.12";
+  var VERSION = "s4-v3-2026-09-25.13";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
 
   var T = {
     fr: {
-      dossier: "le dossier du binôme", exJson: "Exporter le dossier", exMd: "version lisible (.md)", imp: "importer un dossier…", retour: "revenir à l'état d'avant l'import",
+      dossier: "le dossier du binôme", raz: "remise à zéro", razQ: "Le dossier de ce navigateur sera effacé, avec la langue, le thème et la couleur. Export d'abord ?", razExp: "export d'abord", razOk: "effacer", exJson: "Exporter le dossier", exMd: "version lisible (.md)", imp: "importer un dossier…", retour: "revenir à l'état d'avant l'import",
       pied: "Tout reste dans ce navigateur. Le fichier exporté est la copie du binôme : il se réimporte sur n'importe quelle page de l'app.",
       version: "version", illisible: "Fichier illisible : ce n'est pas du JSON. Rien n'a été changé.",
       inconnu: "Format inconnu ({f}) : ce fichier n'est pas un dossier Juger l'IA. Rien n'a été changé.",
@@ -43,7 +43,7 @@ var JA = (function () {
       }
     },
     en: {
-      dossier: "the pair's dossier", exJson: "Export the dossier", exMd: "readable version (.md)", imp: "import a dossier…", retour: "back to the state before the import",
+      dossier: "the pair's dossier", raz: "reset", razQ: "This browser's dossier will be erased, with the language, theme and colour. Export first?", razExp: "export first", razOk: "erase", exJson: "Export the dossier", exMd: "readable version (.md)", imp: "import a dossier…", retour: "back to the state before the import",
       pied: "Everything stays in this browser. The exported file is the pair's copy: it re-imports on any page of the app.",
       version: "version", illisible: "Unreadable file: this is not JSON. Nothing was changed.",
       inconnu: "Unknown format ({f}): this file is not a Judging AI dossier. Nothing was changed.",
@@ -238,6 +238,13 @@ var JA = (function () {
     dlg.onclose = function () { if (dlg.returnValue === "y") cb(); };
     dlg.showModal();
   }
+  function remiseAZero() {
+    dialogue([h("p", { text: t("razQ") }), h("p", {}, [h("button", { type: "button", class: "ja-lien", id: "ja-raz-export", text: t("razExp"), on: { click: exporterJson } })])], t("razOk"), function () {
+      try { var ks = []; for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("judging-ai") === 0) ks.push(k); } ks.forEach(function (k) { localStorage.removeItem(k); }); } catch (e) {}
+      var sc = document.querySelector('script[src$="commun.js"]'), base = sc ? sc.getAttribute("src").replace(/commun\.js$/, "") : "";
+      location.href = base || "./";
+    });
+  }
   function message(s) { dialogue([h("p", { text: s })], "OK", function () {}); var b = dlg.querySelector('button[value="n"]'); if (b) b.remove(); }
   function resume(d) { return (d.binome.lieu || t("sansLieu")) + " · " + nb(d.skill.versions.length, "versions") + " · " + nb(d.essais.length, "essais") + " · " + nb(Object.keys(d.lire).filter(function (k) { return d.lire[k].reponse.trim(); }).length, "reponses"); }
   function importer(texte) {
@@ -287,6 +294,7 @@ var JA = (function () {
       b = document.createElement("button"); b.id = "paire"; b.type = "button";
       outils.appendChild(b);
     }
+    if (!document.getElementById("ja-raz-tete") && b.parentNode) { var rz = document.createElement("button"); rz.type = "button"; rz.id = "ja-raz-tete"; rz.textContent = "↺"; rz.setAttribute("aria-label", t("raz")); rz.title = t("raz"); rz.addEventListener("click", remiseAZero); b.parentNode.insertBefore(rz, b.nextSibling); }
     if (b.getAttribute("data-lie")) return; b.setAttribute("data-lie", "1");
     function nommer() { b.setAttribute("aria-label", (lang() === "fr" ? "couleur : " : "colour: ") + paire().replace("petrole", "pétrole")); }
     nommer();
@@ -311,7 +319,8 @@ var JA = (function () {
       h("div", { class: "ja-suite" }, [
         h("button", { type: "button", class: "ja-btn", id: "ja-export", text: t("exJson"), on: { click: exporterJson } }),
         h("button", { type: "button", class: "ja-lien", id: "ja-export-md", text: t("exMd"), on: { click: exporterMd } }),
-        h("button", { type: "button", class: "ja-lien", id: "ja-import", text: t("imp"), on: { click: function () { fileIn.click(); } } })
+        h("button", { type: "button", class: "ja-lien", id: "ja-import", text: t("imp"), on: { click: function () { fileIn.click(); } } }),
+        h("button", { type: "button", class: "ja-lien", id: "ja-raz", text: t("raz"), on: { click: remiseAZero } })
       ].concat(avant ? [h("button", { type: "button", class: "ja-lien", id: "ja-retour", text: t("retour"), on: { click: revenir } })] : [])),
       h("p", { class: "ja-etat ja-v", text: "judging ai · " + t("version") + " " + VERSION })
     ]);
