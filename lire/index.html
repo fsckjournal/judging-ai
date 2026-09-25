@@ -11,79 +11,65 @@
 <link rel="icon" href="../icon-192.png">
 <title>Judging AI · Lire Saint-Georges</title>
 <style>
-/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
-
-:root{
-  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
-  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
-  --serif:Georgia,'Times New Roman',serif;
-  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
-  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
-}
-:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+/* Judging AI · the tokens, the faces and the header come from ../ds.css (design system « Juger l'IA » V3); this page keeps only its own layout. */
 
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
 button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
-.hd .sp{flex:1}
-.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none;display:inline-flex;align-items:center}
-.hd .lg b{color:var(--encre);font-weight:600}
-.save{font-size:11px;opacity:.8}.save.err{color:var(--orange)}
-.tete{padding:.6em max(18px,env(safe-area-inset-right,0px)) .9em max(18px,env(safe-area-inset-left,0px));border-bottom:2px solid var(--orange)}
-.k{font:500 13px/1.3 var(--mono);letter-spacing:.08em;color:var(--sourd);margin:0}
-.mast{font:400 clamp(26px,5vw,38px)/1.15 var(--serif);margin:.15em 0 .3em}
-.consigne{font:400 16px/1.5 var(--sans);color:var(--encre2);margin:0;max-width:95ch}
-.trois{margin:.4em 0 0;padding-left:1.3em;font:400 15px/1.45 var(--sans);color:var(--encre2);max-width:95ch}
-.panneau{padding:0 max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px))}
-.panneau>h2{font:500 13px/1.3 var(--mono);letter-spacing:.08em;color:var(--sourd);margin:1.2em 0 .4em;text-transform:lowercase}
-.aff{border-top:1px solid var(--trait);padding:1em 0 1.2em;scroll-margin-top:12px}
-.aff.actif .num{color:var(--encre)}
-.aff .num{font:400 26px/1 var(--serif);color:var(--orange);margin-right:.3em}
-.aff .phrase{font:400 21px/1.35 var(--serif);margin:0}
-.renvois{display:flex;flex-wrap:wrap;gap:6px 10px;margin:.6em 0 0;align-items:center}
-.renvois span{font:500 12px/1.3 var(--mono);color:var(--sourd)}
-.renvois a{font:500 13px/1.3 var(--mono);color:var(--encre);text-decoration:none;border-bottom:2px solid var(--orange);padding:6px 0}
-label{display:block;color:var(--sourd);font:500 13px/1.3 var(--mono);letter-spacing:.04em;margin:.9em 0 .4em}
-textarea{width:100%;background:var(--fond);color:var(--encre);border:0;border-left:2px solid var(--orange);background:var(--boite);border-radius:0;padding:.5em .7em;font:400 16px/1.45 var(--sans);min-height:120px;resize:vertical}
-textarea:focus{outline:0;border-left-color:var(--encre)}
-.source{border-top:2px solid var(--encre);padding:.9em 0 .2em;margin-top:1em}
-.source h3{font:400 22px/1.25 var(--serif);margin:0}
-.source .qui{font:400 13px/1.5 var(--mono);color:var(--sourd);margin:.3em 0 0}
-.passage{border-top:1px solid var(--trait);padding:.8em 0;scroll-margin-top:12px}
-.passage .ref{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font:500 12.5px/1.4 var(--mono);color:var(--sourd)}
+/* below the band: the instructions, then the claims and the passages, on the band's grid (1200px, 40px gutters, 20px on a phone) */
+.tete,.split{max-width:1120px;margin-left:40px;margin-right:40px}
+@media (min-width:1200px){.tete,.split{margin-left:auto;margin-right:auto}}
+.tete{padding-top:32px}
+.consigne{font:400 17px/1.5 var(--sans);color:var(--encre2);margin:0;max-width:46em}
+.trois{margin:.6em 0 0;padding-left:1.3em;font:400 16px/1.5 var(--sans);color:var(--encre2);max-width:46em}
+.panneau>h2{font:500 14px/1.3 var(--sans);letter-spacing:0;color:var(--sourd);margin:32px 0 10px}
+.panneau>h2::first-letter{text-transform:uppercase}
+.aff{border-top:1px solid var(--trait);padding:1em 0 1.2em;scroll-margin-top:72px}
+.aff .num{font:600 28px/1 var(--sans);letter-spacing:-.02em;color:var(--encre);margin-right:.35em}
+.aff.actif .num{color:var(--accent)}
+.aff .phrase{font:500 21px/1.35 var(--sans);letter-spacing:-.01em;margin:0}
+.renvois{display:flex;flex-wrap:wrap;gap:0 16px;margin:.6em 0 0;align-items:center}
+.renvois span{display:inline-block;font:400 14px/1.3 var(--sans);color:var(--sourd)}
+.renvois span::first-letter{text-transform:uppercase}
+.renvois a{font:500 15px/1.3 var(--sans);color:var(--encre);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;padding:12px 0}
+textarea{min-height:120px;resize:vertical}
+.source{border-top:2px solid var(--encre);padding:.9em 0 .2em;margin-top:1.4em}
+.source h3{font:500 22px/1.25 var(--sans);letter-spacing:-.01em;margin:0}
+.source .qui{font:400 14px/1.5 var(--sans);color:var(--sourd);margin:.3em 0 0}
+.passage{border-top:1px solid var(--trait);padding:.8em 0;scroll-margin-top:72px}
+.passage .ref{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;font:400 14px/1.4 var(--sans);color:var(--sourd)}
 .passage .ref b{color:var(--encre);font-weight:600}
-.statut{font:600 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:4px 6px;border:1px solid var(--trait)}
-.statut.cite{color:var(--orange);border-color:var(--orange)}
-blockquote{margin:.5em 0 0;padding:.1em 0 .1em .9em;border-left:2px solid var(--trait);font:400 17px/1.55 var(--serif)}
-.passage.eclaire blockquote{border-left-color:var(--orange);background:var(--boite)}
+.statut{display:inline-block;font:400 14px/1.4 var(--sans);color:var(--sourd)}
+.statut::first-letter{text-transform:uppercase}
+.statut.cite{color:var(--encre);font-weight:600}
+.passage.eclaire{box-shadow:inset 0 4px 0 var(--accent)}
 .collant{display:none}
+/* on a laptop: the page scrolls past the band and the instructions, then the claims and the passages fill the screen side by side, each scrolling on its own */
 @media (min-width:900px){
-  html,body{height:100%}
-  body{display:flex;flex-direction:column;height:100dvh;overflow:hidden}
-  .split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
-  .panneau{overflow-y:auto;overscroll-behavior:contain;padding-bottom:30px}
-  #sources{border-left:1px solid var(--trait)}
-  .tete{flex:0 0 auto}
+  .split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);height:100vh;height:100dvh;margin-top:28px;border-top:2px solid var(--encre)}
+  .panneau{overflow-y:auto;padding-bottom:30px}
+  #affirmations{padding-right:28px}
+  #sources{border-left:1px solid var(--trait);padding-left:28px}
 }
 @media (max-width:899.98px){
-  .collant{display:flex;position:sticky;top:0;z-index:5;background:var(--fond);border-bottom:2px solid var(--orange);padding:.5em max(12px,env(safe-area-inset-right,0px)) .5em max(12px,env(safe-area-inset-left,0px));gap:8px;align-items:center}
-  .collant p{flex:1;margin:0;font:400 16px/1.35 var(--serif)}
-  .collant b{color:var(--orange);font:400 18px/1 var(--serif);margin-right:.25em}
-  .collant button{flex:0 0 auto;background:none;border:1px solid var(--trait);color:var(--encre);min-width:44px;min-height:44px;font:500 18px/1 var(--mono)}
-  .collant button:disabled{opacity:.3}
+  .collant{display:flex;position:sticky;top:0;z-index:5;background:var(--fond);border-bottom:2px solid var(--encre);padding:.5em max(20px,env(safe-area-inset-right,0px)) .5em max(20px,env(safe-area-inset-left,0px));gap:8px;align-items:center;margin-top:20px}
+  .collant p{flex:1;margin:0;font:500 16px/1.35 var(--sans)}
+  .collant b{color:var(--encre);font:600 18px/1 var(--sans);margin-right:.35em}
+  .collant button{flex:0 0 auto;background:none;border:1px solid var(--encre);border-radius:0;color:var(--encre);min-width:44px;min-height:44px;font:500 20px/1 var(--sans)}
+  .collant button:disabled{color:var(--encre2);border-color:var(--encre2);opacity:.45}
 }
-@media print{.hd,.collant,button{display:none!important}body{display:block;height:auto;overflow:visible}.panneau{overflow:visible}}
+@media (max-width:700px){.tete,.split{margin-left:20px;margin-right:20px}.tete{padding-top:24px}}
+@media print{.ja-bande .outils,.collant,button{display:none!important}.split{display:block;height:auto}.panneau{overflow:visible}}
 </style>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body>
-<div class="hd"><a href="../">judging ai</a><span class="sp"></span><span id="save" class="save"></span><button id="lang" class="lg"><b>fr</b> · en</button><button id="theme">◐</button></div>
-<header class="tete" id="tete"></header>
+<header class="ja-bande" id="bande"><div class="ja-page">
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a></span><span class="outils"><span id="save" class="save"></span><button type="button" id="lang" class="ja-langue"><b>fr</b> · en</button><button type="button" id="theme">◐</button><button type="button" id="paire"></button></span></div>
+<p class="ja-lab" id="bande-k"></p>
+<h1 class="ja-question" id="bande-titre"></h1>
+</div></header>
+<div class="tete" id="tete"></div>
 <div class="collant" id="collant" aria-live="polite"></div>
 <div class="split">
   <section class="panneau" id="affirmations"></section>
@@ -166,7 +152,7 @@ function setActif(i,defiler){
 function render(){
   document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
   var te=document.getElementById("tete");te.innerHTML="";
-  te.appendChild(h("p",{class:"k",text:t("k")}));te.appendChild(h("h1",{class:"mast",text:t("titre")}));te.appendChild(h("p",{class:"consigne",text:t("consigne")}));
+  document.getElementById("bande-k").textContent=t("k");document.getElementById("bande-titre").textContent=t("titre");te.appendChild(h("p",{class:"consigne",text:t("consigne")}));
   te.appendChild(h("ol",{class:"trois"},t("q").map(function(q){return h("li",{text:q});})));
   var L=document.getElementById("affirmations");L.innerHTML="";L.appendChild(h("h2",{text:t("affs")}));
   AFF.forEach(function(a,i){
@@ -188,7 +174,6 @@ function render(){
     });
     R.appendChild(box);
   });
-  JA.pied(R);
   setActif(actif,false);
   observer();
 }
