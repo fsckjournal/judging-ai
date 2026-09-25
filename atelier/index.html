@@ -62,7 +62,7 @@ main{display:flex;flex-direction:column;gap:.9em}
   background-image:linear-gradient(45deg,transparent 50%,var(--encre) 50%),linear-gradient(135deg,var(--encre) 50%,transparent 50%)!important;
   background-position:calc(100% - 10px) 55%,calc(100% - 5px) 55%!important;background-size:5px 5px!important;background-repeat:no-repeat!important}
 #resource-select option{background:var(--fond);color:var(--encre)}
-main:has(.session-frame){padding-bottom:12px}
+main:has(#session-pane:not([hidden])){padding-bottom:12px}
 #session-pane{margin-top:8px}
 </style>
 <link rel="stylesheet" href="../ds.css">
@@ -118,7 +118,7 @@ function mountSession(){
  var select=h("select",{id:"resource-select","aria-label":"Choisir une rubrique"});
  resources.appendChild(select);
  parts.forEach(function(part,i){
-   var title=part.querySelector(".k,.mast,h1"),label=title?title.textContent:(part.getAttribute("data-titre")||"Informations");
+   var title=part.querySelector(".k,.mast,h1"),label=title?title.textContent:(part.getAttribute("data-titre")||"Informations");label=label.charAt(0).toUpperCase()+label.slice(1);
    select.appendChild(h("option",{value:i,text:label}));
    resources.appendChild(part);part.hidden=i!==0;
  });

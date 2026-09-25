@@ -7,7 +7,7 @@
 :root{--fond:#E9EAE8;--encre:#1C1A17;--encre-2:#484B50;--f-sans:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;color-scheme:light}
 @media (prefers-color-scheme:dark){:root{--fond:#18191B;--encre:#D9DBD8;--encre-2:#A1A5A2;color-scheme:dark}}
 *{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.55 var(--f-sans)}
-main{max-width:1000px;margin:0 auto;padding:40px 40px 64px}
+main{max-width:1200px;margin:0 auto;padding:40px 40px 64px}
 p,li{max-width:40em}a{color:var(--encre);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
 b{font-weight:600}code{font:inherit;font-weight:500}
 h2{margin:6px 0 14px;font:500 28px/1.15 var(--f-sans);letter-spacing:-.015em}
@@ -15,7 +15,7 @@ p.grand{font-size:20px;line-height:1.45}
 table{border-collapse:collapse;width:100%;margin:20px 0;font-size:15px;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre)}
 th,td{text-align:left;padding:10px 12px 10px 0;vertical-align:top;border-bottom:1px solid var(--encre)}
 th{font-weight:500;color:var(--encre-2)}
-.notice{max-width:none;margin:0 0 35px;padding:12px 0 0;border-top:2px solid var(--encre);font-size:16px}
+.notice{max-width:none;margin:0 0 35px;padding:12px max(0px,calc(100% - 46em)) 0 0;border-top:2px solid var(--encre);font-size:16px}
 .etape{border-top:2px solid var(--encre);padding:18px 0 10px}
 .k{margin:0;font:500 14px/1.3 var(--f-sans);color:var(--encre-2)}
 .cell{margin:12px 0 40px;border-top:1px solid var(--encre)}
@@ -26,7 +26,7 @@ pre{margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere;font:400 14px/1.6 
 details pre{border-top:1px solid var(--encre);padding-top:10px}
 .output{padding:10px 0 0;border-top:1px solid var(--encre)}
 .output span{font:500 14px/1.3 var(--f-sans);color:var(--encre-2)}
-@media(max-width:700px){main{padding:28px 20px}body{font-size:16px}h2{font-size:24px}table{font-size:13px}th,td{padding:7px 8px 7px 0}}
+@media(max-width:700px){main{padding:28px 20px}body{font-size:16px}h2{font-size:24px}table{font-size:14px}th,td{padding:7px 8px 7px 0}}
 </style><main><div class="notice">Aperçu de l’atelier · Les cellules ont été exécutées localement avec les données fictives. Cette page ne les exécute pas. Ouvrir le fichier .ipynb dans Colab ou Binder pour manipuler.</div><div class="etape"><p class="k">ESAR · S3 · laboratoire Jupyter</p><h2>Un lieu. Une instruction. Un effet observable.</h2>
 <p class="grand">Vous n’allez pas apprendre à croire une IA. Vous allez fabriquer quelque chose qui change son travail — puis chercher ce que cela ne change pas.</p>
 <p><b>À emporter :</b> votre <code>SKILL.md</code>, un hook Python, ses essais, une comparaison de réponses et un dossier portable.</p>

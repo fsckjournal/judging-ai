@@ -18,7 +18,7 @@
 
 /* ---------- 1 · tokens: the design system's values (tokens.json), light then dark.
    :not(#ds) outranks the older pages' own :root blocks, light and dark. */
-:root:not(#ds),:root[data-theme="light"]:not(#ds){
+:root:not(#ds){
   --f-sans:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;
   --f-voix:"Source Serif 4",Georgia,"Times New Roman",serif;
   --t-texte:17px; --t-petit:15px; --t-etiq:14px;
@@ -113,6 +113,8 @@ html body .ja-compte{font:500 var(--t-etiq)/1 var(--f-sans);color:var(--encre-2)
 :where(body:not(.ja)) label::first-letter,:where(body:not(.ja)) .lab::first-letter{text-transform:uppercase}
 :where(body:not(.ja)) textarea{min-height:120px;resize:vertical}
 :where(body:not(.ja)) input:focus,:where(body:not(.ja)) textarea:focus,:where(body:not(.ja)) select:focus{outline:0;border-bottom:2px solid var(--accent)!important;padding-bottom:7px;box-shadow:none}
+/* the pair's own words (names, place, why, their answers) in Source Serif 4 italic, as .ja-champ; a field that holds the machine's text stays in Archivo */
+:where(body:not(.ja)) input.voix,:where(body:not(.ja)) textarea.voix{font:italic 400 22px/1.3 var(--f-voix);resize:none}
 /* labels and sections: a 2px ink rule opens a section, its label under it */
 :where(body:not(.ja)) .k{font:500 14px/1.3 var(--f-sans);letter-spacing:0;text-transform:none;color:var(--encre-2)}
 :where(body:not(.ja)) .top{position:static;height:auto;background:none;border-top:2px solid var(--encre);margin-top:48px;padding-top:12px}
@@ -126,11 +128,15 @@ html body .ja-compte{font:500 var(--t-etiq)/1 var(--f-sans);color:var(--encre-2)
 :where(body:not(.ja)) .s{font:400 14px/1.45 var(--f-sans);color:var(--encre-2)}
 :where(body:not(.ja)) .intro{font:400 17px/1.5 var(--f-sans);color:var(--encre-2);max-width:40em}
 :where(body:not(.ja)) .help{font:400 14px/1.45 var(--f-sans);color:var(--encre-2);opacity:1;letter-spacing:0}
+/* the rules span the band's grid; running text keeps its measure */
+:where(body:not(.ja)) .s,:where(body:not(.ja)) .l,:where(body:not(.ja)) .help,:where(body:not(.ja)) .empty{max-width:46em}
 /* no boxes: a note, a command, a model's text is text under an ink rule */
 :where(body:not(.ja)) .m{font:400 15px/1.55 var(--f-sans);border:0;border-top:1px solid var(--encre);background:none;padding:8px 0 0}
 :where(body:not(.ja)) p.m{border-top-width:2px;padding-top:10px}
-:where(body:not(.ja)) .notice{border:0;border-top:2px solid var(--encre);background:none;padding:12px 0 0;margin:24px 0;font:400 16px/1.5 var(--f-sans);color:var(--encre);max-width:46em}
+:where(body:not(.ja)) .notice{border:0;border-top:2px solid var(--encre);background:none;padding:12px 0 0;margin:24px 0;font:400 16px/1.5 var(--f-sans);color:var(--encre);max-width:none}
 :where(body:not(.ja)) pre.raw,:where(body:not(.ja)) pre.out{font:400 15px/1.55 var(--f-sans);border:0;border-top:1px solid var(--encre);background:none;padding:8px 0 0}
+/* a text under a rule: the rule runs across the grid, the text keeps its measure */
+:where(body:not(.ja)) .notice,:where(body:not(.ja)) .m,:where(body:not(.ja)) pre.raw,:where(body:not(.ja)) pre.out{padding-right:max(0px,calc(100% - 46em))}
 :where(body:not(.ja)) blockquote{border-left:0;background:none;margin:.5em 0 0;padding:0;font:400 17px/1.55 var(--f-sans)}
 /* a line: the letter or number in ink, the text */
 :where(body:not(.ja)) .ln .meta{color:var(--encre);font:600 17px/1.45 var(--f-sans)}
@@ -147,6 +153,7 @@ html body .ja-compte{font:500 var(--t-etiq)/1 var(--f-sans);color:var(--encre-2)
 :where(body:not(.ja)) .seg{display:flex;flex-wrap:wrap;gap:0;padding:1px 0 0 1px}
 :where(body:not(.ja)) .opt{background:transparent;color:var(--encre);border:1px solid var(--encre);margin:-1px 0 0 -1px;border-radius:0;font:500 15px/1.25 var(--f-sans);padding:10px 16px;min-height:var(--cible);text-align:left;cursor:pointer}
 :where(body:not(.ja)) .opt[aria-pressed=true]{background:var(--encre);color:var(--fond);font-weight:500}
+@media (max-width:700px){:where(body:not(.ja)) .seg{flex-direction:column}:where(body:not(.ja)) .opt{width:calc(100% + 1px)}}
 :where(body:not(.ja)) .letters{display:inline-flex;flex-wrap:nowrap;gap:0!important;width:max-content;border:1px solid var(--encre)}
 :where(body:not(.ja)) .letters button{background:transparent;color:var(--encre);border:0;border-left:1px solid var(--encre);border-radius:0;font:600 24px/1 var(--f-sans);cursor:pointer}
 :where(body:not(.ja)) .letters button:first-child{border-left:0}

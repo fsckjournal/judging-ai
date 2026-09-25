@@ -57,6 +57,12 @@ button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:t
 .section .n{display:block;min-width:0;margin-bottom:6px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
 .section,.field-jump{scroll-margin-top:24px}
 textarea{min-height:86px;resize:vertical}
+/* the pair's own words (binôme, lieu, the worksheet) in Source Serif 4 italic, as .ja-champ; a passage pasted from the model's answer stays in Archivo */
+#work .field-jump input,#work .field-jump textarea{font:italic 400 22px/1.3 var(--f-voix);resize:none}
+#work #place_answer,#work #skill_before,#work #skill_observed,#work #bench_without,#work #bench_with{font:400 17px/1.45 var(--sans);resize:vertical}
+/* the identity fields' lines close the row; the worksheet below opens without a second line, and its note has no rule of its own */
+#sections>.section{border-top:0;padding-top:1.6em}
+.section>.notice{border-top:0;padding-top:0;margin:.6em 0 0}
 .choices{border:0;margin:1.2em 0;padding:0}
 .choices legend{font:500 14px/1.35 var(--sans);letter-spacing:0;color:var(--sourd);margin-bottom:.5em;padding:0}
 .choice{display:flex;gap:12px;align-items:flex-start;margin:0;padding:12px 0;border-top:1px solid var(--encre);font:400 17px/1.4 var(--sans);color:var(--encre);cursor:pointer}
@@ -106,12 +112,14 @@ textarea{min-height:86px;resize:vertical}
 @media(max-width:520px){.tabs{gap:0 20px}.source h3{font-size:20px}.route .goal{font-size:18px}.module-actions>*{width:100%;text-align:center}}
 @media print{.ja-bande .outils,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
 [hidden]{display:none!important}.embedded>.ja-bande,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 0 30px}.embedded .module-bar{margin-top:8px}
+/* inside the atelier, the band's view carries the accent; the page's own tabs mark the current one in ink */
+.embedded .tabs button[aria-selected=true]{box-shadow:inset 0 4px 0 var(--encre)}
 </style>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body>
 <header class="ja-bande" id="bande"><div class="ja-page">
-<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S3 sans papier</i></span><span class="outils"><span id="save" class="save">prêt</span><button type="button" id="theme" aria-label="thème">◐</button><button type="button" id="paire"></button></span></div>
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>· S3 sans papier</i></span><span class="outils"><span id="save" class="save">prêt</span><button type="button" id="theme" aria-label="thème">◐</button><button type="button" id="paire"></button></span></div>
 <p class="ja-lab">ESAR · séance 3 · 18 septembre 2026</p>
 <h1 class="ja-question">Ce que notre essai nous permet de dire</h1>
 </div></header>

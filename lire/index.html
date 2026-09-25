@@ -24,7 +24,8 @@ button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:t
 .trois{margin:.6em 0 0;padding-left:1.3em;font:400 16px/1.5 var(--sans);color:var(--encre2);max-width:46em}
 .panneau>h2{font:500 14px/1.3 var(--sans);letter-spacing:0;color:var(--sourd);margin:32px 0 10px}
 .panneau>h2::first-letter{text-transform:uppercase}
-.aff{border-top:1px solid var(--trait);padding:1em 0 1.2em;scroll-margin-top:72px}
+.aff{border-top:1px solid var(--trait);padding:1em 0 1.6em;scroll-margin-top:72px}
+.aff+.aff{border-top:0;padding-top:.6em}
 .aff .num{font:600 28px/1 var(--sans);letter-spacing:-.02em;color:var(--encre);margin-right:.35em}
 .aff.actif .num{color:var(--accent)}
 .aff .phrase{font:500 21px/1.35 var(--sans);letter-spacing:-.01em;margin:0}
@@ -33,6 +34,8 @@ button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:t
 .renvois span::first-letter{text-transform:uppercase}
 .renvois a{font:500 15px/1.3 var(--sans);color:var(--encre);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;padding:12px 0}
 textarea{min-height:120px;resize:vertical}
+/* the pair's answer, in its own voice (Source Serif 4 italic, as .ja-champ) */
+#affirmations textarea{font:italic 400 22px/1.3 var(--f-voix);resize:none}
 .source{border-top:2px solid var(--encre);padding:.9em 0 .2em;margin-top:1.4em}
 .source h3{font:500 22px/1.25 var(--sans);letter-spacing:-.01em;margin:0}
 .source .qui{font:400 14px/1.5 var(--sans);color:var(--sourd);margin:.3em 0 0}
@@ -42,12 +45,20 @@ textarea{min-height:120px;resize:vertical}
 .statut{display:inline-block;font:400 14px/1.4 var(--sans);color:var(--sourd)}
 .statut::first-letter{text-transform:uppercase}
 .statut.cite{color:var(--encre);font-weight:600}
-.passage.eclaire{box-shadow:inset 0 4px 0 var(--accent)}
+.passage.eclaire{box-shadow:inset 0 4px 0 var(--accent);border-top-color:transparent}
 .collant{display:none}
-/* on a laptop: the page scrolls past the band and the instructions, then the claims and the passages fill the screen side by side, each scrolling on its own */
+/* on a laptop: the page is locked to the screen; a compact band and the instructions on top, then the claims and the passages fill the rest side by side, each scrolling on its own */
 @media (min-width:900px){
-  .split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);height:100vh;height:100dvh;margin-top:28px;border-top:2px solid var(--encre)}
-  .panneau{overflow-y:auto;padding-bottom:30px}
+  html,body{height:100%}
+  body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+  .ja-bande,.tete{flex:0 0 auto}
+  .tete,.split{width:calc(100% - 80px);max-width:1120px}
+  html body .ja-bande{padding-bottom:24px}
+  html body .ja-bande .ja-lab{margin-top:20px}
+  html body .ja-bande .ja-lab+.ja-question{margin-top:6px;font-size:clamp(28px,2.8vw,40px)}
+  .tete{padding-top:18px}
+  .split{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:18px;border-top:2px solid var(--encre)}
+  .panneau{overflow-y:auto;overscroll-behavior:contain;padding-bottom:30px}
   #affirmations{padding-right:28px}
   #sources{border-left:1px solid var(--trait);padding-left:28px}
 }
@@ -56,7 +67,7 @@ textarea{min-height:120px;resize:vertical}
   .collant p{flex:1;margin:0;font:500 16px/1.35 var(--sans)}
   .collant b{color:var(--encre);font:600 18px/1 var(--sans);margin-right:.35em}
   .collant button{flex:0 0 auto;background:none;border:1px solid var(--encre);border-radius:0;color:var(--encre);min-width:44px;min-height:44px;font:500 20px/1 var(--sans)}
-  .collant button:disabled{color:var(--encre2);border-color:var(--encre2);opacity:.45}
+  .collant button:disabled{color:var(--encre2);border-color:var(--encre2);opacity:1;cursor:default}
 }
 @media (max-width:700px){.tete,.split{margin-left:20px;margin-right:20px}.tete{padding-top:24px}}
 @media print{.ja-bande .outils,.collant,button{display:none!important}.split{display:block;height:auto}.panneau{overflow:visible}}
