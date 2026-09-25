@@ -44,7 +44,8 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 
 /* on the design system: the band holds the header and the one heading; below it, ink on paper, ink rules, no boxes */
 main{display:flex;flex-direction:column;gap:.9em}
-main>*{max-width:46em}
+/* the rules span the band's grid; the text keeps its measure */
+.cl{max-width:36em}.why,.verdict{max-width:46em}
 .sec{display:flex;flex-direction:column;gap:.8em;padding-top:0}
 .sec:first-child{padding-top:32px}
 .cl{font:500 clamp(19px,2.4vw,23px)/1.4 var(--sans);letter-spacing:-.01em;margin:.2em 0 0}
@@ -59,6 +60,7 @@ details.piece>summary::-webkit-details-marker{display:none}
 .act{align-self:flex-start}
 .lnk{align-self:flex-start}
 .score{margin:0}
+.score span{font-weight:400;color:var(--encre2)}
 .intro{margin:0}
 </style>
 <link rel="stylesheet" href="../ds.css">
@@ -153,7 +155,7 @@ function render(){
   });
   app.appendChild(sec);
  });
- var fin=h("section",{class:"sec"},[top(t.score),h("p",{class:"score",text:right+" / 5"}),h("p",{class:"s",text:t.sur}),h("p",{class:"why",text:t.fin}),
+ var fin=h("section",{class:"sec"},[top(t.score),h("p",{class:"score"},[String(right),h("span",{text:" / 5"})]),h("p",{class:"s",text:t.sur}),h("p",{class:"why",text:t.fin}),
   h("button",{class:"lnk",text:t.rejouer,on:{click:function(){answers={};render();window.scrollTo(0,0);}}}),
   h("a",{class:"lnk",href:"../journal/#carte",text:t.carte+" →"}),
   h("a",{class:"lnk",href:"../",text:t.retour})]);

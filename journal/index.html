@@ -47,8 +47,7 @@ button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:t
 /* on the design system: the band holds the header and the one heading; below it, ink on paper, ink rules, no boxes */
 body>main{padding-bottom:calc(104px + env(safe-area-inset-bottom,0px))}
 .page{display:flex;flex-direction:column;gap:.9em;padding-top:32px}
-#app>*{max-width:816px}
-#app>.grid{max-width:none}
+/* the rules span the band's grid; running text keeps its measure (ds.css) */
 #app>.top:first-child{margin-top:0}
 nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--fond);border-top:2px solid var(--encre);padding:0 max(20px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
 nav .in{max-width:1120px;margin:-2px auto 0;display:grid;grid-template-columns:repeat(5,1fr)}
@@ -71,6 +70,10 @@ textarea.raw{padding:10px 0 8px;min-height:110px}
 .entry summary{list-style:none;cursor:pointer}
 .entry summary::-webkit-details-marker{display:none}
 .entry .ln{margin:0}
+/* « les outils »: a collapsible opens with + and closes with −, heading in weight 500, as skill/ */
+.entry.outil .ln .meta::before{content:"+"}
+.entry.outil[open] .ln .meta::before{content:"\2212"}
+.entry.outil .ln .meta,.entry.outil .ln .txt b{font-weight:500}
 .clock{font:500 22px var(--sans);font-variant-numeric:tabular-nums;min-width:76px}
 .timer{display:flex;gap:18px 28px;align-items:center}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre)}
@@ -670,7 +673,7 @@ function vPlan(){
   app.appendChild(top(t("outils")));
   app.appendChild(h("p",{class:"s",text:t("outilsIntro")}));
   t("OUT").forEach(function(o){
-    var d=h("details",{class:"entry"},[h("summary",null,[h("div",{class:"ln"},[h("span",{class:"meta",text:"\u203a"}),h("span",{class:"txt"},[h("b",{text:o[0]})])])])]);
+    var d=h("details",{class:"entry outil"},[h("summary",null,[h("div",{class:"ln"},[h("span",{class:"meta","aria-hidden":"true"}),h("span",{class:"txt"},[h("b",{text:o[0]})])])])]);
     [["macOS",o[1]],["Windows",o[2]]].forEach(function(c){
       d.appendChild(h("p",{class:"sub",style:"margin:.6em 0 .2em",text:c[0]}));
       d.appendChild(h("p",{class:"m",text:c[1]}));
@@ -704,10 +707,10 @@ function entry(l){
   d.appendChild(fld(t("aff"),"textarea",l.affirmation,function(v){l.affirmation=v;var a=d.querySelector(".aff");if(a)a.textContent=v||"…";}));
   d.appendChild(h("label",{text:cat(true)}));
   d.appendChild(h("div",{class:"letters"},CARTE.lettres.map(function(L){return h("button",{class:L.l==="X"?"x":"","aria-pressed":String(l.statut===L.l),title:L.nom,text:L.l,on:{click:function(){l.statut=l.statut===L.l?"":L.l;view.open=l.id;save();render();}}});})));
-  d.appendChild(fld(t("op"),"textarea",l.operation,function(v){l.operation=v;}));
+  d.appendChild(fld(t("op"),"textarea",l.operation,function(v){l.operation=v;},{class:"voix"}));
   d.appendChild(h("label",{text:t("res")}));
   d.appendChild(h("div",{class:"seg"},Object.keys(t("R")).filter(function(k){return k!=="perime"||PLUS||l.resultat==="perime";}).map(function(k){return h("button",{class:"opt","aria-pressed":String(l.resultat===k),text:t("R")[k],on:{click:function(){l.resultat=l.resultat===k?"":k;view.open=l.id;save();render();}}});})));
-  d.appendChild(fld(t("rest"),"textarea",l.reste,function(v){l.reste=v;}));
+  d.appendChild(fld(t("rest"),"textarea",l.reste,function(v){l.reste=v;},{class:"voix"}));
   d.appendChild(h("label",{text:t("time")}));
   var c=h("span",{class:"clock","data-id":l.id,text:fmt(msOf(l))});
   d.appendChild(h("div",{class:"timer"+(l.depuis?" on":"")},[c,
@@ -738,7 +741,7 @@ function vEnq(){
   var e=enq(view.enq);
   app.appendChild(top(t("model")));
   app.appendChild(h("button",{class:"txtbtn quiet",text:t("back"),on:{click:function(){go("model");}}}));
-  app.appendChild(fld(t("title"),"text",e.titre,function(v){e.titre=v;}));
+  app.appendChild(fld(t("title"),"text",e.titre,function(v){e.titre=v;},{class:"voix"}));
   app.appendChild(fld(t("modelName"),"text",e.modele,function(v){e.modele=v;},{placeholder:"Claude, ChatGPT, Gemini…"}));
   var prev=null;
   e.tours.forEach(function(x,i){
@@ -872,7 +875,7 @@ function vBanc(){
   // conditions
   var C=B.conditions;
   app.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:t("cond")})]));
-  app.appendChild(fld(t("attendu"),"textarea",C.attendu,function(v){C.attendu=v;}));
+  app.appendChild(fld(t("attendu"),"textarea",C.attendu,function(v){C.attendu=v;},{class:"voix"}));
   app.appendChild(fld(t("condModel"),"text",C.modele,function(v){C.modele=v;},{placeholder:"Claude, ChatGPT, Gemini…"}));
   app.appendChild(fld(t("condDate"),"date",C.date,function(v){C.date=v;}));
   function pick(lbl,obj,key){app.appendChild(h("label",{text:lbl}));app.appendChild(h("div",{class:"seg"},Object.keys(obj).map(function(k){return h("button",{class:"opt","aria-pressed":String(C[key]===k),text:obj[k],on:{click:function(){C[key]=C[key]===k?"":k;save();render();}}});})));}
@@ -959,9 +962,9 @@ function vGarder(){
     h("button",{class:"txtbtn",text:t("imp"),on:{click:function(){document.getElementById("fileIn").click();}}})])));
   app.appendChild(top(t("lieu")));
   app.appendChild(h("p",{class:"s",text:t("lieuHint")}));
-  app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;}));
-  app.appendChild(fld(t("addr"),"text",data.lieu.adresse,function(v){data.lieu.adresse=v;}));
-  app.appendChild(fld(t("why"),"textarea",data.lieu.note,function(v){data.lieu.note=v;}));
+  app.appendChild(fld(t("name"),"text",data.lieu.nom,function(v){data.lieu.nom=v;},{class:"voix"}));
+  app.appendChild(fld(t("addr"),"text",data.lieu.adresse,function(v){data.lieu.adresse=v;},{class:"voix"}));
+  app.appendChild(fld(t("why"),"textarea",data.lieu.note,function(v){data.lieu.note=v;},{class:"voix"}));
   if(PLUS)app.appendChild(h("pre",{class:"out",text:md()}));
 }
 function fname(){return "judging-ai-"+(data.lieu.nom||"journal").normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^\w-]+/g,"-").replace(/^-|-$/g,"").slice(0,40)+"-"+new Date().toISOString().slice(0,10);}
