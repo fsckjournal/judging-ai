@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Judging AI">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="icon" href="../icon-192.png">
+<title>Judging AI</title>
+<link rel="stylesheet" href="../ds.css">
+</head>
+<body class="ja">
+<div id="app" class="ja-accueil"></div>
+<script id="cours" type="application/json">{"semaine": "S4", "seances": [{"id": "S1", "date": "2026-09-04", "fr": {"titre": "classer le statut", "detail": "O·R·I·X · Ayoub · adopter un lieu"}, "en": {"titre": "classify the standing", "detail": "O·R·I·X · Ayoub · adopt a place"}}, {"id": "S2", "date": "2026-09-11", "fr": {"titre": "vérifier : sources et attribution", "detail": "les quatre issues, les quatre gestes, la règle d'or · le modèle sur le lieu du binôme · le journal"}, "en": {"titre": "verify: sources and attribution", "detail": "the four outcomes, the four moves, the golden rule · the model on the pair's place · the journal"}}, {"id": "S3", "date": "2026-09-18", "fr": {"titre": "vérifier & superviser", "detail": "faussaires et vérificateurs · SKILL.md v0, testée sans et avec · début du dossier du lieu"}, "en": {"titre": "verify & oversee", "detail": "forgers and checkers · SKILL.md v0, tested without and with · the place dossier begins"}}, {"id": "S4", "date": "2026-09-25", "fr": {"titre": "borner & autorité", "detail": "trois chiffres sur un bâtiment de Beyrouth · sans SKILL.md, avec SKILL.md, avec le SKILL.md du binôme · noter, citer, signer · le dossier exporté"}, "en": {"titre": "bound & authority", "detail": "three figures about a Beirut building · no SKILL.md, SKILL.md, the pair's SKILL.md · score, cite, sign · the dossier exported"}}, {"id": "S5", "date": "2026-10-02", "fr": {"titre": "décider & défendre", "detail": "accepter, réviser, refuser ou faire remonter · l'audit principal remis"}, "en": {"titre": "decide & defend", "detail": "accept, revise, refuse or escalate · the main audit handed out"}}, {"id": "S6", "date": "2026-10-09", "fr": {"titre": "SKILL.md et hooks", "detail": "le dossier rendu · la présentation orale"}, "en": {"titre": "the SKILL.md and its hooks", "detail": "the dossier handed in · the oral presentation"}}], "travaux": [{"poids": "40 %", "fr": {"titre": "Le dossier du lieu", "detail": "SKILL.md et hooks, construits sur le lieu du binôme, testés sans et avec, ajustés de version en version.", "quand": "un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale"}, "en": {"titre": "The place dossier", "detail": "the SKILL.md and its hooks, built on the pair's place, tested without and with, adjusted version after version.", "quand": "one file per pair, handed in on 9 October (S6), defended at the oral presentation"}}, {"poids": "60 %", "fr": {"titre": "L'audit à fautes contrôlées", "detail": "un rapport généré par IA contenant des fautes contrôlées ; reconstitution des sources, correction des affirmations, mémo de responsabilité signé.", "quand": "essai de la grille et audit remis le 2 octobre (S5) · rapport rendu le 9 octobre (S6)"}, "en": {"titre": "The seeded-error audit", "detail": "an AI-generated report containing seeded errors; sources reconstructed, claims corrected, an accountability memo signed.", "quand": "grid practice and audit handed out on 2 October (S5) · report handed in on 9 October (S6)"}}, {"poids": "", "fr": {"titre": "La présentation orale", "detail": "défendre ses preuves, ses incertitudes, ses décisions. En binôme (10 minutes) ou seul (5 minutes), au choix.", "quand": "9 octobre"}, "en": {"titre": "The oral presentation", "detail": "the defence of the evidence, the uncertainties, the decisions. In a pair (10 minutes) or alone (5 minutes), by choice.", "quand": "9 October"}}], "annonces": []}</script>
+<script id="carte" type="application/json">{"categorie": {"fr": "statut", "en": "standing"}, "titre": {"fr": "O·R·I·X : le {categorie} d'une affirmation, jamais sa vérité", "en": "O·R·I·X: the {categorie} of a claim, never its truth"}, "lettres": [{"l": "O", "nom": "Observation", "fr": {"def": "un constat : quelqu'un l'a vu, mesuré ou compté, et dit quand", "question": "qui l'a constaté, à quelle date ?", "piege": "une phrase peut imiter la forme d'un relevé sans relevé ; le relevé d'un autre, recopié, est une source (R)"}, "en": {"def": "an observation: someone saw, measured or counted it, and says when", "question": "who observed it, on what date?", "piege": "a sentence can imitate the form of a survey without a survey; someone else's survey, copied, is a source (R)"}}, {"l": "R", "nom": "Retrieval", "fr": {"def": "une source nommée, ouverte, qui dit cela", "question": "quelle source, et dit-elle cela ?", "piege": "la source existe mais ne dit pas cela, le mal attribué : ce n'est plus R ; I si elle en dit une partie et que la phrase fait le pas, X si elle n'en dit rien"}, "en": {"def": "a named source, opened, that says it", "question": "which source, and does it say that?", "piege": "the source exists but does not say that, the misattributed: it is no longer R; I if it says part of it and the sentence takes the step, X if it says nothing of it"}}, {"l": "I", "nom": "Inference", "fr": {"def": "des prémisses (O ou R) et un pas qu'elles ne font pas elles-mêmes, dit ou non", "question": "depuis quelles prémisses ?", "piege": "l'inférence qui ne se dit pas : elle prend l'air d'un O ou d'un R"}, "en": {"def": "premises (O or R) and a step they do not take themselves, said or not", "question": "from which premises?", "piege": "the inference that does not say so: it looks like an O or an R"}}, {"l": "X", "nom": "Invention", "fr": {"def": "la forme d'un fait ; rien de ce qu'elle avance ne la porte", "question": "qu'est-ce qui le porte ? rien", "piege": "une invention peut être vraie par hasard ; elle reste une invention"}, "en": {"def": "the form of a fact; nothing it puts forward carries it", "question": "what carries it? nothing", "piege": "an invention can be true by chance; it remains an invention"}}], "regles": {"fr": ["Une seule question : qu'est-ce qui porte cette affirmation, telle qu'elle a été faite ? O, R, I et X en sont les quatre réponses, données une fois le lien vérifié. Avant, « à vérifier » n'est pas une lettre.", "{Categorie} ≠ vérité. Une affirmation vraie peut être une invention ; une fausse peut être un retrieval correct d'une source qui se trompe.", "Ce qu'on trouve après coup porte une autre affirmation : la nôtre, avec sa propre lettre.", "Un modèle constate ce qu'il a sous les yeux : une page, un plan, un calcul. Le bâtiment, jamais : ce qu'il en dit passe par R ou par I.", "Scinder les clauses composées. « Érigé en 1932, l'un des mieux conservés » = deux affirmations.", "Une absence est une affirmation sur l'espace cherché. « Introuvable » s'écrit avec ce qui a été cherché, ou ne s'écrit pas."], "en": ["One question: what carries this claim, as it was made? O, R, I and X are its four answers, given once the link is checked. Before that, “to be checked” is not a letter.", "{Categorie} ≠ truth. A true claim can be an invention; a false one can be a correct retrieval from a source that is wrong.", "What we find afterwards carries another claim: ours, with its own letter.", "A model observes what is in front of it: a page, a drawing, a calculation. Never the building: what it says about the building goes through R or I.", "Split compound clauses. “Built in 1932, one of the best preserved” = two claims.", "An absence is a claim about the space searched. “Not found” is written with what was searched, or not written at all."]}, "actions": ["Classify", "Verify", "Bound", "Decide and defend"], "cours": {"fr": "Juger l'IA : preuves et autorité", "en": "Judging AI: Evidence and Authority"}, "actions_i18n": {"fr": ["Classer", "Vérifier", "Borner", "Décider et défendre"], "en": ["Classify", "Verify", "Bound", "Decide and defend"]}}</script>
+<script src="../commun.js"></script>
+<script>
+(function(){
+"use strict";
+/* Juger l'IA · accueil sur le système V3 (_build/ds) : d'abord le premier écran, noir (seul ou en binôme, les noms, le carré de la paire) ;
+   puis la bande (l'en-tête avec le carré de la paire, les deux vues, le titre) ; en dessous, des rangées entre filets (.ja-plan). #cours s'ouvre sur la bande. */
+var C=JSON.parse(document.getElementById("cours").textContent), K=JSON.parse(document.getElementById("carte").textContent);
+var h=JA.h, lang=JA.lang();
+var T={
+ fr:{vSeance:"Séance {n} · aujourd'hui",vCours:"Le cours · calendrier, carte, notes",seance:"séance",lire:"la question",lireGo:"écrire la question →",
+  vous:"Travail",seul:"seul",binome:"en binôme",votreNom:"Nom",nom1:"Nom 1",nom2:"Nom 2",entrer:"entrer →",
+  skill:"SKILL.md",skillTxt:"L'écrire avec un agent, la figer en v0.",skillFige:"figée : ",skillGo:"écrire, figer →",
+  banc:"le banc",bancTxt:"La même question sans SKILL.md (A), avec SKILL.md (C), avec le SKILL.md du binôme (D). Un autre binôme coche les six cases.",bancGo:"commencer →",
+  dossier:"le dossier · 40 %",dossierTxt:"Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale.",dossierGo:"les critères →",
+  autres:"les autres pages",plus:"SKILL.md, le dossier, les autres pages",journal:"le journal",s3:"la séance S3 (fiches)",entr:"s'entraîner",atelier:"l'atelier S3",
+  semaine:"cette semaine",semestre:"le semestre",carte:"la carte",travaux:"les travaux notés",voir:"voir la carte en entier →",langL:"langue",themeL:"thème",version:"version",vuesL:"Vues de l’app"},
+ en:{vSeance:"Session {n} · today",vCours:"The course · calendar, card, grades",seance:"session",lire:"the question",lireGo:"write the question →",
+  vous:"Working",seul:"alone",binome:"as a pair",votreNom:"Name",nom1:"Name 1",nom2:"Name 2",entrer:"enter →",
+  skill:"the SKILL.md",skillTxt:"Written with an agent, frozen as v0.",skillFige:"frozen: ",skillGo:"write, freeze →",
+  banc:"the bench",bancTxt:"The same question with no SKILL.md (A), with SKILL.md (C), with the pair's SKILL.md (D). Another pair ticks the six boxes.",bancGo:"start →",
+  dossier:"the dossier · 40 %",dossierTxt:"One file per pair, handed in on 9 October (S6), defended at the oral presentation.",dossierGo:"the criteria →",
+  autres:"the other pages",plus:"SKILL.md, the dossier, the other pages",journal:"the journal",s3:"session S3 (worksheets)",entr:"practice",atelier:"the S3 workshop",
+  semaine:"this week",semestre:"the semester",carte:"the card",travaux:"graded work",voir:"see the whole card →",langL:"language",themeL:"theme",version:"version",vuesL:"App views"}
+};
+function t(k){return T[lang][k];}
+function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1);}
+/* la question telle qu'au mur (FR/Le mur S4.html) ; elle se pose en français dans les deux langues */
+var QUESTION="En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";
+function num(id){return String(id).replace(/^S/,"");}
+function jour(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{weekday:"long",day:"numeric",month:"long"});}
+function jourCourt(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"numeric",month:"long"});}
+var vue=location.hash==="#cours"?"cours":"seance";
+function courante(){return C.seances.filter(function(s){return s.id===C.semaine;})[0]||C.seances[0];}
+
+/* le premier écran : seul ou en binôme, puis les noms ; ils vont dans le dossier (binome.seul, binome.noms), les mêmes que skill/#question */
+function premier(box){
+  var D=JA.charger(),s=h("section",{class:"ja-nuit",id:"qui"});
+  function pret(){s.classList.toggle("pret",D.binome.seul!==null&&D.binome.noms.length>=(D.binome.seul?1:2));}
+  function garder(){JA.enregistrer(D);pret();}
+  function champ(id,lbl,val,set){var i=h("input",{type:"text",id:id,autocomplete:"name"});i.value=val||"";i.addEventListener("input",function(){set(i.value);garder();});return h("div",null,[h("label",{class:"k",for:id,text:lbl}),i]);}
+  function noms(){
+    var z=h("div",{class:"noms"+(D.binome.seul===false?" deux-noms":"")});
+    if(D.binome.seul===true)z.appendChild(champ("q-nom1",t("votreNom"),D.binome.noms[0],function(v){D.binome.noms=v.trim()?[v.trim()]:[];}));
+    else if(D.binome.seul===false){var a=[D.binome.noms[0]||"",D.binome.noms[1]||""],reste=D.binome.noms.slice(2);
+      function poser(){D.binome.noms=a.map(function(x){return x.trim();}).filter(Boolean).concat(reste);}
+      z.appendChild(champ("q-nom1",t("nom1"),a[0],function(v){a[0]=v;poser();}));z.appendChild(champ("q-nom2",t("nom2"),a[1],function(v){a[1]=v;poser();}));}
+    return z;}
+  var zone=noms();
+  s.appendChild(h("p",{class:"k",text:t("vous")}));
+  s.appendChild(h("div",{class:"ja-choix",id:"q-seul",role:"group","aria-label":t("vous")},[["seul",true],["binome",false]].map(function(o){
+    return h("button",{type:"button","data-v":o[0],"aria-pressed":String(D.binome.seul===o[1]),text:t(o[0]),on:{click:function(e){
+      D.binome.seul=o[1];if(o[1])D.binome.noms=D.binome.noms.slice(0,1);garder();
+      Array.prototype.forEach.call(e.currentTarget.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.currentTarget));});
+      var nz=noms();zone.replaceWith(nz);zone=nz;var f=nz.querySelector("input");if(f)f.focus();}}});})));
+  s.appendChild(zone);
+  s.appendChild(h("button",{type:"button",class:"ja-entrer",text:t("entrer"),on:{click:function(){document.getElementById("bande").scrollIntoView({behavior:"smooth"});}}}));
+  s.appendChild(h("button",{type:"button",class:"ja-carre",id:"paire"}));
+  pret();
+  box.appendChild(s);
+}
+/* la bande : l'en-tête, les deux vues (Tab), le titre */
+function bande(box){
+  var cur=courante();
+  var lb=h("button",{type:"button",id:"lang",class:"ja-langue","aria-label":t("langL")+" : "+lang,on:{click:function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem("judging-ai-journal-lang",lang);}catch(e){}var y=window.scrollY;render();window.scrollTo(0,y);}}});
+  lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";
+  var th=h("button",{type:"button",id:"theme","aria-label":t("themeL"),text:"◐",on:{click:basculerTheme}});
+  var nav=h("nav",{class:"ja-vues vues","aria-label":t("vuesL")},[["seance",t("vSeance").replace("{n}",num(C.semaine))],["cours",t("vCours")]].map(function(x){
+    return h("button",{type:"button","aria-pressed":String(vue===x[0]),text:x[1],on:{click:function(){vue=x[0];history.replaceState(null,"",x[0]==="cours"?"#cours":location.pathname);render();document.getElementById("bande").scrollIntoView();}}});}));
+  var sous=vue==="cours"?"ESAR · "+jourCourt(C.seances[0].date)+" → "+jourCourt(C.seances[C.seances.length-1].date):t("seance")+" "+num(cur.id)+" · "+jour(cur.date);
+  /* le carré de la paire dans l'en-tête, comme dans skill/ : #paire est celui du premier écran (JA.carre le lie), celui-ci le touche */
+  var sq=h("button",{type:"button",class:"ja-paire",on:{click:function(){var p=document.getElementById("paire");if(p)p.click();}}});
+  box.appendChild(h("header",{class:"ja-bande",id:"bande"},[h("div",{class:"ja-page"},[
+    h("div",{class:"ja-tete"},[h("span",{class:"ja-mot"},[h("span",{text:"judging ai"}),h("i",{text:sous})]),h("span",{class:"outils"},[lb,th,sq])]),
+    nav,
+    h("h1",{class:"ja-question",text:vue==="cours"?K.cours[lang]:cap(cur[lang].titre)})])]));
+}
+function seance(box){
+  var D=JA.charger(),cur=courante(),q=JA.quatre(D);
+  box.appendChild(h("p",{class:"ja-consigne",style:"margin:0 0 40px",text:cur[lang].detail}));
+  function rangee(no,titre,corps,action){return h("div",null,[h("span",{class:"no","aria-hidden":"true",text:no}),h("div",null,[h("h2",{text:cap(titre)})].concat(corps)),action]);}
+  box.appendChild(h("div",{class:"ja-plan"},[
+    rangee("1",t("lire"),[h("p",{class:"mur",id:"accueil-question",text:QUESTION})],h("a",{class:"ja-btn",href:"skill/#question",text:t("lireGo")})),
+    rangee("2",t("banc"),[h("p",{class:"texte",text:t("bancTxt")}),h("div",{class:"abc","aria-hidden":"true"},["A","C","D"].map(function(c){return h("span",null,[h("i",{class:q[c]>=0?"fait":null}),c]);}))],h("a",{class:"ja-lien",href:"skill/",text:t("bancGo")}))]));
+}
+function cours(box){
+  var s=h("div",{class:"ja-cours"}),cur=C.seances.filter(function(x){return x.id===C.semaine;})[0];
+  /* les rangées de la vue séance (.ja-plan) : le numéro ou la lettre, le titre, le détail ; chaque liste entre deux filets de 2px */
+  function rangee(cls,no,titre,corps){return h("div",{class:cls||null},[h("span",{class:"no",text:no}),h("div",null,[h("h3",{text:titre})].concat(corps))]);}
+  function liste(cls,lab,rangees,apres){return h("section",{class:cls},[h("h2",{class:"ja-lab",text:lab}),h("div",{class:"ja-plan"},rangees)].concat(apres||[]));}
+  if(cur)s.appendChild(liste("semaine",t("semaine"),[rangee("",cur.id,cap(cur[lang].titre),[h("p",{class:"texte",text:cur[lang].detail})])]));
+  var past=true;
+  s.appendChild(liste("semestre",t("semestre"),C.seances.map(function(x){var now=x.id===C.semaine;if(now)past=false;
+    return rangee(now?"maintenant":past?"passe":"",x.id,cap(x[lang].titre),[h("p",{class:"texte",text:jourCourt(x.date)+" · "+x[lang].detail})]);})));
+  /* la carte : le nom et sa définition sur une ligne, « Observation · directement vu… » */
+  s.appendChild(liste("carte",t("carte"),K.lettres.map(function(L){return rangee("",L.l,L.nom,[h("span",{class:"def",text:" · "+L[lang].def+"."})]);}),
+    [h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"../journal/#carte",text:t("voir")})])]));
+  s.appendChild(liste("travaux",t("travaux"),C.travaux.map(function(w){return rangee("",w.poids||"·",w[lang].titre,[h("p",{class:"texte",text:w[lang].detail}),h("p",{class:"quand",text:w[lang].quand})]);})));
+  /* retirés de la vue séance (25 Sept, « the app is too complicated ») : SKILL.md (écrire, versions, charger), le dossier, les autres pages */
+  var D=JA.charger(),n=D.skill.versions.length,v=n?D.skill.versions[n-1]:null;
+  s.appendChild(liste("outils",t("plus"),[
+    rangee("","",cap(t("skill")),[n?h("p",{class:"texte"},[document.createTextNode(t("skillFige")+"v"+v.n+" · "+(v.nom||"…"))]):h("p",{class:"texte",text:t("skillTxt")}),h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"skill/#ecrire",text:t("skillGo")})])]),
+    rangee("","",cap(t("dossier")),[h("p",{class:"texte",text:t("dossierTxt")}),h("p",{class:"ja-suite"},[h("a",{class:"ja-lien",href:"skill/#dossier",text:t("dossierGo")})])])],
+    [h("div",{class:"ja-autres"},[
+    h("a",{class:"ja-lien",href:"../journal/",text:t("journal")}),h("a",{class:"ja-lien",href:"../s1/",text:"S1 · 4 septembre"}),h("a",{class:"ja-lien",href:"../s2/",text:"S2 · 11 septembre"}),h("a",{class:"ja-lien",href:"../s3/",text:t("s3")}),h("a",{class:"ja-lien",href:"../s4/",text:"S4 · 25 septembre"}),h("a",{class:"ja-lien",href:"../entrainement/",text:t("entr")}),h("a",{class:"ja-lien",href:"../atelier/",text:t("atelier")})])]));
+  box.appendChild(s);
+}
+/* le carré de l'en-tête dans la vue séance porte le même nom que #paire */
+function nommerCarre(){var p=document.getElementById("paire"),q=document.querySelector(".ja-tete .ja-paire:not(#paire)");if(p&&q)q.setAttribute("aria-label",p.getAttribute("aria-label")||"");}
+function render(){
+  document.documentElement.lang=lang;
+  var app=document.getElementById("app");app.innerHTML="";
+  premier(app);
+  bande(app);
+  var page=h("div",{class:"ja-page ja-ecran"});
+  if(vue==="cours")cours(page);else seance(page);
+  page.appendChild(h("p",{class:"ja-etat ja-version-app",id:"ja-version",text:"judging ai · "+t("version")+" "+JA.VERSION}));
+  app.appendChild(page);
+  JA.carre();
+  /* JA.carre a lié #paire en premier : le nom est à jour quand l'en-tête le recopie */
+  var p=document.getElementById("paire");if(p)p.addEventListener("click",nommerCarre);
+  nommerCarre();
+}
+var theme="";try{theme=localStorage.getItem("judging-ai-journal-theme")||"";}catch(e){}
+function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}applyTheme();
+function basculerTheme(){var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;theme=dark?"light":"dark";applyTheme();try{localStorage.setItem("judging-ai-journal-theme",theme);}catch(e){}}
+render();
+if(vue==="cours")document.getElementById("bande").scrollIntoView();
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
+})();
+</script>
+</body>
+</html>

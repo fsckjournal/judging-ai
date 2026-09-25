@@ -464,3 +464,5 @@ details.repli[open]>.ja-champs{padding:12px 0 8px}
 /* on a phone the home's subtitle takes its own line under « judging ai » and the tools, instead of being cut */
 @media (max-width:700px){.ja-accueil .ja-tete{flex-wrap:wrap;row-gap:0}.ja-accueil .ja-mot{display:contents}
  .ja-accueil .ja-mot i{order:3;flex:1 0 100%;margin:0;overflow:visible;text-overflow:clip;white-space:normal}}
+
+.ja-pas .ailleurs[aria-current]{color:var(--encre);font-weight:600}

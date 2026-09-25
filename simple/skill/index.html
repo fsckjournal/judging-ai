@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Judging AI">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" href="../../icon-180.png">
+<link rel="icon" href="../../icon-192.png">
+<title>Judging AI · Atelier SKILL.md</title>
+<link rel="stylesheet" href="../../ds.css">
+</head>
+<body class="ja">
+<header class="ja-bande"><div class="ja-page">
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><span id="qui" class="qui"></span></span><span class="outils"><span id="save" class="ja-etat"></span><button type="button" id="lang" class="ja-langue"><b>fr</b> · en</button><button type="button" id="theme">◐</button><button type="button" id="paire"></button></span></div>
+<nav class="ja-pas" id="etapes"></nav>
+<div id="tete"></div>
+</div></header>
+<main class="ja-page ja-ecran" id="app"></main>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<dialog id="dlg"><form method="dialog" id="dlgf"></form></dialog>
+<script src="../../commun.js"></script>
+<script>
+/* S4 : l'éditeur part vide ; le binôme y colle le SKILL.md entier que le modèle lui a donné (le nom et la description se remplissent seuls). */
+var MODELE={nom:"notre-batiment-v0",description:"",corps:""};
+</script>
+<script>
+(function(){
+"use strict";
+/* Juger l'IA · skill/ sur le système V3 (_build/ds) · une chose par écran.
+   Chaque écran s'ouvre sur la bande : l'en-tête, les étapes (cinq carrés : la question, A, C, D, les trois ; seul le nom de l'étape courante est écrit ;
+   « SKILL.md · versions » à droite), puis le titre de l'écran. B (générique) n'est plus proposé : il ne s'ouvre, depuis « les trois »,
+   que si le dossier contient déjà un essai B. SKILL.md : écrire et figer → les versions et la comparaison → charger → le dossier (export et import, là seulement).
+   Les données ne changent pas : JA.charger / JA.enregistrer, format juger-ia-dossier/1 (commun.js). */
+var h=JA.h, lang=JA.lang();
+var T={
+ fr:{titre:"L'atelier SKILL.md",
+  eQuestion:"la question",eTrois:"les trois",eSkill:"SKILL.md",eVersions:"versions",eCharger:"charger",eDossier:"le dossier",eB:"générique",
+  noms:"Noms (séparés par des virgules)",lieu:"Lieu du dossier",qSalle:"question de la salle : Issam Fares Institute",qLieu:"même question : lieu du dossier",lieuVide:"D'abord, le lieu du dossier.",question:"La question, identique à chaque essai",questionVide:"D'abord, la question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"modifier la question",copierQ:"copier la question",copierV:"copier v{n}",
+  qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les essais ne se comparent pas.",
+  commencer:"Commencer : A, sans SKILL.md →",
+  consigne:{A:"Nouvelle conversation, sans SKILL.md. La question telle quelle.",B:"SKILL.md générique chargé ou collé, puis la question.",C:"SKILL.md collé comme premier message, puis la question.",D:"Le SKILL.md du binôme, figé, chargé ou collé, puis la question."},
+  version:"Version essayée",app:"App",modele:"Modèle affiché (et version)",date:"Date",web:"Accès web",oui:"oui",non:"non",mode:"SKILL.md",charg:"chargée",coll:"collée",
+  source:"SKILL.md : nom ou source",reponse:"La réponse (entière)",
+  enreg:"Enregistrer l'essai",manqueE:"Il manque : ",enregistre:"Essai {n} enregistré",
+  pasDeV:"D'abord, une version figée : un essai D dit quelle version du SKILL.md du binôme a été chargée.",allerFiger:"figer v0 →",
+  essai:"Essai",cases:"les six cases, cochées par un autre binôme",pasNote:"pas encore noté",
+  bilan:"le bilan de cet essai",etayees:"étayées",contredites:"contredites",non_resolues:"non résolues",utilisables:"utilisables",
+  gagne:"Ce qui a été gagné",perdu:"Ce qui a été perdu",decision:"La décision : garder, réviser ou abandonner quelle instruction, et pourquoi",
+  refaire:"nouvel essai sous {c}",annuler:"annuler",suivant:{A:"C →",B:"les trois →",C:"D →",D:"les trois →"},
+  qAucun:"pas encore d'essai",qDiff4:"Ces réponses ne viennent pas toutes de la même question : elles ne se comparent pas.",
+  nom:"name : le nom",nomAide:"Minuscules, chiffres et tirets ; 64 caractères au plus. Le dossier du zip porte ce nom.",nomMal:"Minuscules, chiffres et tirets seulement ; sera exporté comme : ",nomReserve:"Claude refuse un nom qui contient « claude » ou « anthropic ».",
+  desc:"description : quand l'utiliser",descAide:"200 caractères au plus : c'est la limite de Claude. Le modèle lit cette phrase pour décider de charger le SKILL.md.",trop:"trop long de {n}",
+  corps:"Le corps de SKILL.md (Markdown)",corpsAide:"Des instructions testables : une phrase chacune, vérifiable.",collerIci:"Ici, le SKILL.md entier donné par le modèle (de --- à la fin) : le nom et la description se remplissent seuls.",fm:"frontmatter généré",
+  nvIntro:"Fige le texte actuel de l'éditeur. Une version figée ne se modifie plus ; l'éditeur reste libre pour la suivante.",
+  change:"Ce que nous avons changé",pourquoi:"Pourquoi (quel essai l'a montré)",figer:"Figer v{n}",signerAide:"Une touche sur la réponse à signer.",descLong:"La description de cette version fait {l} caractères ; Claude en accepte 200 au plus et refusera le zip. Issues : une description raccourcie dans « SKILL.md » et une nouvelle version figée, ou « copier le texte ».",manque:"Manque : ce qui a changé et pourquoi.",fige:"v{n} figée",
+  aucune:"Aucune version figée. La première sera v0.",figeeLe:"figée le",brouillon:"brouillon (éditeur)",
+  cmp:"comparer",cmpIntro:"Deux versions, ligne à ligne : à gauche ce qui a été retiré, à droite ce qui a été ajouté.",a:"de",b:"à",retire:"{n} retirées",ajoute:"{n} ajoutées",identiques:"Les deux textes sont identiques.",pareil:"… {n} lignes identiques",
+  exIntro:"La version à charger, au choix. Le zip contient un dossier à son nom, avec SKILL.md dedans.",quoi:"Version à exporter",zip:"Télécharger {nom}.zip",md:"SKILL.md seul",copier:"copier le texte",copie:"Copié",
+  invalide:"Pas d'export tant que le nom ou la description ne tiennent pas dans les limites.",
+  aide:[["Claude","claude.ai, toutes les offres, y compris gratuite",["Réglages : exécution de code activée.","Customize > Skills : import du fichier .zip.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
+   ["ChatGPT","Plus ou Pro",["Onglet Skills (Plugins · Skills · GPTs) : import.","D'abord le .zip ; s'il est refusé, SKILL.md seul.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
+   ["Coller","toute app, Gemini compris",["Bouton « copier le texte ».","Nouvelle conversation : le texte comme premier message, puis la question exacte.","Au banc : « collée ». Ce n'est pas un chargement du SKILL.md."]]],
+  tous:"tous les essais",aucunE:"Aucun essai.",sansAvec:"sans puis avec",sans:"Réponse sans SKILL.md",avec:"Réponse avec SKILL.md",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",
+  saved:"✓ enregistré",plus:"plus : SKILL.md, versions, charger",leDossier:"le dossier →",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →"},
+ en:{titre:"The SKILL.md workshop",
+  eQuestion:"the question",eTrois:"the three",eSkill:"the SKILL.md",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
+  noms:"Names (comma separated)",lieu:"The dossier's place",qSalle:"room question: Issam Fares Institute",qLieu:"same question: the dossier's place",lieuVide:"First, the dossier's place.",question:"The question, identical in every run",questionVide:"First, the question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
+  qDiff:"This is not the previous run's question. Without the same question, the runs do not compare.",
+  commencer:"Start: A, no SKILL.md →",
+  consigne:{A:"New conversation, no SKILL.md. The question as it is.",B:"The generic SKILL.md loaded or pasted, then the question.",C:"SKILL.md pasted as the first message, then the question.",D:"The pair's frozen SKILL.md, loaded or pasted, then the question."},
+  version:"Version tried",app:"App",modele:"Displayed model (and version)",date:"Date",web:"Web access",oui:"yes",non:"no",mode:"The SKILL.md was",charg:"loaded",coll:"pasted",
+  source:"The SKILL.md's name or source",reponse:"The answer (whole)",
+  enreg:"Record the run",manqueE:"Missing: ",enregistre:"Run {n} recorded",
+  pasDeV:"First, a frozen version: a D run says which version of the pair's SKILL.md was loaded.",allerFiger:"freeze v0 →",
+  essai:"Run",cases:"the six boxes, ticked by another pair",pasNote:"not scored yet",
+  bilan:"this run's review",etayees:"supported",contredites:"contradicted",non_resolues:"unresolved",utilisables:"usable",
+  gagne:"What was gained",perdu:"What was lost",decision:"The decision: keep, revise or drop which instruction, and why",
+  refaire:"new run under {c}",annuler:"cancel",suivant:{A:"C →",B:"the three →",C:"D →",D:"the three →"},
+  qAucun:"no run yet",qDiff4:"These answers do not all come from the same question: they do not compare.",
+  nom:"name: the SKILL.md's name",nomAide:"Lowercase letters, digits and hyphens; 64 characters at most. The zip folder carries this name.",nomMal:"Lowercase letters, digits and hyphens only; will be exported as: ",nomReserve:"Claude refuses a name containing “claude” or “anthropic”.",
+  desc:"description: when to use it",descAide:"200 characters at most: Claude's limit. The model reads this sentence to decide whether to load the SKILL.md.",trop:"{n} too long",
+  corps:"The body of SKILL.md (Markdown)",corpsAide:"Testable instructions: one sentence each, checkable.",collerIci:"Here, the whole SKILL.md the model gave (from --- to the end): the name and description fill themselves in.",fm:"generated frontmatter",
+  nvIntro:"Freezes the editor's current text. A frozen version no longer changes; the editor stays free for the next one.",
+  change:"What we changed",pourquoi:"Why (which run showed it)",figer:"Freeze v{n}",signerAide:"One tap on the answer to sign.",descLong:"This version's description is {l} characters long; Claude accepts 200 at most and will refuse the zip. Ways out: a shorter description in “the SKILL.md” and a new frozen version, or “copy the text”.",manque:"Missing: what changed and why.",fige:"v{n} frozen",
+  aucune:"No frozen version. The first will be v0.",figeeLe:"frozen on",brouillon:"draft (editor)",
+  cmp:"compare",cmpIntro:"Two versions, line by line: on the left what was removed, on the right what was added.",a:"from",b:"to",retire:"{n} removed",ajoute:"{n} added",identiques:"The two texts are identical.",pareil:"… {n} identical lines",
+  exIntro:"Which version to load. The zip holds a folder named after the SKILL.md, with SKILL.md inside.",quoi:"Version to export",zip:"Download {nom}.zip",md:"SKILL.md only",copier:"copy the text",copie:"Copied",
+  invalide:"No export until the name and description fit the limits.",
+  aide:[["Claude","claude.ai, every plan including Free",["Settings: code execution on.","Customize > Skills: upload of the .zip file.","New conversation, then the exact question. On the bench: “loaded”."]],
+   ["ChatGPT","Plus or Pro",["Skills tab (Plugins · Skills · GPTs): upload.","First the .zip; if it is refused, SKILL.md alone.","New conversation, then the exact question. On the bench: “loaded”."]],
+   ["Pasting","any app, Gemini included",["“copy the text” button.","New conversation: the text as the first message, then the exact question.","On the bench: “pasted”. This is not loading the SKILL.md."]]],
+  tous:"all runs",aucunE:"No runs.",sansAvec:"without then with",sans:"Answer without the SKILL.md",avec:"Answer with the SKILL.md",suppr:"Delete",supprQ:"Deleting this run?",
+  saved:"✓ saved",plus:"more: the SKILL.md, versions, load",leDossier:"the dossier →",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps",skillV:"the SKILL.md · versions",leBanc:"← the bench",ouvrirB:"B · generic SKILL.md: the run →"}
+};
+function t(k){return T[lang][k];}
+function r(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
+function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1);}
+
+/* ---------- état ---------- */
+var D=JA.charger();
+var ed=D.skill.brouillon?JA.lireSkill(D.skill.brouillon):{nom:MODELE.nom,description:MODELE.description,corps:MODELE.corps};
+var BKEY="judging-ai-skill-brouillons";
+function nv(){return D.skill.versions.length;}
+function nouvelEssai(c){var p=D.essais[D.essais.length-1]||{};return {version:nv()?nv()-1:0,app:p.app||"Claude",modele:p.modele||"",date:JA.jour(),web:p.web||false,mode:c==="A"?"":"collée",question:"",sans:"",avec:"",etayees:0,contredites:0,non_resolues:0,utilisables:0,gagne:"",perdu:"",decision:"",condition:c,skill_source:"",reponse:"",cases:[false,false,false,false,"",false],note_par:"",citer:"",citer_pourquoi:""};}
+var B={change:"",pourquoi:"",cmpA:"",cmpB:"",exp:"",brouillons:{},refaire:{}};
+try{var rb=JSON.parse(localStorage.getItem(BKEY)||"null");if(rb&&typeof rb==="object")Object.keys(B).forEach(function(k){if(rb[k]!=null)B[k]=rb[k];});
+  if(rb&&rb.essai&&rb.essai.condition&&!B.brouillons[rb.essai.condition])B.brouillons[rb.essai.condition]=rb.essai;}catch(e){}
+function brouillon(c){var e=B.brouillons[c];if(!e||typeof e!=="object"){e=nouvelEssai(c);B.brouillons[c]=e;}else{var n=nouvelEssai(c);Object.keys(n).forEach(function(k){if(e[k]==null)e[k]=n[k];});e.condition=c;if(!e.modele&&n.modele){e.modele=n.modele;e.app=n.app;}}return e;}
+function save(){
+  D.skill.brouillon=JA.skillMd(ed.nom,ed.description,ed.corps);
+  var ok=JA.enregistrer(D);try{localStorage.setItem(BKEY,JSON.stringify(B));}catch(e){ok=false;}
+  var el=document.getElementById("save");el.textContent=ok?t("saved"):t("notsaved");el.className=ok?"ja-etat":"ja-etat erreur";
+}
+function nomExport(n){return String(n||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9-]+/g,"-").replace(/-+/g,"-").replace(/^-|-$/g,"").slice(0,64)||"skill";}
+function problemes(v){var p=[];if(!v.nom||v.nom!==nomExport(v.nom)||v.nom.length>64)p.push("name");if(/claude|anthropic/.test(v.nom))p.push("name");if(!v.description.trim()||v.description.length>200)p.push("description");return p;}
+function etat(c){var i=JA.quatre(D)[c];if(i<0)return "pas-vu";var e=D.essais[i];return (e.note_par.trim()||e.cases.some(Boolean))?"note":"vu";}
+
+/* ---------- outils ---------- */
+var fid=0;
+/* un champ (Field) : le libellé, un trait dessous ; cls "machine" pour ce qui s'écrit dans la voix du cours ou de la machine (Archivo), sinon la voix du binôme */
+function fld(lbl,type,val,set,ex,cls){ex=ex||{};var i=type==="textarea"?h("textarea",ex):h("input",Object.assign({type:type},ex));i.id=i.id||"f-"+(++fid);if(cls)i.classList.add(cls);i.value=val==null?"":val;i.addEventListener("input",function(){set(i.value,i);save();});if(type==="textarea"){var fit=function(){if(!i.isConnected)return;i.style.height="auto";i.style.height=i.scrollHeight+2+"px";};i.addEventListener("input",fit);requestAnimationFrame(fit);if(document.fonts)document.fonts.ready.then(fit);}return h("div",{class:"ja-champ"},[h("label",{text:lbl,for:i.id}),i]);}
+/* SegmentedChoice */
+function choix(val,opts,set,lab){return h("div",{class:"ja-choix",role:"group","aria-label":lab||null},opts.map(function(o){return h("button",{type:"button","data-v":o[0],"aria-pressed":String(val===o[0]),text:o[1],on:{click:function(e){set(o[0]);save();Array.prototype.forEach.call(e.currentTarget.parentNode.children,function(b){b.setAttribute("aria-pressed",String(b===e.currentTarget));});}}});}));}
+function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},2400);}
+function quand(iso){try{return new Date(iso).toLocaleString(lang==="fr"?"fr-FR":"en-GB",{timeZone:"Asia/Beirut",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"});}catch(e){return iso;}}
+function confirmer(msg,ok,cb){var f=document.getElementById("dlgf");f.innerHTML="";f.appendChild(h("p",{text:msg}));f.appendChild(h("div",{class:"ja-suite"},[h("button",{class:"ja-lien",value:"n",text:T[lang].annuler}),h("button",{class:"ja-btn",value:"y",text:ok})]));var d=document.getElementById("dlg");d.returnValue="";d.onclose=function(){if(d.returnValue==="y")cb();};d.showModal();}
+document.getElementById("dlg").addEventListener("click",function(e){var q=this.getBoundingClientRect();if(e.target===this&&(e.clientX<q.left||e.clientX>q.right||e.clientY<q.top||e.clientY>q.bottom))this.close("");});
+function copier(s){function fb(){var x=h("textarea",{style:"position:fixed;top:0;opacity:0"});x.value=s;document.body.appendChild(x);x.select();try{document.execCommand("copy");toast(t("copie"));}catch(e){}x.remove();}if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(s).then(function(){toast(t("copie"));},fb);else fb();}
+function textes(){var o=[{v:"b",l:t("brouillon"),s:ed}];D.skill.versions.forEach(function(v,i){o.push({v:String(i),l:"v"+v.n+" · "+(v.nom||"…"),s:v});});return o;}
+function texteDe(k){var s=k==="b"||!D.skill.versions[k]?ed:D.skill.versions[k];return {nom:s.nom,description:s.description,corps:s.corps,md:JA.skillMd(s.nom,s.description,s.corps)};}
+function liste(id,val,set){var s=h("select",{id:id});textes().forEach(function(o){s.appendChild(h("option",{value:o.v,text:o.l}));});s.value=val;if(s.value!==val)s.value=s.options[s.options.length-1].value;s.addEventListener("change",function(){set(s.value);save();});return s;}
+/* le texte collé tel quel ; les adresses deviennent des liens (nouvel onglet) */
+function liens(el,s){s=String(s||"");var re=/https?:\/\/[^\s<>"'`\])]+/g,m,k=0;while((m=re.exec(s))){var u=m[0].replace(/[.,;:!?»]+$/,"");if(m.index>k)el.appendChild(document.createTextNode(s.slice(k,m.index)));el.appendChild(h("a",{href:u,target:"_blank",rel:"noopener noreferrer",text:u}));k=m.index+u.length;re.lastIndex=k;}if(k<s.length)el.appendChild(document.createTextNode(s.slice(k)));return el;}
+function qui(){var e=document.getElementById("qui");if(e){e.textContent=D.binome.noms.join(" · ");e.title=e.textContent;}}
+function sansL(c){return JA.condLabel(c).replace(/^[A-D] · /,"");}
+/* the score, « 5/6 » : the figure in ink, « /6 » in encre-2 */
+function chiffre(el,e){el.innerHTML="";el.appendChild(h("b",{text:String(JA.score(e))}));el.appendChild(h("span",{text:"/"+JA.sur(e)}));return el;}
+
+/* ---------- comparaison ligne à ligne ---------- */
+function lignes(a,b){
+  var A=a.split("\n"),Bb=b.split("\n"),n=A.length,m=Bb.length,L=[],i,j;
+  for(i=0;i<=n;i++){L.push(new Uint16Array(m+1));}
+  for(i=n-1;i>=0;i--)for(j=m-1;j>=0;j--)L[i][j]=A[i]===Bb[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  var ops=[];i=0;j=0;
+  while(i<n&&j<m){if(A[i]===Bb[j]){ops.push(["=",A[i],Bb[j]]);i++;j++;}else if(L[i+1][j]>=L[i][j+1]){ops.push(["-",A[i]]);i++;}else{ops.push(["+",Bb[j]]);j++;}}
+  while(i<n)ops.push(["-",A[i++]]);while(j<m)ops.push(["+",Bb[j++]]);
+  var rows=[],k=0;
+  while(k<ops.length){
+    if(ops[k][0]==="="){rows.push([ops[k][1],"eq",ops[k][2],"eq"]);k++;continue;}
+    var del=[],add=[];while(k<ops.length&&ops[k][0]!=="="){(ops[k][0]==="-"?del:add).push(ops[k][1]);k++;}
+    for(var x=0;x<Math.max(del.length,add.length);x++)rows.push([x<del.length?del[x]:"",x<del.length?"moins":"vide",x<add.length?add[x]:"",x<add.length?"plus":"vide"]);
+  }
+  return {rows:rows,moins:ops.filter(function(o){return o[0]==="-";}).length,plus:ops.filter(function(o){return o[0]==="+";}).length};
+}
+function vueDiff(box){
+  box.innerHTML="";var ta=textes();
+  var a=B.cmpA,b=B.cmpB;
+  if(!ta.some(function(o){return o.v===a;}))a=ta.length>2?ta[ta.length-2].v:ta[ta.length-1].v;
+  if(!ta.some(function(o){return o.v===b;}))b=ta.length>1?"b":ta[0].v;
+  var la=ta.filter(function(o){return o.v===a;})[0].l,lb=ta.filter(function(o){return o.v===b;})[0].l;
+  var d=lignes(texteDe(a).md,texteDe(b).md);
+  box.appendChild(h("p",{class:"ja-etat",style:"margin-top:24px",text:d.moins||d.plus?r(t("retire"),{n:d.moins})+" · "+r(t("ajoute"),{n:d.plus}):t("identiques")}));
+  var g=h("div",{class:"ja-diff",id:"diff"},[h("div",{class:"en",text:la}),h("div",{class:"en",text:lb})]);
+  var rows=d.rows,i=0;
+  while(i<rows.length){
+    var j=i;while(j<rows.length&&rows[j][1]==="eq")j++;
+    var run=j-i,keepA=i===0?0:3,keepB=j===rows.length?0:3;
+    if(run>keepA+keepB+1){
+      rows.slice(i,i+keepA).concat([["…",""]]).concat(rows.slice(j-keepB,j)).forEach(function(x){
+        if(x[0]==="…"&&x.length===2){g.appendChild(h("div",{class:"c saut",text:r(t("pareil"),{n:run-keepA-keepB})}));g.appendChild(h("div",{class:"c saut",text:""}));}
+        else{g.appendChild(h("div",{class:"c eq",text:x[0]}));g.appendChild(h("div",{class:"c eq",text:x[2]}));}});
+      i=j;continue;
+    }
+    var x=rows[i];g.appendChild(h("div",{class:"c "+x[1],text:x[0]}));g.appendChild(h("div",{class:"c "+x[3],text:x[2]}));i++;
+  }
+  box.appendChild(g);
+}
+
+/* ---------- les écrans, les étapes (StepSquares) ---------- */
+var VUES=["question","a","c","d","trois","b","ecrire","versions","charger","dossier"],BANC=["question","a","c","d","trois"],SKILL=["ecrire","versions","charger"];
+var dernier="question";
+function route(){var v=(location.hash||"").replace(/^#/,"");if(v==="b"&&JA.quatre(D).B<0)v="";return VUES.indexOf(v)>=0?v:"question";}
+function pas(){
+  var nav=document.getElementById("etapes");nav.innerHTML="";var cur=route();
+  if(SKILL.indexOf(cur)>=0){
+    nav.appendChild(h("span",{class:"mots"},[["ecrire",t("eSkill")],["versions",t("eVersions")],["charger",t("eCharger")]].map(function(x){
+      return h("a",{href:"#"+x[0],"data-v":x[0],class:x[0]==="ecrire"&&!nv()?"pas-vu":null,"aria-current":cur===x[0]?"true":null,text:x[1]});})));
+    nav.appendChild(h("a",{class:"ailleurs",href:"#"+dernier,"data-v":"banc",text:t("leBanc")}));
+    return;
+  }
+  var e={question:D.binome.question.trim()?"vu":"pas-vu",a:etat("A"),c:etat("C"),d:etat("D"),trois:D.signer.condition?"note":"pas-vu"};
+  var noms={question:t("eQuestion"),a:JA.condLabel("A"),c:JA.condLabel("C"),d:JA.condLabel("D"),trois:t("eTrois"),b:JA.condLabel("B")};
+  nav.appendChild(h("span",{class:"q"},BANC.map(function(v){var ici=cur===v;
+    return h("a",{href:"#"+v,"data-v":v,class:e[v],"aria-current":ici?"true":null,"aria-label":noms[v],title:noms[v]},[h("i",{class:ici?"ici":e[v]!=="pas-vu"?"fait":null})]);})));
+  /* le chemin du jour : la question, A, C, D, les trois, puis le dossier (à droite) ; SKILL.md, versions et charger passent par « plus », en bas de l'écran */
+  nav.appendChild(h("span",{class:"nom",text:cur==="dossier"?"":noms[cur]}));
+  nav.appendChild(h("a",{class:"ailleurs",href:"#dossier","data-v":"dossier","aria-current":cur==="dossier"?"true":null,text:t("eDossier")}));
+}
+/* le titre de l'écran, dans la bande */
+function titre(tete,txt,cls){var e=h("h1",{class:"ja-question"+(cls?" "+cls:""),text:String(txt).replace(/ ([?!:;»])/g,"\u00a0$1")});tete.appendChild(e);return e;}
+
+/* ---------- écran : la question ---------- */
+function vueQuestion(tete,box){
+  if(!D.binome.question){D.binome.question=t("qModele");}
+  var q=fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;majQ();ajuster();pas();},{id:"b-question",class:"question",rows:"2",placeholder:t("qModele")});
+  q.classList.add("question");tete.appendChild(h("h1",{class:"vis-cache",text:cap(t("eQuestion"))}));tete.appendChild(q);
+  var ta=q.querySelector("textarea");function ajuster(){ta.style.height="auto";ta.style.height=ta.scrollHeight+"px";}
+  var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"ja-etat erreur alerte",id:"q-diff",text:t("qDiff")});
+  function majQ(){var cur=D.binome.question.trim(),RX=/^En cinq lignes au plus : .+\. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux \?$/;warn.hidden=!prev||cur===prev.trim()||(RX.test(cur)&&RX.test(prev.trim()));}
+  tete.appendChild(warn);majQ();
+  requestAnimationFrame(ajuster);if(document.fonts)document.fonts.ready.then(ajuster);
+  var s=h("section",{id:"ecran-question"});
+  s.appendChild(h("div",{class:"ja-deux"},[fld(t("noms"),"text",D.binome.noms.join(", "),function(v){D.binome.noms=v.split(",").map(function(x){return x.trim();}).filter(Boolean);qui();},{id:"b-noms"}),fld(t("lieu"),"text",D.binome.lieu,function(v){D.binome.lieu=v;},{id:"b-lieu"})]));
+  (function(){var QI=t("qModele"),QL=function(v){return "En cinq lignes au plus : "+v+". Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";};
+    function poser(x){D.binome.question=x;ta.value=x;majQ();ajuster();save();}
+    s.appendChild(h("div",{class:"ja-suite",id:"q-choix"},[
+      h("button",{type:"button",class:"ja-btn",id:"q-salle",text:t("qSalle"),on:{click:function(){poser(QI);}}}),
+      h("button",{type:"button",class:"ja-btn",id:"q-lieu",text:t("qLieu"),on:{click:function(){var v=(D.binome.lieu||"").trim();if(!v){toast(t("lieuVide"));return;}poser(QL(v));}}})]));})();
+  s.appendChild(h("div",{class:"ja-suite droite"},[h("a",{class:"ja-btn",href:"#a",text:t("commencer")})]));
+  box.appendChild(s);
+}
+
+/* ---------- écran : une condition (Condition) ---------- */
+function vueCond(tete,box,c){
+  var qv=D.binome.question.trim();
+  titre(tete,qv||t("questionVide"),"question-lue");
+  tete.appendChild(h("div",{class:"actions"},[qv?h("button",{type:"button",class:"ja-lien petit",id:"copier-q",text:t("copierQ"),on:{click:function(){copier(qv);}}}):null,h("a",{class:"ja-lien petit",href:"#question",text:t("modifier")})]));
+  var s=h("section",{class:"ja-cond",id:"banc","data-c":c});
+  s.appendChild(h("div",{class:"tete"},[h("span",{class:"ja-l",text:c,"aria-hidden":"true"}),h("h2",{class:"nom"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))])]));
+  s.appendChild(h("p",{class:"ja-consigne",text:t("consigne")[c]}));
+  var i=JA.quatre(D)[c];
+  if(i>=0&&(c==="B"||!B.refaire[c]))s.appendChild(blocEssai(i,c));
+  else s.appendChild(formulaire(c,i));
+  box.appendChild(s);
+}
+function formulaire(c,avant){
+  var E=brouillon(c),n=nv(),f=h("div",{class:"ja-champs",style:"margin-top:36px"});
+  function sansV(){return c==="D"&&!nv();}
+  var pdv=h("p",{class:"ja-etat erreur",id:"pas-de-v"},[document.createTextNode(t("pasDeV")+" "),h("a",{href:"#ecrire",text:t("allerFiger")})]);pdv.hidden=!sansV();f.appendChild(pdv);
+  if(c==="B"||c==="C")f.appendChild(fld(t("source"),"text",E.skill_source,function(v){E.skill_source=v;},{id:"e-source"},"machine"));
+  if(c==="D"&&n){var vs=h("select",{id:"e-version"});D.skill.versions.forEach(function(v,k){vs.appendChild(h("option",{value:String(k),text:"v"+v.n+" · "+(v.nom||"…")}));});
+    var cv=h("button",{type:"button",class:"ja-lien petit",id:"copier-v",on:{click:function(){var v=D.skill.versions[E.version];copier(JA.skillMd(v.nom,v.description,v.corps));}}});
+    function majCv(){cv.textContent=r(t("copierV"),{n:D.skill.versions[E.version].n});}
+    vs.value=String(Math.min(E.version,n-1));E.version=Number(vs.value);majCv();vs.addEventListener("change",function(){E.version=Number(vs.value);majCv();save();});
+    f.appendChild(h("div",{class:"ja-rangee"},[h("div",{class:"ja-champ"},[h("label",{text:t("version"),for:"e-version"}),vs]),h("div",null,[cv])]));}
+  var ap=h("select",{id:"e-app"});JA.APPS.forEach(function(a){ap.appendChild(h("option",{value:a,text:a}));});ap.value=E.app;ap.addEventListener("change",function(){E.app=ap.value;save();});
+  var fiche=h("div",{class:"ja-rangee",role:"group","aria-label":t("app")+" · "+t("modele")},[
+    h("div",{class:"ja-champ"},[h("label",{text:t("app"),for:"e-app"}),ap]),
+    fld(t("modele"),"text",E.modele,function(v){E.modele=v;},{id:"e-modele"},"machine"),
+    fld(t("date"),"date",E.date,function(v){E.date=v;},{id:"e-date"},"machine"),
+    h("div",{class:"ja-champ"},[h("label",{text:t("web")}),(function(){var g=choix(E.web?"o":"n",[["o",t("oui")],["n",t("non")]],function(v){E.web=v==="o";},t("web"));g.id="e-web";return g;})()])]);
+  if(c!=="A")fiche.appendChild(h("div",{class:"ja-champ"},[h("label",{text:t("mode")}),(function(){var g=choix(E.mode,[["chargée",t("charg")],["collée",t("coll")]],function(v){E.mode=v;},t("mode"));g.id="e-mode";return g;})()]));
+  f.appendChild(fiche);
+  f.appendChild(fld(t("reponse"),"textarea",E.reponse,function(v){E.reponse=v;},{id:"e-reponse",rows:"8"},"machine"));
+  var suite=h("div",{class:"ja-suite"},[h("button",{type:"button",class:"ja-btn",id:"enreg",text:t("enreg"),on:{click:function(){
+    if(sansV()){toast(t("pasDeV"));return;}
+    var m=[];if(!E.modele.trim())m.push(t("modele"));if(!E.date)m.push(t("date"));if(!D.binome.question.trim())m.push(t("question"));
+    if((c==="B"||c==="C")&&!E.skill_source.trim())m.push(t("source"));if(!E.reponse.trim())m.push(t("reponse"));
+    if(m.length){toast(t("manqueE")+m.join(" · "));return;}
+    var x=JSON.parse(JSON.stringify(E));x.condition=c;if(c==="A")x.mode="";x.cases=nouvelEssai(c).cases;x.question=D.binome.question;var k=Math.min(E.version,nv()-1);x.version=nv()?D.skill.versions[Math.max(0,k)].n:0;
+    D.essais.push(x);var nx=nouvelEssai(c);nx.version=E.version;B.brouillons[c]=nx;B.refaire[c]=false;save();render();toast(r(t("enregistre"),{n:D.essais.length}));}}})]);
+  if(avant>=0)suite.appendChild(h("button",{type:"button",class:"ja-lien",text:t("annuler"),on:{click:function(){B.refaire[c]=false;save();render();}}}));
+  f.appendChild(suite);
+  return f;
+}
+function blocEssai(i,c){
+  var e=D.essais[i],bc=JA.banc(),w=h("div",{id:"essai-"+i,style:"margin-top:36px"});
+  w.appendChild(h("p",{class:"ja-lab",text:t("essai")+" "+(i+1)+" · "+[e.app,e.modele,e.date,t("web")+" "+(e.web?t("oui"):t("non"))].concat(c==="A"?[]:[e.mode==="chargée"?t("charg"):t("coll")]).concat(c==="D"?["v"+e.version]:[]).concat(e.skill_source?[e.skill_source]:[]).join(" · ")}));
+  w.appendChild(liens(h("p",{class:"ja-rep reponse-bloc"}),e.reponse));
+  var sc=h("p",{class:"ja-score"}),sub=h("p",{class:"ja-etat"});
+  function majS(){chiffre(sc,e);sub.textContent=e.note_par?bc.notePar+" : "+e.note_par:t("pasNote");}
+  w.appendChild(h("p",{class:"ja-lab",text:t("cases")}));
+  w.appendChild(h("div",{class:"ja-cases"},bc.cases.map(function(txt,k){
+    if(k===4){var g=choix(e.cases[4]===null?"n":e.cases[4]===true?"1":e.cases[4]===false?"0":"",bc.c5,function(v){e.cases[4]=v==="n"?null:v==="1";majS();pas();},(k+1)+" · "+txt);g.id="c-"+i+"-4";
+      return h("div",{class:"ja-case c5"},[h("span",{text:(k+1)+" · "+txt}),g]);}
+    var cb=h("input",{type:"checkbox",id:"c-"+i+"-"+k});cb.checked=e.cases[k];cb.addEventListener("change",function(){e.cases[k]=cb.checked;save();majS();pas();});
+    return h("label",{class:"ja-case",for:cb.id},[cb,h("span",{text:(k+1)+" · "+txt})]);})));
+  w.appendChild(h("div",{class:"ja-note"},[fld(bc.notePar,"text",e.note_par,function(v){e.note_par=v;majS();pas();},{id:"n-"+i}),h("div",{class:"score-ligne"},[sc,sub])]));
+  majS();
+  w.appendChild(h("div",{class:"ja-citer",id:"cite-"+i},[h("p",{class:"ja-lab",text:bc.citer}),
+    (function(){var g=choix(e.citer,[["oui",t("oui")],["non",t("non")]],function(v){e.citer=v;},bc.citer);g.id="cit-"+i;return g;})(),
+    fld(bc.citerPq,"textarea",e.citer_pourquoi,function(v){e.citer_pourquoi=v;},{id:"cp-"+i,rows:"2"})]));
+  w.appendChild(h("details",{class:"repli"},[h("summary",{text:t("bilan")}),h("div",{class:"ja-champs"},[
+    h("div",{class:"ja-nombres"},["etayees","contredites","non_resolues","utilisables"].map(function(k){return fld(t(k),"number",String(e[k]),function(v){e[k]=Math.max(0,Math.floor(Number(v))||0);},{id:k+"-"+i,min:"0",step:"1",inputmode:"numeric"});})),
+    h("div",{class:"ja-deux"},[fld(t("gagne"),"textarea",e.gagne,function(v){e.gagne=v;},{id:"g-"+i,rows:"2"}),fld(t("perdu"),"textarea",e.perdu,function(v){e.perdu=v;},{id:"p-"+i,rows:"2"})]),
+    fld(t("decision"),"textarea",e.decision,function(v){e.decision=v;},{id:"d-"+i,rows:"2"})])]));
+  var suivant=({A:"c",B:"trois",C:"d",D:"trois"})[c];
+  w.appendChild(h("div",{class:"ja-suite"},[h("a",{class:"ja-btn",href:"#"+suivant,text:(c==="A"?JA.condLabel("C"):c==="C"?JA.condLabel("D"):t("eTrois"))+" →"}),
+    c==="B"?null:h("button",{type:"button",class:"ja-lien",id:"refaire",text:r(t("refaire"),{c:c}),on:{click:function(){B.refaire[c]=true;save();render();}}})]));
+  return w;
+}
+
+/* ---------- écran : les trois côte à côte, celle à signer (LesTrois) ---------- */
+function vueTrois(tete,box){
+  titre(tete,D.binome.question||cap(t("eTrois")),"question-lue");
+  var s=h("section",{id:"quatre"}),q=(function(){var r=JA.quatre(D),o=Object.assign({},r),cur=(D.binome.question||"").trim();if(!cur)return r;["A","B","C","D"].forEach(function(c){for(var i=D.essais.length-1;i>=0;i--){var x=D.essais[i];if(x.condition===c&&(x.question||"").trim()===cur){o[c]=i;return;}}});return o;})(),bc=JA.banc(),qs={};
+  s.appendChild(h("h2",{class:"ja-lab",id:"signer-titre",text:bc.signer}));
+  s.appendChild(h("p",{class:"ja-etat",id:"signer-aide",style:"margin:4px 0 16px",text:t("signerAide")}));
+  var conds=["A","C","D"].concat(q.B>=0?["B"]:[]);
+  /* the best score: the highest share of the boxes set, then the most boxes ticked (5/5 and 6/6: 6/6) */
+  var ratio=function(e){return JA.sur(e)?JA.score(e)/JA.sur(e)+JA.score(e)/1000:0;},best=0;
+  conds.forEach(function(c){var e=D.essais[q[c]];if(e&&JA.score(e))best=Math.max(best,ratio(e));});
+  var g=h("div",{class:"ja-trois"+(q.B>=0?" avec-b":""),id:"quatre-grille",role:"group","aria-labelledby":"signer-titre"},conds.map(function(c){
+    var i=q[c],e=D.essais[i],col=h("div",{"data-c":c,"data-v":c,role:"button",tabindex:"0","aria-pressed":String(D.signer.condition===c),class:i<0?"pas-vu":null,
+      on:{click:function(){choisir(c);},keydown:function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();choisir(c);}}}},
+      [h("div",{class:"ja-cond"},[h("div",{class:"tete"},[h("span",{class:"ja-l",text:c,"aria-hidden":"true"}),h("h3",{class:"nom"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))])])])]);
+    if(!e){col.appendChild(h("p",{class:"vide",text:t("qAucun")}));return col;}
+    qs[e.question.trim()]=1;
+    col.appendChild(chiffre(h("p",{class:"ja-score"+(best&&ratio(e)===best?" meilleur":"")}),e));
+    col.appendChild(h("p",{class:"m",text:e.reponse}));
+    return col;}));
+  s.appendChild(g);
+  if(Object.keys(qs).length>1)s.appendChild(h("p",{class:"ja-etat erreur alerte",style:"margin-top:16px",text:t("qDiff4")}));
+  if(q.B>=0)s.appendChild(h("p",{style:"margin:18px 0 0"},[h("a",{class:"ja-lien petit",href:"#b",id:"ouvrir-b",text:t("ouvrirB")})]));
+  function majSigne(){Array.prototype.forEach.call(g.children,function(d){var on=d.dataset.c===D.signer.condition,tag=d.querySelector(".ja-signee");d.classList.toggle("signe",on);d.setAttribute("aria-pressed",String(on));
+    if(on&&!tag)d.insertBefore(h("span",{class:"ja-signee",text:lang==="fr"?"signée":"signed"}),d.firstChild);if(!on&&tag)tag.remove();});}
+  function choisir(c){D.signer.condition=c;save();majSigne();pas();}
+  majSigne();
+  var pq=fld(bc.pourquoi,"textarea",D.signer.pourquoi,function(v){D.signer.pourquoi=v;},{id:"signer-pourquoi",rows:"3",class:"long"});
+  var lab=pq.querySelector("label");lab.className="ja-lab";
+  s.appendChild(h("div",{class:"ja-pourquoi"},[lab,pq]));
+  s.appendChild(h("div",{class:"ja-suite droite"},[h("a",{class:"ja-btn",href:"#dossier",id:"vers-dossier",text:t("leDossier")})]));
+  box.appendChild(s);
+}
+
+/* ---------- écran : écrire et figer ---------- */
+function vueEcrire(tete,box){
+  var n=nv();titre(tete,cap(t("eSkill")));
+  var s=h("section",{class:"ja-champs",id:"editeur"});
+  var cn=h("p",{class:"ja-compteur",id:"c-nom",style:"margin:8px 0 0"}),cd=h("p",{class:"ja-compteur",id:"c-desc",style:"margin:8px 0 0"}),fm=h("pre",{class:"m",id:"fm"});
+  function compte(){
+    var nm=ed.nom,ok=nm===nomExport(nm)&&nm.length<=64;
+    cn.textContent=nm.length+" / 64"+(ok?"":" · "+t("nomMal")+nomExport(nm))+(/claude|anthropic/.test(nm)?" · "+t("nomReserve"):"");cn.className="ja-compteur"+(ok&&!/claude|anthropic/.test(nm)?"":" trop");
+    var l=ed.description.length;cd.textContent=l+" / 200"+(l>200?" · "+r(t("trop"),{n:l-200}):"");cd.className="ja-compteur"+(l>200?" trop":"");
+    fm.textContent=JA.skillMd(ed.nom,ed.description,"").trim();
+  }
+  var fn=fld(t("nom"),"text",ed.nom,function(v){ed.nom=v;compte();},{id:"s-nom",class:"machine grand",maxlength:"80",autocapitalize:"off",spellcheck:"false"},"machine");
+  fn.appendChild(cn);fn.appendChild(h("p",{class:"ja-aide",text:t("nomAide")}));s.appendChild(fn);
+  var fdsc=fld(t("desc"),"textarea",ed.description,function(v){ed.description=v;compte();},{id:"s-desc",rows:"3",class:"machine"},"machine");
+  fdsc.appendChild(cd);fdsc.appendChild(h("p",{class:"ja-aide",text:t("descAide")}));s.appendChild(fdsc);
+  s.appendChild(h("details",{class:"repli",style:"margin:0"},[h("summary",{text:t("fm")}),fm]));
+  var fc=fld(t("corps"),"textarea",ed.corps,function(v,el){if(/^\s*---\r?\n[\s\S]*?\r?\n---/.test(v)){var p=JA.lireSkill(v.replace(/^\s+/,""));ed.nom=p.nom||ed.nom;ed.description=p.description||ed.description;ed.corps=p.corps;el.value=p.corps;document.getElementById("s-nom").value=ed.nom;document.getElementById("s-desc").value=ed.description;compte();}else ed.corps=v;},{id:"s-corps",class:"machine",rows:"18",spellcheck:"false",placeholder:t("collerIci")},"machine");
+  fc.appendChild(h("p",{class:"ja-aide",text:t("corpsAide")}));s.appendChild(fc);
+  compte();
+  box.appendChild(s);
+  box.appendChild(h("section",{class:"ja-section",id:"versions-figer"},[h("h2",{class:"ja-sous",text:r(t("figer"),{n:n})}),h("p",{class:"ja-consigne",style:"margin:0 0 24px",text:t("nvIntro")}),
+    n?h("div",{class:"ja-deux"},[fld(t("change"),"textarea",B.change,function(v){B.change=v;},{id:"v-change",rows:"2"}),fld(t("pourquoi"),"textarea",B.pourquoi,function(v){B.pourquoi=v;},{id:"v-pourquoi",rows:"2"})]):null,
+    h("div",{class:"ja-suite"},[h("button",{type:"button",class:"ja-btn",id:"figer",text:r(t("figer"),{n:n}),on:{click:function(){
+      if(n&&(!B.change.trim()||!B.pourquoi.trim())){toast(t("manque"));return;}
+      D.skill.versions.push({n:n,nom:ed.nom,description:ed.description,corps:ed.corps,change:n?B.change.trim():"",pourquoi:n?B.pourquoi.trim():"",figee_le:JA.beyrouth()});
+      B.change="";B.pourquoi="";B.cmpA="";B.cmpB="";Object.keys(B.brouillons).forEach(function(k){B.brouillons[k].version=n;});save();render();toast(r(t("fige"),{n:n}));}}}),
+      h("a",{class:"ja-lien",href:"#versions",text:t("eVersions")+" →"})])]));
+}
+
+/* ---------- écran : les versions (VersionCard), la comparaison ---------- */
+function vueVersions(tete,box){
+  var n=nv();titre(tete,cap(t("eVersions")));
+  var s=h("section",{id:"ecran-versions"});
+  if(!n)s.appendChild(h("p",null,[document.createTextNode(t("aucune")+" "),h("a",{class:"ja-lien",href:"#ecrire",text:t("allerFiger")})]));
+  var qd=JA.quatre(D).D,courante=qd>=0?D.essais[qd].version:n?D.skill.versions[n-1].n:-1;
+  var l=h("div",{class:"ja-versions versions"});
+  D.skill.versions.slice().reverse().forEach(function(v){
+    l.appendChild(h("div",{class:"ja-version"+(v.n===courante?" courante":"")},[h("span",{class:"n",text:"v"+v.n}),h("div",{class:"corps"},[
+      h("span",{class:"machine",text:v.nom||"…"}),
+      v.change?h("span",{class:"quoi",text:v.change}):null,
+      v.pourquoi?h("p",{class:"pq",text:v.pourquoi}):null,
+      h("details",null,[h("summary",{text:"SKILL.md"}),h("pre",{class:"m",text:JA.skillMd(v.nom,v.description,v.corps)})])]),
+      h("span",{class:"quand",text:t("figeeLe")+" "+quand(v.figee_le)})]));
+  });
+  if(n)s.appendChild(l);
+  var sc=h("section",{class:"ja-section",id:"comparer"},[h("h2",{class:"ja-sous",text:cap(t("cmp"))}),h("p",{class:"ja-consigne",style:"margin:0 0 24px",text:t("cmpIntro")})]),bx=h("div");
+  sc.appendChild(h("div",{class:"ja-deux"},[h("div",{class:"ja-champ"},[h("label",{text:t("a"),for:"cmp-a"}),liste("cmp-a",B.cmpA||(n>1?String(n-2):"b"),function(v){B.cmpA=v;vueDiff(bx);})]),h("div",{class:"ja-champ"},[h("label",{text:t("b"),for:"cmp-b"}),liste("cmp-b",B.cmpB||(n?String(n-1):"b"),function(v){B.cmpB=v;vueDiff(bx);})])]));
+  if(!B.cmpA)B.cmpA=sc.querySelector("#cmp-a").value;if(!B.cmpB)B.cmpB=sc.querySelector("#cmp-b").value;
+  sc.appendChild(bx);vueDiff(bx);
+  s.appendChild(sc);box.appendChild(s);
+}
+
+/* ---------- écran : charger ---------- */
+function vueCharger(tete,box){
+  var n=nv();titre(tete,cap(t("eCharger")));
+  var s=h("section",{id:"exporter"});
+  s.appendChild(h("p",{class:"ja-consigne",style:"margin:0 0 28px",text:t("exIntro")}));
+  var zipB=h("button",{type:"button",class:"ja-btn",id:"ex-zip"});
+  var dl=h("p",{class:"ja-etat erreur",id:"desc-long",style:"margin:16px 0 0"});
+  function majZip(){var x=texteDe(B.exp);zipB.textContent=r(t("zip"),{nom:nomExport(x.nom)});dl.textContent=r(t("descLong"),{l:x.description.length});dl.hidden=x.description.length<=200;}
+  s.appendChild(h("div",{class:"ja-champ",style:"max-width:560px"},[h("label",{text:t("quoi"),for:"ex-quoi"}),liste("ex-quoi",B.exp||(n?String(n-1):"b"),function(v){B.exp=v;majZip();})]));
+  s.appendChild(dl);
+  if(!B.exp)B.exp=s.querySelector("#ex-quoi").value;
+  function pret(){var x=texteDe(B.exp);if(problemes(x).length){toast(t("invalide"));return null;}return x;}
+  zipB.addEventListener("click",function(){var x=pret();if(!x)return;var nm=nomExport(x.nom);JA.telecharger(JA.zip([{nom:nm+"/"},{nom:nm+"/SKILL.md",texte:x.md}]),nm+".zip","application/zip");});
+  majZip();
+  s.appendChild(h("div",{class:"ja-suite"},[zipB,
+    h("button",{type:"button",class:"ja-lien",id:"ex-md",text:t("md"),on:{click:function(){var x=pret();if(x)JA.telecharger(x.md,"SKILL.md","text/markdown");}}}),
+    h("button",{type:"button",class:"ja-lien",id:"ex-copier",text:t("copier"),on:{click:function(){copier(texteDe(B.exp).md);}}})]));
+  s.appendChild(h("div",{class:"ja-colonnes"},t("aide").map(function(a){return h("div",null,[h("h2",{text:a[0]}),h("p",{class:"ja-lab",text:a[1]}),h("ol",null,a[2].map(function(x){return h("li",{text:x});}))]);})));
+  box.appendChild(s);
+}
+
+/* ---------- écran : le dossier (les critères, l'export et l'import, tous les essais) ---------- */
+function vueDossier(tete,box){
+  titre(tete,cap(lang==="fr"?"le dossier · 40 %":"the dossier · 40 %"));
+  var s=h("section");
+  s.appendChild(h("div",{id:"dossier"},[JA.criteres(D)]));
+  s.appendChild(JA.outils());
+  var hs=h("div",{class:"ja-section",id:"essais"},[h("h2",{class:"ja-sous",text:cap(t("tous"))})]);
+  if(!D.essais.length)hs.appendChild(h("p",{class:"ja-etat",text:t("aucunE")}));
+  var li=h("div",{class:"ja-essais"});
+  D.essais.map(function(e,i){return [e,i];}).reverse().forEach(function(p){
+    var e=p[0],i=p[1];
+    var titreE=t("essai")+" "+(i+1)+(e.condition?" · "+JA.condLabel(e.condition):" · "+t("sansAvec"))+(!e.condition||e.condition==="D"?" · v"+e.version:"")+" · "+e.app+(e.modele?" · "+e.modele:"");
+    var corps=e.condition?[h("div",{class:"champ"},[h("b",{text:t("reponse")}),liens(h("pre",{class:"m"}),e.reponse)]),h("p",{class:"ja-etat",text:JA.score(e)+"/"+JA.sur(e)+(e.note_par?" · "+JA.banc().notePar+" : "+e.note_par:"")})]
+      :[h("div",{class:"champ"},[h("b",{text:t("sans")}),h("pre",{class:"m",text:e.sans})]),h("div",{class:"champ"},[h("b",{text:t("avec")}),h("pre",{class:"m",text:e.avec})])];
+    li.appendChild(h("details",{class:"essai"},[h("summary",{text:titreE}),h("p",{class:"sub",text:[e.date,e.question].join(" · ")})].concat(corps).concat([
+      h("div",{class:"champ"},[h("b",{text:t("gagne")}),h("span",{class:"voix",text:e.gagne||"—"})]),h("div",{class:"champ"},[h("b",{text:t("perdu")}),h("span",{class:"voix",text:e.perdu||"—"})]),h("div",{class:"champ"},[h("b",{text:t("decision")}),h("span",{class:"voix",text:e.decision||"—"})]),
+      h("div",{class:"ja-suite droite",style:"margin-top:16px"},[h("button",{type:"button",class:"ja-lien",text:t("suppr"),on:{click:function(){confirmer(t("supprQ"),t("suppr"),function(){D.essais.splice(i,1);save();render();});}}})])])));
+  });
+  if(D.essais.length)hs.appendChild(li);
+  s.appendChild(hs);box.appendChild(s);
+}
+
+/* ---------- rendu ---------- */
+function render(){
+  document.documentElement.lang=lang;var lb=document.getElementById("lang");lb.innerHTML=lang==="fr"?"<b>fr</b> · en":"fr · <b>en</b>";lb.setAttribute("aria-label",t("langL")+" : "+lang);document.getElementById("theme").setAttribute("aria-label",t("themeL"));
+  document.getElementById("etapes").setAttribute("aria-label",t("etapes"));
+  var v=route(),box=document.getElementById("app"),tete=document.getElementById("tete");box.innerHTML="";tete.innerHTML="";
+  if(BANC.indexOf(v)>=0||v==="b")dernier=v;
+  if(v==="question")vueQuestion(tete,box);
+  else if(v==="a"||v==="c"||v==="d"||v==="b")vueCond(tete,box,v.toUpperCase());
+  else if(v==="trois")vueTrois(tete,box);
+  else if(v==="ecrire")vueEcrire(tete,box);
+  else if(v==="versions")vueVersions(tete,box);
+  else if(v==="charger")vueCharger(tete,box);
+  else vueDossier(tete,box);
+  if(SKILL.indexOf(v)<0)box.appendChild(h("p",{class:"ja-plus",style:"margin:56px 0 0"},[h("a",{class:"ja-lien petit",id:"plus",href:"#ecrire",text:t("plus")})]));
+  pas();qui();
+}
+window.addEventListener("hashchange",function(){render();window.scrollTo(0,0);});
+render();
+if(location.hash)setTimeout(function(){window.scrollTo(0,0);},0);
+document.getElementById("save").textContent="";
+document.getElementById("lang").onclick=function(){lang=lang==="fr"?"en":"fr";try{localStorage.setItem("judging-ai-journal-lang",lang);}catch(e){}render();};
+var theme="";try{theme=localStorage.getItem("judging-ai-journal-theme")||"";}catch(e){}
+function applyTheme(){if(theme)document.documentElement.setAttribute("data-theme",theme);else document.documentElement.removeAttribute("data-theme");}applyTheme();
+document.getElementById("theme").onclick=function(){var dark=theme?theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;theme=dark?"light":"dark";applyTheme();try{localStorage.setItem("judging-ai-journal-theme",theme);}catch(e){}};
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../../sw.js").catch(function(){});
+})();
+</script>
+</body>
+</html>
