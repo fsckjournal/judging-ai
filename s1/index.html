@@ -108,10 +108,76 @@ textarea{min-height:86px;resize:vertical}
 [hidden]{display:none!important}.embedded>.ja-bande,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 0 30px}.embedded .module-bar{margin-top:8px}
 </style>
 <link rel="stylesheet" href="../ds.css">
+<style>
+/* after ds.css: the session page on the course view's rows (index.html #cours, .ja-plan): 2px ink opens and closes a list, 1px between rows,
+   the number 28px/600 in a 64px column, the title 24px/500; Archivo only, the pair's own words in Source Serif 4 italic; no boxes, no rounded corners */
+main>.intro{margin:48px 0 0}
+main>.section{border-top:1px solid var(--encre);padding:0;margin:0}
+main>:not(.section)+.section{margin-top:48px;border-top-width:2px}
+main>.section:not(:has(+.section)){border-bottom:2px solid var(--encre)}
+.section>summary{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:10px 32px;align-items:baseline;padding:26px 0;min-height:44px}
+.section>summary .n{display:block;margin:0;font:600 28px/1 var(--f-sans);letter-spacing:-.02em;color:var(--encre)}
+.section>summary h2{display:block;margin:0;font:500 24px/1.2 var(--f-sans);letter-spacing:-.01em}
+.section>summary::after{content:"+";font:500 24px/1 var(--f-sans);color:var(--encre)}
+.section[open]>summary::after{content:"\2212"}
+.section>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.section>:not(summary){margin-left:96px}
+.section[open]{padding-bottom:36px}
+.section>summary+*{margin-top:0}
+.section>p,.section blockquote,.section ul{max-width:46em}
+.section blockquote{margin-top:22px;font:400 17px/1.55 var(--f-sans)}
+.section blockquote+.meta{margin-top:6px}
+.section .meta+.notice{border-top:1px solid var(--encre)}
+.section .big{margin-top:8px;margin-bottom:14px;font-size:clamp(28px,3.4vw,40px)}
+.section ul{list-style:none;padding:0;margin-top:12px;margin-bottom:0}
+.section li{padding:10px 0;border-top:1px solid var(--encre)}
+.step{margin:28px 0 8px;font:500 14px/1.3 var(--f-sans);color:var(--encre-2)}
+/* the card: its label under a 2px rule, the four letters as rows between 1px rules, closed by 2px */
+main>section.source{border-top:0;border-bottom:2px solid var(--encre);margin:56px 0 0;padding:0 0 24px}
+main>section.source>.top{margin-top:0}
+main>section.source>.med{margin:8px 0 18px}
+.source hr.r{border-top-width:1px;margin:16px 0}
+.chip{margin-right:.35em}
+/* one claim on the wall: a row between 1px rules */
+.section div.source{border-top:1px solid var(--encre);padding:20px 0 6px;max-width:none}
+.section div.source>.step{margin-top:0}
+.q{margin:8px 0;max-width:36em;font:500 22px/1.3 var(--f-sans);font-style:normal;letter-spacing:-.01em}
+/* a source's words and a model's answer: text under a 1px rule; the student's words in the pair's voice */
+.doc{margin:12px 0 0;max-width:46em;font:400 17px/1.5 var(--f-sans)}
+.doc.piece{border-top:1px solid var(--encre);padding-top:10px}
+.doc.piece+.s{margin-top:6px}
+.doc.tour{display:grid;grid-template-columns:7.5em minmax(0,1fr);gap:4px 16px;padding-top:10px;border-top:1px solid var(--encre)}
+.doc.tour .qui{font:500 14px/1.6 var(--f-sans);color:var(--encre-2)}
+.doc.tour.voix{font:italic 400 19px/1.4 var(--f-voix)}
+/* two columns between 2px rules, 1px between them (as .ja-colonnes) */
+.deux{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin-top:20px;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre)}
+.deux>div{min-width:0;padding:16px 24px 22px 0}
+.deux>div+div{padding:16px 0 22px 24px;border-left:1px solid var(--encre)}
+.deux>div>.s:first-child{margin-top:0}
+/* the six boxes and the totals: rows between rules, the figure in ink, « /6 » in encre-2 */
+table.t{width:100%;max-width:46em;border-collapse:collapse;margin-top:16px;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre);font:400 16px/1.45 var(--f-sans)}
+table.t th{text-align:left;font:500 14px/1.3 var(--f-sans);color:var(--encre-2);padding:10px 16px 10px 0}
+table.t td{padding:10px 16px 10px 0;border-top:1px solid var(--encre);vertical-align:baseline}
+table.t th:last-child,table.t td:last-child{padding-right:0}
+.sc{font:500 24px/1 var(--f-sans);letter-spacing:-.02em}
+.sc small{font-size:inherit;font-weight:400;color:var(--encre-2)}
+/* the four outcomes (S2): term and definition as rows */
+.section>div:not([class]){display:grid;grid-template-columns:minmax(8em,11em) minmax(0,1fr);column-gap:0;max-width:46em;margin-top:22px;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre)}
+.section>div:not([class])>b{font-weight:600;padding:12px 24px 12px 0}
+.section>div:not([class])>span{padding:12px 0}
+.section>div:not([class])>b:not(:first-child),.section>div:not([class])>b:not(:first-child)+span{border-top:1px solid var(--encre)}
+@media (max-width:700px){
+ .section>summary{grid-template-columns:40px minmax(0,1fr) auto;column-gap:16px;padding:22px 0}
+ .section>:not(summary){margin-left:0}
+ .deux{grid-template-columns:1fr}.deux>div{padding-right:0}.deux>div+div{padding:16px 0 22px;border-left:0;border-top:1px solid var(--encre)}
+ .doc.tour{grid-template-columns:1fr}
+ .section>div:not([class]){grid-template-columns:1fr}.section>div:not([class])>b+span{padding-top:0}.section>div:not([class])>b:not(:first-child)+span{border-top:0}
+ .q{font-size:20px}}
+</style>
 </head>
 <body>
 <header class="ja-bande" id="bande"><div class="ja-page">
-<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S1 · 4 septembre</i></span><span class="outils"><button type="button" id="theme" aria-label="thème">◐</button></span></div>
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S1 · 4 septembre</i></span><span class="outils"><button type="button" id="theme" aria-label="thème">◐</button><button type="button" id="paire"></button></span></div>
 <p class="ja-lab">ESAR · séance 1 · 4 septembre 2026</p>
 <h1 class="ja-question">Observer &amp; classer</h1>
 </div></header>
