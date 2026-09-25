@@ -4,7 +4,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-25.2";
+  var VERSION = "s4-v3-2026-09-25.3";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -22,7 +22,7 @@ var JA = (function () {
       n: { versions: ["version", "versions"], essais: ["essai", "essais"], reponses: ["réponse", "réponses"] }, sansLieu: "lieu non indiqué", exporteLe: "exporté le",
       crit: {
         titre: "le dossier · 40 %",
-        intro: "Un fichier par binôme, rendu le 9 octobre (S6), défendu au viva. Ce qui est regardé :",
+        intro: "Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale. Ce qui est regardé :",
         items: [
           ["versions", "Les versions, chacune avec ce que vous avez changé et pourquoi (quel essai l'a montré)."],
           ["essais", "Les essais, chacun avec ses conditions : app, modèle, date, web, chargée ou collée, la même question."],
@@ -54,7 +54,7 @@ var JA = (function () {
       n: { versions: ["version", "versions"], essais: ["run", "runs"], reponses: ["answer", "answers"] }, sansLieu: "no place given", exporteLe: "exported on",
       crit: {
         titre: "the dossier · 40 %",
-        intro: "One file per pair, handed in on 9 October (S6), defended at the viva. What is looked at:",
+        intro: "One file per pair, handed in on 9 October (S6), defended at the oral presentation. What is looked at:",
         items: [
           ["versions", "The versions, each with what you changed and why (which run showed it)."],
           ["essais", "The runs, each with its conditions: app, model, date, web, loaded or pasted, the same question."],
