@@ -31,12 +31,12 @@ var JA = (function () {
         ]
       },
       md: { titre: "Dossier", binome: "Binôme", seul: "Seul", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
-        brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "Skill", oui: "oui", non: "non",
-        sans: "Sans Skill", avec: "Avec Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
+        brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "SKILL.md", oui: "oui", non: "non",
+        sans: "Sans SKILL.md", avec: "Avec SKILL.md", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
         gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)",
-        condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les conditions" },
+        condition: "Condition", source: "SKILL.md", reponse: "Réponse", score: "Score", quatre: "Les conditions" },
       banc: {
-        conds: { A: "sans Skill", B: "Skill générique", C: "Skill du prof", D: "Skill du binôme" },
+        conds: { A: "sans SKILL.md", B: "SKILL.md générique", C: "SKILL.md", D: "SKILL.md du binôme" },
         cases: ["d'où vient chaque affirmation", "un passage précis", "les désaccords séparés", "dit ce qui manque", "aucune référence inventée", "répond"],
         c5: [["1", "1 · elle existe et dit ce qu'on lui fait dire"], ["0", "0 · elle n'existe pas, ou ne dit pas cela"], ["n", "non ouverte · ni 0 ni 1"]], nonOuverte: "non ouverte", pasNotee: "pas encore notée",
         notePar: "noté par le binôme", citer: "La citeriez-vous telle quelle ?", citerPq: "pourquoi : une ligne, qui nomme une ligne de la réponse", signer: "Laquelle signeriez-vous dans votre dossier ?", pourquoi: "pourquoi", oui: { oui: "oui", non: "non" }
@@ -63,12 +63,12 @@ var JA = (function () {
         ]
       },
       md: { titre: "Dossier", binome: "Pair", seul: "Alone", lieu: "Place", question: "Question", versions: "Versions", change: "What we changed", pourquoi: "Why (which run)", figee: "frozen on",
-        brouillon: "Current draft", essais: "Runs", essai: "Run", cond: "Conditions", app: "App", modele: "Model", date: "Date", web: "Web", mode: "Skill", oui: "yes", non: "no",
-        sans: "Without the Skill", avec: "With the Skill", etayees: "supported", contredites: "contradicted", non_resolues: "unresolved", utilisables: "usable",
+        brouillon: "Current draft", essais: "Runs", essai: "Run", cond: "Conditions", app: "App", modele: "Model", date: "Date", web: "Web", mode: "SKILL.md", oui: "yes", non: "no",
+        sans: "Without the SKILL.md", avec: "With the SKILL.md", etayees: "supported", contredites: "contradicted", non_resolues: "unresolved", utilisables: "usable",
         gagne: "What was gained", perdu: "What was lost", decision: "Decision", lire: "Exercise 1 · Saint-Georges", s3: "Session 3 (worksheets)",
-        condition: "Condition", source: "Skill", reponse: "Answer", score: "Score", quatre: "The four conditions" },
+        condition: "Condition", source: "SKILL.md", reponse: "Answer", score: "Score", quatre: "The four conditions" },
       banc: {
-        conds: { A: "no Skill", B: "generic Skill", C: "the teacher's Skill", D: "the pair's Skill" },
+        conds: { A: "no SKILL.md", B: "generic SKILL.md", C: "SKILL.md", D: "the pair's SKILL.md" },
         cases: ["where each claim comes from", "a precise passage", "disagreements kept apart", "says what is missing", "no invented reference", "answers"],
         c5: [["1", "1 · it exists and says what it is made to say"], ["0", "0 · it does not exist, or does not say that"], ["n", "not opened · neither 0 nor 1"]], nonOuverte: "not opened", pasNotee: "not graded yet",
         notePar: "scored by the pair", citer: "Would you cite it as it stands?", citerPq: "why: one line, naming one line of the answer", signer: "Which one would you sign in your dossier?", pourquoi: "why", oui: { oui: "yes", non: "no" }
