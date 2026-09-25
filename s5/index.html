@@ -22,6 +22,8 @@ body.s5{margin:0;background:var(--fond);color:var(--encre);font-family:var(--f-s
 .s5 .petit{background:transparent;color:inherit;border:1px solid var(--encre);padding:8px 14px}
 .s5 .suite{display:block;margin:28px 0 0 auto;background:var(--encre);color:var(--fond);border:0;padding:14px 26px;font-size:18px}
 .s5 .suite:disabled{opacity:.3;cursor:default}
+.s5 .avant{font-size:14px;opacity:.75;margin:28px 0 0;text-align:right}
+.s5 .avant+.suite{margin-top:8px}
 .s5 .fichiers{border:1px dashed var(--encre);padding:18px;text-align:center}
 .s5 .trouve{margin:14px 0 0;font-size:15px}
 .s5 .etat{font-size:14px;opacity:.75;min-height:1.2em}
@@ -45,6 +47,7 @@ var CHIFFRES=["la hauteur","la surface de plancher","le nombre de niveaux"];
 var PORTE=["","une source nommée, ouverte, qui le dit","un constat daté (quelqu'un l'a vu ou mesuré)","un calcul, ses prémisses dites","rien","pas de chiffre"];
 var S; try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
 if(!S)S={etape:0,noms:"",lieu:"",skill:"",fichiers:[],sans:"",avec:"",q:{},change:""};
+if(!S.fige)S.fige={}; /* S.fige[étape] = l'heure du « suite » (ou du premier envoi) ; une étape passée ne se rouvre pas */
 function garder(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 var app=document.getElementById("app");
 
@@ -95,7 +98,9 @@ function ecran(){
   [charger,sans,avec,questionnaire,envoi][S.etape]();
   window.scrollTo(0,0);
 }
-function suite(ok){var b=h("button",{type:"button",class:"suite",id:"suite",text:"suite →",on:{click:function(){S.etape++;garder();ecran();}}});b.disabled=!ok;app.appendChild(b);return b;}
+function suite(ok){app.appendChild(h("p",{class:"avant",id:"avant",text:"Après « suite », ce qui est écrit ici ne se modifie plus."}));
+  var b=h("button",{type:"button",class:"suite",id:"suite",text:"suite →",on:{click:function(){S.fige[S.etape]=new Date().toISOString();S.etape++;garder();ecran();}}});b.disabled=!ok;app.appendChild(b);return b;}
+function heures(){var o={};TITRES.forEach(function(t,i){if(S.fige[i])o[t]=S.fige[i];});return o;}
 function copie(txt){var b=h("button",{type:"button",class:"petit",text:"copie du texte",on:{click:function(){(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent="copié";},function(){b.textContent="sélection à la main";});}}});return b;}
 
 function charger(){
@@ -144,21 +149,23 @@ function questionnaire(){
 function lisible(){
   var L=["# Séance 5 · "+(S.noms||"—"),"","Lieu du dossier : "+(S.lieu||"—"),"","## Sans SKILL.md","",S.sans,"","## Avec SKILL.md","",S.avec,"","## Ce qui porte chaque chiffre",""];
   [["ifi",QIFI],["lieu",S.lieu]].forEach(function(q){L.push("### "+q[1],"","| | sans | avec |","|---|---|---|");CHIFFRES.forEach(function(c,ci){L.push("| "+c+" | "+(S.q[q[0]+"|"+ci+"|sans"]||"—")+" | "+(S.q[q[0]+"|"+ci+"|avec"]||"—")+" |");});L.push("");});
-  L.push("## Ce qui a changé","",S.change||"—","");return L.join("\n");
+  L.push("## Ce qui a changé","",S.change||"—","","## L'heure de chaque étape","");
+  TITRES.forEach(function(t,i){L.push("- "+(i+1)+" / 5 · "+t+" : "+(S.fige[i]||"—"));});
+  L.push("");return L.join("\n");
 }
 function envoi(){
   app.appendChild(h("h1",{text:"L'envoi à l'enseignant"}));
   app.appendChild(h("p",{class:"aide",text:"Un seul zip : le SKILL.md, les deux textes collés, les deux réponses, le questionnaire. Sur téléphone, le partage ; sur ordinateur, un téléchargement."}));
   var etat=h("p",{class:"etat",id:"etat"});
   var b=h("button",{type:"button",class:"suite",id:"envoi",text:"envoi →",on:{click:function(){
-    var d={format:"juger-ia-s5/1",noms:S.noms,lieu:S.lieu,skill:S.skill,prompt_sans:prompt1(),prompt_avec:prompt2(),sans:S.sans,avec:S.avec,questionnaire:S.q,change:S.change,fichiers_lus:S.fichiers,le:new Date().toISOString()};
+    if(!S.fige[4]){S.fige[4]=new Date().toISOString();garder();}
+    var d={format:"juger-ia-s5/1",noms:S.noms,lieu:S.lieu,skill:S.skill,prompt_sans:prompt1(),prompt_avec:prompt2(),sans:S.sans,avec:S.avec,questionnaire:S.q,change:S.change,fichiers_lus:S.fichiers,fige:heures(),le:S.fige[4]};
     var nom="seance5-"+(JA.slug(S.noms)||"sans-nom")+".zip",z=JA.zip([{nom:"seance5/travail.json",texte:JSON.stringify(d,null,2)},{nom:"seance5/travail.md",texte:lisible()},{nom:"seance5/SKILL.md",texte:S.skill}]);
     var file=new File([z],nom,{type:"application/zip"});
     if(navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title:nom}).then(function(){etat.textContent="envoyé";},function(e){if(!e||e.name!=="AbortError")JA.telecharger(z,nom,"application/zip");});
     else{JA.telecharger(z,nom,"application/zip");etat.textContent="zip téléchargé : "+nom;}
   }}});
   app.appendChild(b);app.appendChild(etat);
-  app.appendChild(h("button",{type:"button",class:"petit",id:"retour",style:"margin-top:40px",text:"retour au début",on:{click:function(){S.etape=0;garder();ecran();}}}));
 }
 ecran();
 })();
