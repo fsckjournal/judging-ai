@@ -27,7 +27,7 @@ var h=JA.h, lang=JA.lang();
 var T={
  fr:{vSeance:"Séance {n} · aujourd'hui",vCours:"Le cours · calendrier, carte, notes",seance:"séance",lire:"la question",lireGo:"écrire la question →",
   vous:"Travail",seul:"seul",binome:"en binôme",votreNom:"Nom",nom1:"Nom 1",nom2:"Nom 2",entrer:"entrer →",
-  envoiT:"sauvegarde du travail",envoiTxt:"Un seul fichier sur cet appareil : tout ce que ce navigateur garde (essais, réponses, SKILL.md), avec les fichiers ajoutés. Ce fichier est celui à envoyer à l'enseignant.",ajout:"ajout de fichiers (export, SKILL.md)…",ajoutes:"ajoutés : ",envoiGo:"sauvegarde →",fait:"Fichier enregistré sur cet appareil : ",mailTxt:"Ensuite, ce fichier en pièce jointe, par courriel à ",corps:"Le fichier {f} est en pièce jointe.",rien:"Rien dans ce navigateur, aucun fichier ajouté.",
+  envoiT:"sauvegarde du travail",envoiTxt:"Un seul fichier sur cet appareil : tout ce que ce navigateur garde (essais, réponses, SKILL.md), avec les fichiers ajoutés. Ce fichier est celui à envoyer à l'enseignant.",ajout:"ajout de fichiers (export, SKILL.md)…",ajoutes:"ajoutés : ",envoiGo:"sauvegarde et courriel →",fait:"Fichier enregistré sur cet appareil : ",mailTxt:"Le courriel va à ",partage:"Le zip est joint : dans la liste, Mail (ou l'app de courriel), puis l'adresse, déjà copiée, dans « À ».",partageFait:"Zip transmis à l'app choisie.",annule:"Rien d'envoyé ; le bouton reste là.",joindre:"le courriel s'ouvre ; ce fichier y va en pièce jointe.",corps:"Le fichier {f} est en pièce jointe.",rien:"Rien dans ce navigateur, aucun fichier ajouté.",
   skill:"SKILL.md",skillTxt:"L'écrire avec un agent, la figer en v0.",skillFige:"figée : ",skillGo:"écrire, figer →",
   banc:"le banc",bancTxt:"La même question sans SKILL.md (A), avec SKILL.md (C), avec le SKILL.md du binôme (D). Un autre binôme coche les six cases.",bancGo:"commencer →",
   dossier:"le dossier · 40 %",dossierTxt:"Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale.",dossierGo:"les critères →",
@@ -35,7 +35,7 @@ var T={
   semaine:"cette semaine",semestre:"le semestre",carte:"la carte",travaux:"les travaux notés",voir:"voir la carte en entier →",langL:"langue",themeL:"thème",version:"version",vuesL:"Vues de l’app"},
  en:{vSeance:"Session {n} · today",vCours:"The course · calendar, card, grades",seance:"session",lire:"the question",lireGo:"write the question →",
   vous:"Working",seul:"alone",binome:"as a pair",votreNom:"Name",nom1:"Name 1",nom2:"Name 2",entrer:"enter →",
-  envoiT:"save the work",envoiTxt:"One file on this device: everything this browser keeps (runs, answers, SKILL.md), with any added files. This is the file to send to the teacher.",ajout:"add files (export, SKILL.md)…",ajoutes:"added: ",envoiGo:"save →",fait:"File saved on this device: ",mailTxt:"Then this file, as an attachment, by email to ",corps:"The file {f} is attached.",rien:"Nothing in this browser, no files added.",
+  envoiT:"save the work",envoiTxt:"One file on this device: everything this browser keeps (runs, answers, SKILL.md), with any added files. This is the file to send to the teacher.",ajout:"add files (export, SKILL.md)…",ajoutes:"added: ",envoiGo:"save and email →",fait:"File saved on this device: ",mailTxt:"The email goes to ",partage:"The zip is attached: pick Mail (or the email app), then paste the address, already copied, into « To ».",partageFait:"Zip handed to the chosen app.",annule:"Nothing sent; the button is still there.",joindre:"the email opens; attach this file.",corps:"The file {f} is attached.",rien:"Nothing in this browser, no files added.",
   skill:"the SKILL.md",skillTxt:"Written with an agent, frozen as v0.",skillFige:"frozen: ",skillGo:"write, freeze →",
   banc:"the bench",bancTxt:"The same question with no SKILL.md (A), with SKILL.md (C), with the pair's SKILL.md (D). Another pair ticks the six boxes.",bancGo:"start →",
   dossier:"the dossier · 40 %",dossierTxt:"One file per pair, handed in on 9 October (S6), defended at the oral presentation.",dossierGo:"the criteria →",
@@ -96,8 +96,15 @@ function envoi(s){
   function envoyer(){var r=travail(),f=r.f.concat(ajouts.map(function(a){return {nom:"ajouts/"+a.nom,octets:a.octets};}));
     if(!f.length){info.textContent=t("rien");return;}
     var noms=(r.d.binome&&r.d.binome.noms||[]).join("-"),nom="travail-"+(JA.slug(noms)||"sans-nom")+"-"+new Date().toISOString().slice(0,10)+".zip";
-    var z=JA.zip(f);JA.telecharger(z,nom,"application/zip");info.textContent=t("fait")+nom;
-    mail.hidden=false;mail.querySelector("a").href="mailto:georges.khawam@usj.edu.lb?subject="+encodeURIComponent("Juger l'IA · "+(noms||"travail"))+"&body="+encodeURIComponent(t("corps").replace("{f}",nom));}
+    var z=JA.zip(f),ADR="georges.khawam@usj.edu.lb",sujet="Juger l'IA · "+(noms||"travail"),corps=t("corps").replace("{f}",nom);
+    var href="mailto:"+ADR+"?subject="+encodeURIComponent(sujet)+"&body="+encodeURIComponent(corps);
+    mail.hidden=false;mail.querySelector("a").href=href;
+    try{if(navigator.clipboard)navigator.clipboard.writeText(ADR);}catch(e){}
+    var file=null;try{file=new File([z],nom,{type:"application/zip"});}catch(e){}
+    if(file&&navigator.canShare&&navigator.canShare({files:[file]})){
+      info.textContent=t("partage");
+      navigator.share({files:[file],title:sujet,text:ADR+"\n"+corps}).then(function(){info.textContent=t("partageFait");},function(e){if(!e||e.name!=="AbortError"){JA.telecharger(z,nom,"application/zip");info.textContent=t("fait")+nom;location.href=href;}else info.textContent=t("annule");});
+    }else{JA.telecharger(z,nom,"application/zip");info.textContent=t("fait")+nom+" · "+t("joindre");setTimeout(function(){location.href=href;},600);}}
   w.appendChild(h("p",{class:"k",text:t("envoiT")}));
   w.appendChild(h("p",{class:"ja-s",style:"color:var(--sur-nuit);opacity:.85",text:t("envoiTxt")}));
   document.body.appendChild(inp);
