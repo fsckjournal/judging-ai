@@ -43,7 +43,7 @@ var T={
 function t(k){return T[lang][k];}
 function cap(s){s=String(s||"");return s.charAt(0).toUpperCase()+s.slice(1);}
 /* la question telle qu'au mur (FR/Le mur S4.html) ; elle se pose en français dans les deux langues */
-var QUESTION="En cinq lignes au plus : [nom usuel, rue, Beyrouth]. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";
+var QUESTION="En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";
 function num(id){return String(id).replace(/^S/,"");}
 function jour(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{weekday:"long",day:"numeric",month:"long"});}
 function jourCourt(iso){return new Date(iso+"T12:00:00").toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"numeric",month:"long"});}
@@ -100,7 +100,7 @@ function seance(box){
     rangee("3",t("banc"),[h("p",{class:"texte",text:t("bancTxt")}),h("div",{class:"abc","aria-hidden":"true"},["A","C","D"].map(function(c){return h("span",null,[h("i",{class:q[c]>=0?"fait":null}),c]);})),h("p",{style:"margin-top:14px"},[h("a",{class:"ja-lien petit",id:"accueil-prof",href:"prof/",text:t("prof")})])],h("a",{class:"ja-lien",href:"skill/",text:t("bancGo")})),
     rangee("",t("dossier"),[h("p",{class:"texte",text:t("dossierTxt")})],h("a",{class:"ja-lien",href:"skill/#dossier",text:t("dossierGo")}))]));
   box.appendChild(h("section",{class:"ja-section"},[h("h2",{class:"ja-lab",text:t("autres")}),h("div",{class:"ja-autres"},[
-    h("a",{class:"ja-lien",href:"journal/",text:t("journal")}),h("a",{class:"ja-lien",href:"s3/",text:t("s3")}),h("a",{class:"ja-lien",href:"entrainement/",text:t("entr")}),h("a",{class:"ja-lien",href:"atelier/",text:t("atelier")})])]));
+    h("a",{class:"ja-lien",href:"journal/",text:t("journal")}),h("a",{class:"ja-lien",href:"s1/",text:"S1 · 4 septembre"}),h("a",{class:"ja-lien",href:"s2/",text:"S2 · 11 septembre"}),h("a",{class:"ja-lien",href:"s3/",text:t("s3")}),h("a",{class:"ja-lien",href:"s4/",text:"S4 · 25 septembre"}),h("a",{class:"ja-lien",href:"entrainement/",text:t("entr")}),h("a",{class:"ja-lien",href:"atelier/",text:t("atelier")})])]));
 }
 function cours(box){
   var s=h("div",{class:"ja-cours"}),cur=C.seances.filter(function(x){return x.id===C.semaine;})[0];

@@ -38,7 +38,7 @@ var h=JA.h, lang=JA.lang();
 var T={
  fr:{titre:"L'atelier Skill",
   eQuestion:"la question",eTrois:"les trois",eSkill:"la Skill",eVersions:"versions",eCharger:"charger",eDossier:"le dossier",eB:"générique",
-  noms:"Noms (séparés par des virgules)",lieu:"Lieu : celui de votre dossier",question:"La question, identique à chaque essai",questionVide:"Écrivez d'abord la question.",qModele:"En cinq lignes au plus : [votre bâtiment]…",modifier:"modifier la question",copierQ:"copier la question",copierV:"copier v{n}",
+  noms:"Noms (séparés par des virgules)",lieu:"Lieu",question:"La question, identique à chaque essai",questionVide:"Écrivez d'abord la question.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"modifier la question",copierQ:"copier la question",copierV:"copier v{n}",
   qDiff:"Ce n'est pas la question de l'essai précédent. Sans la même question, les essais ne se comparent pas.",
   commencer:"Commencer : A, sans Skill →",
   consigne:{A:"Nouvelle conversation, sans Skill. La question telle quelle.",B:"La Skill générique chargée ou collée, puis la question.",C:"La Skill du prof collée comme premier message, puis la question.",D:"Votre Skill figée, chargée ou collée, puis la question."},
@@ -67,7 +67,7 @@ var T={
   saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"la Skill · versions",leBanc:"← le banc",ouvrirB:"B · Skill générique : l'essai →",versProf:"la Skill du prof, à copier →"},
  en:{titre:"The Skill workshop",
   eQuestion:"the question",eTrois:"the three",eSkill:"the Skill",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
-  noms:"Names (comma separated)",lieu:"Place: the one your dossier is about",question:"The question, identical in every run",questionVide:"Write the question first.",qModele:"In five lines at most: [your building]…",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
+  noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"Write the question first.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
   qDiff:"This is not the previous run's question. Without the same question, the runs do not compare.",
   commencer:"Start: A, no Skill →",
   consigne:{A:"New conversation, no Skill. The question as it is.",B:"The generic Skill loaded or pasted, then the question.",C:"The teacher's Skill pasted as the first message, then the question.",D:"Your frozen Skill, loaded or pasted, then the question."},
@@ -203,6 +203,7 @@ function titre(tete,txt,cls){var e=h("h1",{class:"ja-question"+(cls?" "+cls:""),
 
 /* ---------- écran : la question ---------- */
 function vueQuestion(tete,box){
+  if(!D.binome.question){D.binome.question=t("qModele");}
   var q=fld(t("question"),"textarea",D.binome.question,function(v){D.binome.question=v;majQ();ajuster();pas();},{id:"b-question",class:"question",rows:"2",placeholder:t("qModele")});
   q.classList.add("question");tete.appendChild(h("h1",{class:"vis-cache",text:cap(t("eQuestion"))}));tete.appendChild(q);
   var ta=q.querySelector("textarea");function ajuster(){ta.style.height="auto";ta.style.height=ta.scrollHeight+"px";}
