@@ -9,7 +9,7 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../icon-180.png">
 <link rel="icon" href="../icon-192.png">
-<title>Judging AI · Skill du prof</title>
+<title>Judging AI · SKILL.md</title>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body class="ja">
@@ -24,14 +24,14 @@
 <script>
 (function(){
 "use strict";
-/* Juger l'IA · prof/ : Skill du prof (condition C), lue dans prof/SKILL.md à chaque ouverture (jamais en cache : voir sw.js).
+/* Juger l'IA · prof/ : SKILL.md (condition C), lue dans prof/SKILL.md à chaque ouverture (jamais en cache : voir sw.js).
    Le texte en entier, en lecture seule, et un seul bouton « copier ». Sans fichier : une ligne. */
 var h=JA.h, lang=JA.lang(), texte=null;
 var T={
- fr:{titre:"Skill du prof",sous:"condition C",absente:"Skill du prof : ici après la pause.",copier:"copier",copie:"Copié",
-  banc:"← C · Skill du prof",langL:"langue",themeL:"thème",version:"version"},
- en:{titre:"The teacher's Skill",sous:"condition C",absente:"The teacher's Skill will be here after the break.",copier:"copy",copie:"Copied",
-  banc:"← C · the teacher's Skill",langL:"language",themeL:"theme",version:"version"}
+ fr:{titre:"SKILL.md",sous:"condition C",absente:"SKILL.md : ici après la pause.",copier:"copier",copie:"Copié",
+  banc:"← C · SKILL.md",langL:"langue",themeL:"thème",version:"version"},
+ en:{titre:"SKILL.md",sous:"condition C",absente:"SKILL.md: here after the break.",copier:"copy",copie:"Copied",
+  banc:"← C · SKILL.md",langL:"language",themeL:"theme",version:"version"}
 };
 function t(k){return T[lang][k];}
 function toast(s){var e=document.getElementById("toast");e.textContent=s;e.classList.add("on");clearTimeout(e._t);e._t=setTimeout(function(){e.classList.remove("on");},2400);}
