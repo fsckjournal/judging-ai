@@ -4,7 +4,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-25.14";
+  var VERSION = "s4-v3-2026-09-25.15";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -294,7 +294,7 @@ var JA = (function () {
       b = document.createElement("button"); b.id = "paire"; b.type = "button";
       outils.appendChild(b);
     }
-    if (!document.getElementById("ja-raz-tete") && b.parentNode) { var rz = document.createElement("button"); rz.type = "button"; rz.id = "ja-raz-tete"; rz.textContent = "↺"; rz.setAttribute("aria-label", t("raz")); rz.title = t("raz"); rz.addEventListener("click", remiseAZero); b.parentNode.insertBefore(rz, b.nextSibling); }
+    if (!document.getElementById("ja-raz-tete") && b.parentNode) { var rz = document.createElement("button"); rz.type = "button"; rz.id = "ja-raz-tete"; rz.textContent = "↺"; rz.setAttribute("aria-label", t("raz")); rz.title = t("raz"); rz.addEventListener("click", remiseAZero); var hote = document.querySelector(".ja-tete .outils"); if (hote) hote.appendChild(rz); else b.parentNode.insertBefore(rz, b.nextSibling); }
     if (b.getAttribute("data-lie")) return; b.setAttribute("data-lie", "1");
     function nommer() { b.setAttribute("aria-label", (lang() === "fr" ? "couleur : " : "colour: ") + paire().replace("petrole", "pétrole")); }
     nommer();

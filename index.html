@@ -81,7 +81,7 @@ function premier(box){
 }
 /* l'envoi (25 sept., après la séance) : ce que ce navigateur garde, plus les fichiers ajoutés (un export d'avant la remise à zéro, les SKILL.md enregistrés), en un seul zip ; partage du téléphone si possible, sinon téléchargement */
 function envoi(s){
-  var ajouts=[],w=h("div",{class:"envoi",id:"envoi"}),info=h("p",{class:"ja-s",id:"envoi-info"});
+  var ajouts=[],w=h("div",{class:"envoi",id:"envoi",style:"margin:40px 0 72px;padding-top:18px;border-top:1px solid #4A4D52"}),info=h("p",{class:"ja-s",id:"envoi-info"});
   var inp=h("input",{type:"file",multiple:"multiple",id:"envoi-fichiers",style:"display:none"});
   inp.addEventListener("change",function(){Array.prototype.forEach.call(inp.files||[],function(f){var r=new FileReader();r.onload=function(){ajouts.push({nom:f.name,octets:new Uint8Array(r.result)});info.textContent=t("ajoutes")+ajouts.map(function(a){return a.nom;}).join(", ");};r.readAsArrayBuffer(f);});inp.value="";});
   function travail(){var d=JA.complet(),v=d.skill||{},f=[],ok=(d.essais&&d.essais.length)||(v.versions&&v.versions.length)||(v.brouillon&&v.brouillon.trim())||(d.binome&&d.binome.noms&&d.binome.noms.length);
@@ -99,8 +99,8 @@ function envoi(s){
   w.appendChild(h("p",{class:"k",text:t("envoiT")}));
   w.appendChild(h("p",{class:"ja-s",text:t("envoiTxt")}));
   document.body.appendChild(inp);
-  w.appendChild(h("button",{type:"button",class:"ja-lien",id:"envoi-ajout",text:t("ajout"),on:{click:function(){inp.click();}}}));
-  w.appendChild(h("button",{type:"button",class:"ja-entrer",id:"envoi-go",text:t("envoiGo"),on:{click:envoyer}}));
+  w.appendChild(h("button",{type:"button",class:"ja-lien",style:"color:var(--sur-nuit);background:none;border:1px solid #4A4D52;padding:8px 14px;font:inherit;cursor:pointer;margin:6px 12px 6px 0",id:"envoi-ajout",text:t("ajout"),on:{click:function(){inp.click();}}}));
+  w.appendChild(h("button",{type:"button",class:"envoi-go",id:"envoi-go",text:t("envoiGo"),on:{click:envoyer}}));
   w.appendChild(info);
   s.appendChild(w);
 }

@@ -466,3 +466,4 @@ details.repli[open]>.ja-champs{padding:12px 0 8px}
  .ja-accueil .ja-mot i{order:3;flex:1 0 100%;margin:0;overflow:visible;text-overflow:clip;white-space:normal}}
 
 .ja-pas .ailleurs[aria-current]{color:var(--encre);font-weight:600}
+.ja-nuit .envoi-go{background:var(--sur-nuit);color:var(--nuit);border:0;padding:10px 20px;font:500 17px var(--font-sans);cursor:pointer;margin:6px 0}
