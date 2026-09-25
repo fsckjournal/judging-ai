@@ -1,17 +1,34 @@
 <!doctype html><html lang="fr"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ESAR · Un lieu, une Skill, un hook</title><style>
-*{box-sizing:border-box}body{margin:0;background:#08090b;color:#e8e6e1;font:18px/1.6 Georgia,serif}
-main{max-width:1000px;margin:40px auto;background:#08090b;padding:36px 48px}
-p,li{max-width:76ch}h2{letter-spacing:-.025em;font-weight:400}a{color:#d97757}code{background:#181b20;padding:1px 4px;border-radius:3px;font-size:.9em}
-table{border-collapse:collapse;width:100%;margin:20px 0;font-size:15px}th,td{text-align:left;padding:10px;border-bottom:1px solid #d8d9d2;vertical-align:top}
-th{background:#181b20;color:#e8e6e1}.cell{border:1px solid #3e4147;border-radius:4px;overflow:hidden;margin:12px 0 40px;background:#08090b}
-.cell h3{font-size:19px;font-weight:400;margin:0;padding:16px 20px;background:#181b20}.cell details{padding:12px 20px}summary{cursor:pointer;color:#d97757}
-pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 ui-monospace,SFMono-Regular,monospace;margin:10px 0}
-.output{padding:14px 20px;background:#111316;border-top:1px solid #3e4147}.output span{font-size:11px;letter-spacing:1.7px;color:#bbb6ad}
-.notice{border-left:2px solid #d97757;background:#181b20;color:#e8e6e1;padding:18px 24px;margin-bottom:35px;font-size:16px}
-@media(max-width:700px){main{margin:0;padding:28px 20px}body{font-size:16px}table{font-size:13px}th,td{padding:7px}}
-</style><main><div class="notice">APERÇU DE L’ATELIER · Les cellules ont été exécutées localement avec les données fictives. Cette page ne les exécute pas. Ouvrir le fichier .ipynb dans Colab ou Binder pour manipuler.</div><div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ESAR · S3 · LABORATOIRE JUPYTER </p><h2 style="font-size:30px;line-height:1.15">Un lieu. Une instruction. Un effet observable.</h2>
-<p style="font-size:20px">Vous n’allez pas apprendre à croire une IA. Vous allez fabriquer quelque chose qui change son travail — puis chercher ce que cela ne change pas.</p>
+<title>ESAR · Un lieu, une Skill, un hook</title>
+<link rel="icon" href="../icon-192.png">
+<link rel="stylesheet" href="../ds.css">
+<script>try{var t=localStorage.getItem("judging-ai-journal-theme");if(t)document.documentElement.setAttribute("data-theme",t);}catch(e){}</script>
+<style>
+:root{--fond:#E9EAE8;--encre:#1C1A17;--encre-2:#484B50;--f-sans:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--fond:#18191B;--encre:#D9DBD8;--encre-2:#A1A5A2;color-scheme:dark}}
+*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.55 var(--f-sans)}
+main{max-width:1000px;margin:0 auto;padding:40px 40px 64px}
+p,li{max-width:40em}a{color:var(--encre);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+b{font-weight:600}code{font:inherit;font-weight:500}
+h2{margin:6px 0 14px;font:500 28px/1.15 var(--f-sans);letter-spacing:-.015em}
+p.grand{font-size:20px;line-height:1.45}
+table{border-collapse:collapse;width:100%;margin:20px 0;font-size:15px;border-top:2px solid var(--encre);border-bottom:2px solid var(--encre)}
+th,td{text-align:left;padding:10px 12px 10px 0;vertical-align:top;border-bottom:1px solid var(--encre)}
+th{font-weight:500;color:var(--encre-2)}
+.notice{max-width:none;margin:0 0 35px;padding:12px 0 0;border-top:2px solid var(--encre);font-size:16px}
+.etape{border-top:2px solid var(--encre);padding:18px 0 10px}
+.k{margin:0;font:500 14px/1.3 var(--f-sans);color:var(--encre-2)}
+.cell{margin:12px 0 40px;border-top:1px solid var(--encre)}
+.cell h3{margin:0;padding:14px 0 6px;font:500 20px/1.3 var(--f-sans)}
+.cell details{padding:0 0 8px}
+summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-weight:500;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+pre{margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere;font:400 14px/1.6 var(--f-sans)}
+details pre{border-top:1px solid var(--encre);padding-top:10px}
+.output{padding:10px 0 0;border-top:1px solid var(--encre)}
+.output span{font:500 14px/1.3 var(--f-sans);color:var(--encre-2)}
+@media(max-width:700px){main{padding:28px 20px}body{font-size:16px}h2{font-size:24px}table{font-size:13px}th,td{padding:7px 8px 7px 0}}
+</style><main><div class="notice">Aperçu de l’atelier · Les cellules ont été exécutées localement avec les données fictives. Cette page ne les exécute pas. Ouvrir le fichier .ipynb dans Colab ou Binder pour manipuler.</div><div class="etape"><p class="k">ESAR · S3 · laboratoire Jupyter</p><h2>Un lieu. Une instruction. Un effet observable.</h2>
+<p class="grand">Vous n’allez pas apprendre à croire une IA. Vous allez fabriquer quelque chose qui change son travail — puis chercher ce que cela ne change pas.</p>
 <p><b>À emporter :</b> votre <code>SKILL.md</code>, un hook Python, ses essais, une comparaison de réponses et un dossier portable.</p>
 <p><b>45 minutes de manipulation, réparties dans la séance.</b> Travaillez à deux : une personne propose, l’autre cherche le contre-exemple. Inversez les rôles après la première Skill.</p>
 <table><tr><th>1 · Ouvrir</th><th>2 · Formuler</th><th>3 · Intercepter</th><th>4 · Éprouver</th><th>5 · Emporter</th></tr>
@@ -20,7 +37,7 @@ pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.65 ui-monospace,SFMo
 <p><b>ChatGPT · Claude · Gemini :</b> gardez le chat déjà disponible. Le même texte d’instructions et les mêmes essais sont exportés sans format propriétaire. <b>OpenCode</b>, client open source multi-fournisseur, est une voie facultative pour aller plus loin. Aucun Mac, iPhone ou Apple Shortcuts n’est nécessaire.</p>
 <p>Les documents de démonstration ci-dessous sont <b>inventés et signalés comme tels</b>. Ils ne sont pas des sources sur Beyrouth. Remplacez le lieu et les réponses par votre propre travail.</p>
 </div>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 1 MIN</p><h2 style="font-size:30px;line-height:1.15">Avant le premier triangle ▶</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 1 min</p><h2>Avant le premier triangle ▶</h2>
 <ol><li>Depuis la page du cours, choisissez <b>Colab</b> (compte Google) ou <b>Binder</b> (sans compte). Ne lancez qu’un environnement.</li>
 <li>Dans Colab : vérifiez le compte affiché, <b>Copier sur Drive</b>, puis <b>Se connecter</b> en Python 3 / CPU. Depuis un fichier téléchargé : <b>Fichier → Importer le notebook</b>.</li>
 <li>Dans Binder : attendez JupyterLab, puis sélectionnez une cellule et <b>Shift + Entrée</b>. Les champs Colab apparaissent ici comme variables Python : ne modifiez que leur valeur. Faites-vous accompagner si les guillemets bloquent.</li>
@@ -43,11 +60,11 @@ PORTABLE = ATELIER / &quot;portable&quot;
 (PLUGIN / &quot;.claude-plugin&quot;).mkdir(parents=True)
 print(&quot;✓ Votre atelier est ouvert.&quot;)
 print(&quot;✓ Python est prêt. Aucun compte de modèle ni accès réseau n’a été utilisé.&quot;)
-print(&quot;Dossier temporaire :&quot;, ATELIER)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Votre atelier est ouvert.
+print(&quot;Dossier temporaire :&quot;, ATELIER)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>✓ Votre atelier est ouvert.
 ✓ Python est prêt. Aucun compte de modèle ni accès réseau n’a été utilisé.
 Dossier temporaire : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">L’action a-t-elle eu lieu ?</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 2 min</p><h2>L’action a-t-elle eu lieu ?</h2>
 <p>Un hook intervient à un moment précis. Ici : <b>juste avant</b> la lecture d’un document. Exécutez la cellule, puis changez <code>INTERCEPTER = True</code> en <code>False</code> et relancez.</p>
 <p><b>À observer :</b> « lecture effectuée » doit disparaître lorsque le passage est bloqué. Ce premier exemple est un interrupteur pédagogique ; vous allez ensuite écrire une condition sur l’adresse demandée.</p>
 </div>
@@ -57,11 +74,11 @@ if INTERCEPTER:
     print(&quot;Le document n’a pas été lu par cette cellule.&quot;)
 else:
     print(&quot;▶ ACTION · Lecture effectuée : document fictif n°17.&quot;)
-print(&quot;Question : est-ce le modèle qui a choisi de s’arrêter ? Non : c’est le programme.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>⏸ AVANT L’ACTION · La lecture est bloquée.
+print(&quot;Question : est-ce le modèle qui a choisi de s’arrêter ? Non : c’est le programme.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>⏸ AVANT L’ACTION · La lecture est bloquée.
 Le document n’a pas été lu par cette cellule.
 Question : est-ce le modèle qui a choisi de s’arrêter ? Non : c’est le programme.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">FORMULER · 1/5 · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Votre lieu, votre difficulté</h2>
+<div class="etape"><p class="k">Formuler · 1/5 · 3 min</p><h2>Votre lieu, votre difficulté</h2>
 <p>Revenez à une réponse réellement obtenue sur votre lieu. Retenez <b>un besoin précis</b> : attribution fusionnée, référence introuvable, désaccord effacé, précision sans source… Si la réponse est juste et utile, dites ce qui mérite d’être préservé ; ne lui inventez pas une faute.</p>
 <p><b>La bonne question :</b> quel changement un autre binôme pourrait-il constater dans la prochaine réponse ? « Sois fiable » ne permet pas de le vérifier.</p>
 </div>
@@ -76,11 +93,11 @@ STATUT_ORIX = &quot;À renseigner : O/R/I/X et raison ; distinct de vrai ou faux
 DECISION_SOURCE = &quot;À renseigner : garder, corriger ou suspendre ; pourquoi et quelle conséquence dans notre notice ?&quot; #@param {type:&quot;string&quot;}
 print(&quot;LIEU →&quot;, LIEU)
 print(&quot;DÉFAUT OBSERVÉ →&quot;, DEFAUT_OBSERVE)
-print(&quot;EFFET QUE NOUS CHERCHONS →&quot;, EFFET_ATTENDU)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>LIEU → Votre lieu à Beyrouth
+print(&quot;EFFET QUE NOUS CHERCHONS →&quot;, EFFET_ATTENDU)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>LIEU → Votre lieu à Beyrouth
 DÉFAUT OBSERVÉ → À remplacer par un passage de notre vraie réponse : ...
 EFFET QUE NOUS CHERCHONS → Distinguer ce qu’une source attribue de ce que nous pouvons conclure.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 4 MIN</p><h2 style="font-size:30px;line-height:1.15">Une Skill n’est pas une promesse</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 4 min</p><h2>Une Skill n’est pas une promesse</h2>
 <p>Une <b>Skill</b> rassemble des instructions réutilisables pour un travail identifiable. Le fichier n’agit pas tout seul : une application doit le charger, ou vous devez coller son texte dans le chat.</p>
 <p>Choisissez une à cinq instructions issues du défaut observé. L’exemple ci-dessous propose trois comportements. Gardez, réécrivez ou supprimez ; <b>le nombre d’instructions n’est pas une note</b>.</p>
 <p><b>Exemple testable :</b> « Présente séparément les attributions contradictoires et leur source. » Un refus automatique de toute question difficile n’est pas une amélioration.</p>
@@ -107,7 +124,7 @@ INSTRUCTIONS_TEXTE = SKILL.split(&quot;---&quot;, 2)[2].lstrip()
 (PORTABLE / &quot;instructions.txt&quot;).write_text(INSTRUCTIONS_TEXTE, encoding=&quot;utf-8&quot;)
 (PORTABLE / &quot;skill&quot; / &quot;lieu-v0&quot; / &quot;SKILL.md&quot;).write_text(SKILL, encoding=&quot;utf-8&quot;)
 print(SKILL)
-print(&quot;✓ Fichier créé. Cela ne prouve pas encore qu’un modèle l’a chargé ni respecté.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>---
+print(&quot;✓ Fichier créé. Cela ne prouve pas encore qu’un modèle l’a chargé ni respecté.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>---
 name: lieu-v0
 description: &quot;Examiner les attributions architecturales concernant Votre lieu à Beyrouth, à partir des pièces disponibles.&quot;
 ---
@@ -133,7 +150,7 @@ Ne transforme pas une absence de vérification en preuve de fausseté.
 
 ✓ Fichier créé. Cela ne prouve pas encore qu’un modèle l’a chargé ni respecté.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA </p><h2 style="font-size:30px;line-height:1.15">Garder le premier travail</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA</p><h2>Garder le premier travail</h2>
 <p>Cette première sauvegarde contient votre Skill et votre point de départ. Téléchargez-la avant la pause. <b>Après une modification des champs, relancez les cellules 04 puis 05.</b></p>
 </div>
 <section class="cell"><h3>▶ 05 · Télécharger une première sauvegarde</h3><details><summary>Voir le code Python</summary><pre>def sauvegarder_projet():
@@ -175,15 +192,15 @@ def proposer_telechargement(fichier):
         files.download(str(fichier))
 
 sauvegarder_projet()
-proposer_telechargement(creer_zip(&quot;esar-premiere-sauvegarde.zip&quot;))</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ À emporter : esar-premiere-sauvegarde.zip
+proposer_telechargement(creer_zip(&quot;esar-premiere-sauvegarde.zip&quot;))</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>✓ À emporter : esar-premiere-sauvegarde.zip
 Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj/esar-premiere-sauvegarde.zip
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">INTERCEPTER · 2/5 · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">De l’instruction à l’interception</h2>
-<p style="font-size:22px">Instruction → <b>ce qu’on demande au modèle</b><br>Hook → <b>ce que le programme fait à un événement</b></p>
+<div class="etape"><p class="k">Intercepter · 2/5 · 2 min</p><h2>De l’instruction à l’interception</h2>
+<p class="grand">Instruction → <b>ce qu’on demande au modèle</b><br>Hook → <b>ce que le programme fait à un événement</b></p>
 <p>Nous allons intercepter une demande de lecture web. L’essai reste hors ligne : un petit lecteur ouvre un document fictif en mémoire. Le hook, lui, est un <b>vrai programme Python</b>, appelé automatiquement avant le lecteur.</p>
 <p><b>Portée exacte :</b> ce mécanisme agit dans ce notebook. Il ne contrôle ni votre chat ouvert ailleurs, ni tout le réseau de Colab. Les hooks natifs dépendent du client : l’export conserve une démonstration Claude Code facultative, pas un branchement universel.</p>
 </div>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">Qu’est-ce que votre hook doit décider ?</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 2 min</p><h2>Qu’est-ce que votre hook doit décider ?</h2>
 <p>Notre premier choix : autoriser la lecture seulement si l’hôte de l’URL appartient à une liste explicitement choisie. Ce n’est <b>pas</b> une liste des lieux où tout serait vrai.</p>
 <p>Les adresses <code>example.org</code> et <code>example.net</code> servent aux exemples ; aucun site n’est contacté. Gardez-les pendant le banc commun. Vous créerez ensuite votre propre liste de sources.</p>
 </div>
@@ -195,11 +212,11 @@ def ecrire_configuration(domaines, sous_domaines=False):
 ecrire_configuration(DOMAINES, SOUS_DOMAINES)
 print(&quot;Lectures autorisées vers :&quot;, &quot;, &quot;.join(DOMAINES))
 print(&quot;Sous-domaines :&quot;, &quot;acceptés&quot; if SOUS_DOMAINES else &quot;non acceptés automatiquement&quot;)
-print(&quot;Ce choix ne vérifie ni l’auteur, ni la date, ni le sens d’une page.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>Lectures autorisées vers : archives.example.org
+print(&quot;Ce choix ne vérifie ni l’auteur, ni la date, ni le sens d’une page.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>Lectures autorisées vers : archives.example.org
 Sous-domaines : non acceptés automatiquement
 Ce choix ne vérifie ni l’auteur, ni la date, ni le sens d’une page.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 4 MIN</p><h2 style="font-size:30px;line-height:1.15">Le code que vous pouvez discuter</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 4 min</p><h2>Le code que vous pouvez discuter</h2>
 <p>Lisez surtout les lignes marquées <b>CHOIX</b>. Le programme reçoit un événement et renvoie un motif. <code>0</code> signifie qu’il n’arrête pas l’action ; <code>2</code> qu’il l’arrête.</p>
 <p>La variable <code>HOOK_SOURCE</code> contient le texte du fichier Python que nous allons exécuter et exporter. Vous pouvez modifier ce texte ; <b>relancez cette cellule puis tous les essais</b>. Un code qui « a l’air correct » n’est pas encore testé.</p>
 <p>Différence volontaire avec la trousse antérieure : une demande <code>WebFetch</code> sans URL valide est ici arrêtée, au lieu de passer silencieusement. Les autres outils restent hors de cette interception.</p>
@@ -250,10 +267,10 @@ if __name__ == &quot;__main__&quot;:
 HOOK = PLUGIN / &quot;hooks&quot; / &quot;garde-lieu.py&quot;
 HOOK.write_text(HOOK_SOURCE, encoding=&quot;utf-8&quot;)
 print(&quot;✓ Le code visible ci-dessus a été écrit dans hooks/garde-lieu.py.&quot;)
-print(&quot;Prochaine étape : il doit produire les effets attendus, pas seulement exister.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Le code visible ci-dessus a été écrit dans hooks/garde-lieu.py.
+print(&quot;Prochaine étape : il doit produire les effets attendus, pas seulement exister.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>✓ Le code visible ci-dessus a été écrit dans hooks/garde-lieu.py.
 Prochaine étape : il doit produire les effets attendus, pas seulement exister.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">Voir l’ordre des opérations</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 2 min</p><h2>Voir l’ordre des opérations</h2>
 <p><b>Demande d’action → hook → arrêt OU lecteur → résultat.</b> Le programme ci-dessous rend cet ordre visible. Il ne demande pas à un modèle de dire s’il a obéi.</p>
 <p>Le lecteur ne contacte pas Internet. Il renvoie des textes fictifs uniquement après le passage du hook. Un compteur permet de vérifier qu’une action refusée n’a pas atteint le lecteur.</p>
 </div>
@@ -293,14 +310,14 @@ def montrer(resultat):
     print(&quot; &quot;, resultat[&quot;texte&quot;] or resultat[&quot;motif&quot;])
 
 montrer(proposer_lecture(&quot;https://archives.example.org/notice-17&quot;))
-montrer(proposer_lecture(&quot;https://blog.example.net/notice-17&quot;))</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>PASSAGE · https://archives.example.org/notice-17
+montrer(proposer_lecture(&quot;https://blog.example.net/notice-17&quot;))</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>PASSAGE · https://archives.example.org/notice-17
   Lecteur exécuté : OUI
   DOCUMENT FICTIF · Inventaire : attribution à A. Martin, 1892 ; pièce à confronter.
 ARRÊT · https://blog.example.net/notice-17
   Lecteur exécuté : NON
   Adresse hors liste : blog.example.net. Examiner la source avant de modifier la liste.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ÉPROUVER · 3/5 · 4 MIN</p><h2 style="font-size:30px;line-height:1.15">Six cas. Deux questions différentes.</h2>
+<div class="etape"><p class="k">Éprouver · 3/5 · 4 min</p><h2>Six cas. Deux questions différentes.</h2>
 <p><b>Question mécanique :</b> le programme fait-il ce que nous avons écrit ?<br><b>Question de jugement :</b> ce comportement aide-t-il notre enquête ?</p>
 <table><tr><th>Cas</th><th>À prédire avant d’exécuter</th></tr>
 <tr><td>01 · Adresse prévue</td><td>Le lecteur peut-il fonctionner ?</td></tr>
@@ -331,7 +348,7 @@ for nom, url, passage_attendu in CAS:
     RESULTATS.append({&quot;cas&quot;: nom, &quot;attendu&quot;: passage_attendu, **resultat})
     print(nom, &quot;→&quot;, resultat[&quot;statut&quot;], &quot;· mécanisme conforme&quot;)
 print(&quot;\n6/6 comportements prévus observés. Ce n’est PAS un score de vérité.&quot;)
-print(&quot;Cas 04 : une erreur est passée. Cas 05 : un témoignage utile a été arrêté.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>01 · Vert : adresse prévue → PASSAGE · mécanisme conforme
+print(&quot;Cas 04 : une erreur est passée. Cas 05 : un témoignage utile a été arrêté.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>01 · Vert : adresse prévue → PASSAGE · mécanisme conforme
 02 · Rouge : hors liste → ARRÊT · mécanisme conforme
 03 · Piège : hôte ressemblant → ARRÊT · mécanisme conforme
 04 · Piège : erreur sur hôte admis → PASSAGE · mécanisme conforme
@@ -341,7 +358,7 @@ print(&quot;Cas 04 : une erreur est passée. Cas 05 : un témoignage utile a ét
 6/6 comportements prévus observés. Ce n’est PAS un score de vérité.
 Cas 04 : une erreur est passée. Cas 05 : un témoignage utile a été arrêté.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Réparer sans ouvrir toutes les portes</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 3 min</p><h2>Réparer sans ouvrir toutes les portes</h2>
 <p>Le cas 05 est utile mais bloqué. Vous avez examiné son intérêt ; ajoutez uniquement son hôte. <b>Le cas ressemblant doit rester bloqué.</b></p>
 <p>Dans le formulaire, saisissez les noms d’hôtes séparés par une virgule, sans guillemets ni crochets. Le code transforme ce texte en liste. Gardez les deux hôtes proposés pour cet essai commun.</p>
 <p>Question d’architecture : si l’on ne retient que des archives institutionnelles, quelles expériences du lieu deviennent invisibles ? Élargir la liste est un choix argumenté ; ce n’est pas certifier chaque phrase du témoignage.</p>
@@ -363,7 +380,7 @@ assert preuve_utile[&quot;lecture&quot;] and not preuve_piege[&quot;lecture&quot
 montrer(preuve_utile)
 montrer(preuve_piege)
 print(&quot;\nPOURQUOI NOUS AVONS CHANGÉ :&quot;, JUSTIFICATION)
-print(&quot;À décider encore : qui parle, de quoi, à quelle date, avec quelles limites ?&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>PASSAGE · https://memoire.example.net/temoignage
+print(&quot;À décider encore : qui parle, de quoi, à quelle date, avec quelles limites ?&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>PASSAGE · https://memoire.example.net/temoignage
   Lecteur exécuté : OUI
   DOCUMENT FICTIF · Témoignage pertinent : un usage du lieu absent de l’inventaire.
 ARRÊT · https://archives.example.org.pirate.example/notice-17
@@ -373,7 +390,7 @@ ARRÊT · https://archives.example.org.pirate.example/notice-17
 POURQUOI NOUS AVONS CHANGÉ : Nous voulons confronter la notice à un témoignage sur l’usage du lieu ; son contenu reste à examiner.
 À décider encore : qui parle, de quoi, à quelle date, avec quelles limites ?
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 1 MIN</p><h2 style="font-size:30px;line-height:1.15">Le hook a-t-il fait une différence ?</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 1 min</p><h2>Le hook a-t-il fait une différence ?</h2>
 <p>Le même lecteur reçoit la même adresse hors liste, une fois sans hook et une fois avec. Cet essai mesure une différence d’exécution, <b>pas</b> une différence d’intelligence.</p>
 </div>
 <section class="cell"><h3>▶ 11 · Comparer désactivé / actif</h3><details><summary>Voir le code Python</summary><pre>ADRESSE_COMPARAISON = &quot;https://blog.example.net/notice-17&quot;
@@ -382,11 +399,11 @@ AVEC_HOOK = proposer_lecture(ADRESSE_COMPARAISON, hook_actif=True)
 assert SANS_HOOK[&quot;lecture&quot;] and not AVEC_HOOK[&quot;lecture&quot;]
 print(&quot;SANS HOOK → lecteur exécuté :&quot;, SANS_HOOK[&quot;lecture&quot;])
 print(&quot;AVEC HOOK → lecteur exécuté :&quot;, AVEC_HOOK[&quot;lecture&quot;])
-print(&quot;Différence établie pour cet appel et cette configuration seulement.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>SANS HOOK → lecteur exécuté : True
+print(&quot;Différence établie pour cet appel et cette configuration seulement.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>SANS HOOK → lecteur exécuté : True
 AVEC HOOK → lecteur exécuté : False
 Différence établie pour cet appel et cette configuration seulement.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">COMPARER · 4/5 · 8 MIN</p><h2 style="font-size:30px;line-height:1.15">Et la Skill, a-t-elle changé la réponse ?</h2>
+<div class="etape"><p class="k">Comparer · 4/5 · 8 min</p><h2>Et la Skill, a-t-elle changé la réponse ?</h2>
 <p>Ouvrez <b>deux conversations neuves</b> dans la même application, avec le même modèle affiché, les mêmes documents et le même accès web. Dans l’une, posez la question seule ; dans l’autre, collez les instructions puis exactement la même question.</p>
 <p><b>ChatGPT, Claude ou Gemini :</b> ce choix ne change pas la manipulation. Ne faites pas « sans » chez un fournisseur et « avec » chez un autre : vous ne pourriez pas isoler le changement d’instructions.</p>
 <p>Les binômes pairs commencent sans Skill ; les impairs commencent avec. Enregistrez les réponses complètes en <b>texte brut UTF-8</b>, dans deux fichiers nommés <code>sans.txt</code> et <code>avec.txt</code>. À la cellule 13, cochez <code>IMPORTER_REPONSES</code>, exécutez, puis sélectionnez les deux fichiers. <b>Ne collez jamais une réponse dans le code Python.</b> Ici, « avec » signifie instructions collées, pas Skill nativement chargée.</p>
@@ -401,7 +418,7 @@ PROMPT_AVEC = INSTRUCTIONS_TEXTE + &quot;\n\n---\n\n&quot; + PROMPT_SANS
 print(&quot;À COPIER DANS LA CONVERSATION SANS INSTRUCTIONS\n&quot;)
 print(PROMPT_SANS)
 print(&quot;\nÀ COPIER DANS LA CONVERSATION AVEC INSTRUCTIONS\n&quot;)
-print(PROMPT_AVEC)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>À COPIER DANS LA CONVERSATION SANS INSTRUCTIONS
+print(PROMPT_AVEC)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>À COPIER DANS LA CONVERSATION SANS INSTRUCTIONS
 
 Lieu : Votre lieu à Beyrouth
 Matériaux disponibles : À décrire : documents fournis, web disponible ou non.
@@ -490,11 +507,11 @@ def comparaison_renseignee(comparaison):
 COMPARAISON[&quot;completee&quot;] = comparaison_renseignee(COMPARAISON)
 print(&quot;Comparaison :&quot;, &quot;renseignée — à examiner ensemble&quot; if COMPARAISON[&quot;completee&quot;] else &quot;EN ATTENTE de vos réponses réelles&quot;)
 print(&quot;Renseignée signifie champs présents, pas amélioration établie. Un modèle non indiqué ou une mémoire inconnue doit être écrit explicitement.&quot;)
-print(&quot;Aucune réponse de modèle n’a été fabriquée par le notebook.&quot;)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>Comparaison : EN ATTENTE de vos réponses réelles
+print(&quot;Aucune réponse de modèle n’a été fabriquée par le notebook.&quot;)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>Comparaison : EN ATTENTE de vos réponses réelles
 Renseignée signifie champs présents, pas amélioration établie. Un modèle non indiqué ou une mémoire inconnue doit être écrit explicitement.
 Aucune réponse de modèle n’a été fabriquée par le notebook.
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">EMPORTER · 5/5 · 3 MIN</p><h2 style="font-size:30px;line-height:1.15">Emporter ce qui a réellement tourné</h2>
+<div class="etape"><p class="k">Emporter · 5/5 · 3 min</p><h2>Emporter ce qui a réellement tourné</h2>
 <p>Le ZIP rassemble le même hook que celui exécuté, ses résultats, votre Skill, vos réponses, un dossier <code>portable/</code> (instructions, demandes, documents fictifs et six cas), un guide des quatre voies et une notice Claude Code facultative. L’empreinte permet de reconnaître une version ; elle ne prouve pas sa qualité.</p>
 <p><b>Avant d’exporter :</b> décidez des domaines de votre vrai lieu. Si vous gardez les adresses d’exercice, le programme restera un démonstrateur. Cela sera visible dans l’export.</p>
 </div>
@@ -504,7 +521,7 @@ ecrire_configuration(DOMAINES_EXPORT, False)
 EXERCICE_SEULEMENT = any(&quot;example.&quot; in d for d in DOMAINES_EXPORT)
 print(&quot;EXPORT :&quot;, &quot;DÉMONSTRATEUR — adresses d’exercice&quot; if EXERCICE_SEULEMENT else &quot;LISTE PERSONNALISÉE — à éprouver&quot;)
 print(&quot;Hôtes :&quot;, &quot;, &quot;.join(DOMAINES_EXPORT))
-print(&quot;Motif :&quot;, MOTIF_EXPORT)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>EXPORT : DÉMONSTRATEUR — adresses d’exercice
+print(&quot;Motif :&quot;, MOTIF_EXPORT)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>EXPORT : DÉMONSTRATEUR — adresses d’exercice
 Hôtes : archives.example.org, memoire.example.net
 Motif : Nous voulons confronter la notice à un témoignage sur l’usage du lieu ; son contenu reste à examiner.
 </pre></div></section>
@@ -541,12 +558,12 @@ with zipfile.ZipFile(ZIP_FINAL) as archive:
     assert &quot;atelier-lieu/hooks/garde-lieu.py&quot; in archive.namelist()
 print(&quot;✓ Archive vérifiée :&quot;, len(empreintes), &quot;fichiers identifiés.&quot;)
 print(&quot;✓ Hook exécuté ici ; chargement natif encore à vérifier.&quot;)
-proposer_telechargement(ZIP_FINAL)</pre></details><div class="output"><span>EXÉCUTION LOCALE · EXEMPLE</span><pre>✓ Archive vérifiée : 16 fichiers identifiés.
+proposer_telechargement(ZIP_FINAL)</pre></details><div class="output"><span>Exécution locale · exemple</span><pre>✓ Archive vérifiée : 16 fichiers identifiés.
 ✓ Hook exécuté ici ; chargement natif encore à vérifier.
 ✓ À emporter : esar-notre-toolkit.zip
 Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxzswc0000gn/T/esar-atelier-um68xooj/esar-notre-toolkit.zip
 </pre></div></section>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA · 2 MIN</p><h2 style="font-size:30px;line-height:1.15">Installer : savoir où cela prend effet</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA · 2 min</p><h2>Installer : savoir où cela prend effet</h2>
 <p>Vous avez trois états distincts, tous utiles :</p>
 <table><tr><th>État</th><th>Ce qui est établi</th></tr>
 <tr><td>Instructions collées dans un chat</td><td>Le texte a été fourni au modèle ; il faut examiner l’effet.</td></tr>
@@ -555,7 +572,7 @@ Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxz
 <p>La notice du ZIP donne les étapes pour le troisième état. La démonstration peut être collective : personne ne doit perdre l’atelier à résoudre un compte ou un terminal.</p>
 <p><b>Sortie de séance :</b> « Nous avons changé <i>ce comportement</i>. Voici l’essai qui le montre. Voici encore <i>ce que nous n’avons pas résolu</i>. »</p>
 </div>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA </p><h2 style="font-size:30px;line-height:1.15">Pour aller plus loin — pas un prérequis</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA</p><h2>Pour aller plus loin — pas un prérequis</h2>
 <p><b>Quatre voies, des hooks différents.</b> Le guide <code>COMPATIBILITE.md</code> dans votre ZIP donne les sources techniques et l’état exact des essais.</p>
 <table><tr><th>Client</th><th>Skill locale documentée</th><th>Interception native</th></tr>
 <tr><td>Codex · OpenAI</td><td><code>.agents/skills/</code></td><td><code>PreToolUse</code> ; adapter aux outils effectivement couverts.</td></tr>
@@ -569,7 +586,7 @@ Hors notebook — fichier disponible ici : /var/folders/g0/4r5n69ds7n50nsphkdfxz
 <li><b>Une panne :</b> changez temporairement une clé dans un événement de test. Observez l’arrêt. Pourquoi le même échec pourrait-il être traité autrement par un agent natif ?</li></ul>
 <p>À la prochaine séance : votre version ne devient pas meilleure parce qu’elle est plus longue. Elle devient meilleure si un essai pertinent montre ce qu’elle permet, empêche ou laisse encore passer.</p>
 </div>
-<div style="border-top:2px solid #777;padding:18px 0 10px"><p style="font-size:12px;letter-spacing:2px">ATELIER · JUGER L’IA </p><h2 style="font-size:30px;line-height:1.15">Sources, fabrication, limites</h2>
+<div class="etape"><p class="k">Atelier · Juger l’IA</p><h2>Sources, fabrication, limites</h2>
 <p>Ce notebook est une proposition pédagogique réalisée pour ESAR S3. Il reprend l’idée Skill de lieu + filtre de domaine de la trousse locale <code>ESAR/_toolkit/juger-ia</code>, mais son code est une adaptation ciblée à <code>WebFetch</code>, avec ses propres essais.</p>
 <p>Références techniques : <a href="https://research.google.com/colaboratory/faq.html">Google Colab — FAQ</a> ; <a href="https://code.claude.com/docs/en/hooks">Claude Code — hooks</a> ; <a href="https://code.claude.com/docs/en/plugins">Claude Code — plugins</a>.</p>
 <p><b>Ne pas confondre :</b> un banc Python local réussi, un import réel dans Colab, un téléchargement autorisé par le navigateur et le déclenchement d’un hook dans Claude Code sont quatre vérifications différentes. La notice accompagnant ce fichier dit lesquelles ont effectivement été réalisées.</p>

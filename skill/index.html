@@ -290,7 +290,7 @@ function blocEssai(i,c){
 
 /* ---------- écran : les trois côte à côte, celle à signer (LesTrois) ---------- */
 function vueTrois(tete,box){
-  titre(tete,D.binome.question||"—","question-lue");
+  titre(tete,D.binome.question||cap(t("eTrois")),"question-lue");
   var s=h("section",{id:"quatre"}),q=JA.quatre(D),bc=JA.banc(),qs={};
   s.appendChild(h("h2",{class:"ja-lab",id:"signer-titre",text:bc.signer}));
   s.appendChild(h("p",{class:"ja-etat",id:"signer-aide",style:"margin:4px 0 16px",text:t("signerAide")}));

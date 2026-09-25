@@ -1,5 +1,5 @@
-/* Judging AI · commun à toutes les pages : le dossier du binôme (export, import), la version en pied de page
-   (pages anciennes) ou sur l'écran du dossier (skill/#dossier, outils()).
+/* Judging AI · commun à toutes les pages : le dossier du binôme (export, import) et la version, sur l'écran du dossier
+   seulement (skill/#dossier, outils()) ; le carré de la paire dans l'en-tête de chaque page.
    Le dossier vit dans ce navigateur (localStorage "judging-ai-dossier") ; le fichier exporté est la seule copie hors du navigateur.
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
@@ -272,16 +272,7 @@ var JA = (function () {
     });
   }
 
-  /* ---------- le pied de page ---------- */
-  var CSS = ".ja-pied{max-width:760px;margin:2.4em auto 0;padding:1.2em max(18px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px));border-top:1px solid var(--trait);display:flex;flex-direction:column;gap:.7em;font-family:var(--sans)}" +
-    ".ja-k{font:500 13px/1.3 var(--mono);letter-spacing:.08em;color:var(--sourd);margin:0}.ja-s{font:400 14px/1.45 var(--sans);color:var(--sourd);margin:0}" +
-    ".ja-row{display:flex;gap:16px;flex-wrap:wrap;align-items:center}.ja-act{background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 15px/1 var(--serif);letter-spacing:.12em;padding:0 1.1em;min-height:48px}" +
-    ".ja-txt{background:none;border:0;border-bottom:2px solid var(--orange);border-radius:0;color:var(--encre);font:500 15px/1.3 var(--sans);padding:0 0 4px;min-height:44px}" +
-    ".ja-v{font:400 12px/1.4 var(--mono);color:var(--sourd);margin:0}" +
-    ".ja-dlg{background:var(--fond);color:var(--encre);border:0;border-top:2px solid var(--orange);border-radius:0;max-width:520px;width:calc(100% - 36px);padding:1.2em;font:400 16px/1.45 var(--sans)}.ja-dlg::backdrop{background:rgba(0,0,0,.6)}.ja-dlg p{margin:0 0 .8em}" +
-    ".ja-crit{display:flex;flex-direction:column;gap:.55em}.ja-li{display:grid;grid-template-columns:1.6em 1fr;gap:.6em;font:400 16px/1.45 var(--sans)}.ja-n{color:var(--orange);font:400 22px/1.1 var(--serif)}.ja-compte{font:500 13px/1 var(--mono);color:var(--orange);white-space:nowrap}" +
-    "@media print{.ja-pied{display:none}}";
-  var parent = null, fileIn;
+  var fileIn;
   /* la paire de couleurs (V3) : un petit carré dans l'en-tête, qui change de paire à chaque clic ; seulement sur les pages qui chargent ds.css */
   var PAIRES = ["vermillon", "outremer", "violet", "petrole"], PKEY = "judging-ai-paire";
   function paire() { var v = ""; try { v = localStorage.getItem(PKEY) || ""; } catch (e) {} return PAIRES.indexOf(v) >= 0 ? v : "vermillon"; }
@@ -290,10 +281,11 @@ var JA = (function () {
   function carrePaire() {
     var b = document.getElementById("paire");
     if (!b) {
-      var hd = document.querySelector(".hd"), th = document.getElementById("theme");
-      if (!hd || !th || !document.querySelector('link[href$="ds.css"]')) return;
-      b = document.createElement("button"); b.id = "paire"; b.type = "button"; b.appendChild(document.createElement("i"));
-      hd.insertBefore(b, th);
+      /* pages anciennes (sans body.ja) : l'en-tête du système (.ja-tete .outils : langue, thème, puis le carré) */
+      var outils = document.querySelector(".ja-tete .outils"), th = document.getElementById("theme");
+      if (!outils || !th || document.body.classList.contains("ja") || !document.querySelector('link[href$="ds.css"]')) return;
+      b = document.createElement("button"); b.id = "paire"; b.type = "button";
+      outils.appendChild(b);
     }
     if (b.getAttribute("data-lie")) return; b.setAttribute("data-lie", "1");
     function nommer() { b.setAttribute("aria-label", (lang() === "fr" ? "couleur : " : "colour: ") + paire().replace("petrole", "pétrole")); }
@@ -309,29 +301,7 @@ var JA = (function () {
     document.body.appendChild(fileIn);
     return true;
   }
-  function pied(conteneur) {
-    if (conteneur) parent = conteneur;
-    if (!document.getElementById("ja-css")) { var st = h("style", { id: "ja-css" }); st.textContent = CSS; document.head.appendChild(st); }
-    if (fichier()) {
-      var lb = document.getElementById("lang"); if (lb) lb.addEventListener("click", function () { setTimeout(function () { pied(); }, 0); });
-    }
-    var old = document.getElementById("ja-pied"); if (old) old.remove();
-    var avant = false; try { avant = !!localStorage.getItem(AVANT); } catch (e) {}
-    var f = h("footer", { class: "ja-pied", id: "ja-pied" }, [
-      h("p", { class: "ja-k", text: t("dossier") }),
-      h("p", { class: "ja-s", text: t("pied") }),
-      h("div", { class: "ja-row" }, [
-        h("button", { type: "button", class: "ja-act", id: "ja-export", text: t("exJson"), on: { click: exporterJson } }),
-        h("button", { type: "button", class: "ja-txt", id: "ja-export-md", text: t("exMd"), on: { click: exporterMd } }),
-        h("button", { type: "button", class: "ja-txt", id: "ja-import", text: t("imp"), on: { click: function () { fileIn.click(); } } })
-      ].concat(avant ? [h("button", { type: "button", class: "ja-txt", id: "ja-retour", text: t("retour"), on: { click: revenir } })] : [])),
-      h("p", { class: "ja-v", text: "judging ai · " + t("version") + " " + VERSION })
-    ]);
-    (parent || document.body).appendChild(f);
-    return f;
-  }
-
-  /* ---------- export et import sur l'écran du dossier (pages sur le système V3 : pas de pied de page) ---------- */
+  /* ---------- export et import sur l'écran du dossier (skill/#dossier) : le seul endroit, plus de pied de page ---------- */
   function outils() {
     fichier();
     var avant = false; try { avant = !!localStorage.getItem(AVANT); } catch (e) {}
@@ -371,5 +341,5 @@ var JA = (function () {
   }
 
   return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, CONDS: CONDS, banc: function () { return t("banc"); }, condLabel: condLabel, score: score, sur: sur, quatre: quatre, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
-    pied: pied, outils: outils, carre: carrePaire, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
+    pied: function () {}, outils: outils, carre: carrePaire, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
 })();

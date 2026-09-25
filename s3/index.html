@@ -11,20 +11,7 @@
 <link rel="icon" href="../icon-192.png">
 <title>Judging AI · S3 sans papier</title>
 <style>
-/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
-
-:root{
-  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
-  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
-  --serif:Georgia,'Times New Roman',serif;
-  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
-  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
-}
-:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+/* Judging AI · the tokens, the faces and the header come from ../ds.css (design system « Juger l'IA » V3); this page keeps only its own layout. */
 
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
@@ -57,34 +44,78 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 .help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
 
 button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{max-width:900px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
-.hd .sp{flex:1}.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none}.save{font-size:11px;opacity:.8}
-main{max-width:900px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
-.mast{font:400 clamp(32px,8vw,58px)/1.04 var(--serif);margin:.2em 0;max-width:16ch}.intro{font:400 clamp(17px,4vw,21px)/1.5 var(--sans);color:var(--encre2);max-width:70ch}
-.top{margin-top:2.2em}.k{font:600 12px/1.3 var(--mono);letter-spacing:.09em;color:var(--orange);text-transform:uppercase}
-.notice{border-left:2px solid var(--orange);background:var(--boite);padding:.8em 1em;margin:1em 0;font:400 14px/1.55 var(--sans);color:var(--encre2)}
-.tabs{position:sticky;top:0;z-index:4;display:flex;gap:8px;background:var(--fond);border-bottom:1px solid var(--trait);padding:8px 0}.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;min-height:48px;font:500 14px/1 var(--mono);color:var(--sourd)}.tabs button[aria-selected=true]{color:var(--encre);border-color:var(--orange)}.tabs button[hidden]{display:none}
-.panel[hidden]{display:none}.worksheet-picker{display:none!important}.section{border-top:1px solid var(--trait);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}.section h2{display:inline;font:400 clamp(23px,5vw,31px)/1.2 var(--serif);margin:0}.n{display:inline-block;min-width:2em;color:var(--orange);font:400 28px/1 var(--serif)}
-label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spacing:.04em;margin:1.1em 0 .35em}input[type=text],textarea{width:100%;box-sizing:border-box;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}textarea{min-height:86px;resize:vertical}input:focus,textarea:focus{outline:0;border-bottom-color:var(--orange)}
-.choices{border:0;margin:1.2em 0;padding:0}.choices legend{font:600 13px/1.4 var(--mono);letter-spacing:.04em;color:var(--orange);margin-bottom:.5em}.choice{display:flex;gap:.7em;align-items:flex-start;margin:.5em 0;padding:.7em;border:1px solid var(--trait);font:400 16px/1.4 var(--sans);color:var(--encre)}.choice input{margin:.25em 0 0;flex:0 0 auto}.step{font:600 12px/1.3 var(--mono);letter-spacing:.08em;color:var(--orange);text-transform:uppercase;margin-top:1.5em}
-.act{display:inline-block;background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 15px/1.2 var(--serif);letter-spacing:.1em;padding:1em 1.2em;min-height:50px}.act:disabled{opacity:.35}.txtbtn{background:none;border:0;border-bottom:2px solid var(--orange);color:var(--encre);font:500 15px/1.3 var(--sans);padding:6px 0;min-height:42px}.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.source{border-top:1px solid var(--trait);padding:.9em 0}.source h3{display:inline;font:400 22px/1.25 var(--serif);margin:0}.badge{display:inline-block;margin-left:.5em;color:var(--orange);font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.meta{font:400 12px/1.55 var(--mono);color:var(--sourd)}blockquote{margin:1em 0;padding:.2em 0 .2em 1em;border-left:2px solid var(--orange);font:400 17px/1.5 var(--serif)}.limit{font:400 14px/1.55 var(--sans);color:var(--sourd)}
-.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:400 26px/1.2 var(--serif);margin-bottom:.5em}.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--orange);font:400 23px/1 var(--serif)}
-.route{border-top:1px solid var(--trait);border-bottom:1px solid var(--trait);padding:1em 0;margin:1.3em 0}.route>summary{list-style:none;cursor:pointer;font:400 25px/1.25 var(--serif)}.route>summary::-webkit-details-marker{display:none}.route>summary:after{content:" +";color:var(--orange)}.route[open]>summary:after{content:" −"}.route ol{list-style:none;padding:0;margin:1em 0 0;counter-reset:module}.route li{counter-increment:module;border-top:1px solid var(--trait);padding:1em 0}.route h3{font:400 22px/1.25 var(--serif);margin:0}.route h3:before{content:counter(module) ". ";color:var(--orange)}.route .time{font:600 11px/1.4 var(--mono);letter-spacing:.07em;color:var(--orange);margin:.35em 0}.route .goal{font:400 16px/1.5 var(--sans);margin:.45em 0}.route dl{display:grid;grid-template-columns:6.5em 1fr;gap:.35em .8em;margin:.75em 0 0}.route dt{font:600 11px/1.4 var(--mono);letter-spacing:.05em;color:var(--sourd)}.route dd{font:400 14px/1.45 var(--sans);margin:0}
-.footer{margin-top:2em;border-top:1px solid var(--trait);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:520px){.tabs button{font-size:12px}.source h3{font-size:20px}.hd .where{display:none}}
-/* The module number follows the projected lesson; worksheet numbers stay separate. */
-.route{background:#08090a;color:#f4f1e8;padding:22px;border:1px solid #555}.route h2{font:400 28px/1.2 var(--serif);margin:0 0 18px}.module-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.module-controls label{color:#f4f1e8;font-size:16px;margin:0}.module-controls select{width:100%;max-width:100%;min-height:54px;background:#171819;color:#fff;border:1px solid #777;padding:10px;font:400 18px/1.4 var(--sans)}.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}.module-buttons button,.module-actions button,.module-actions a{font:500 18px/1.4 var(--sans);min-height:48px;padding:10px 14px;border:1px solid #aaa;background:#171819;color:#fff;text-decoration:none}.module-buttons button:disabled{opacity:.4}.route li[hidden]{display:none}.route h3{font-size:clamp(30px,5vw,44px);line-height:1.15}.route h3:before{content:none}.module-number{font:600 19px/1.4 var(--mono);color:#f09772;margin:0 0 12px}.route .time{font-size:16px}.route .goal{font-size:22px;line-height:1.5}.route dl{grid-template-columns:1fr;gap:5px}.route dt{font-size:16px;color:#f09772;margin-top:12px}.route dd{font-size:19px;line-height:1.55}.module-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.module-bar{position:sticky;top:0;z-index:5;background:#08090a;color:#fff;border-bottom:1px solid #777;display:flex;align-items:center;gap:12px;padding:10px 0;min-height:48px}.module-bar button{background:none;color:#fff;border:0;text-align:left;font:500 17px/1.35 var(--sans);min-height:42px}.module-bar span{color:#f09772}.tabs{top:68px}.tabs button{font-size:17px}.notice,.limit{font-size:18px}label{font:500 18px/1.45 var(--sans);letter-spacing:0}.meta{font-size:16px}blockquote{font-size:21px}.source h3{font-size:26px}.section .n{font:500 16px/1.5 var(--mono);min-width:0;display:block;margin-bottom:6px}.section,.field-jump{scroll-margin-top:160px}.module-actions button:focus-visible,.module-controls select:focus-visible{outline:3px solid #f09772;outline-offset:3px}@media(max-width:520px){.route{padding:18px}.route .goal{font-size:21px}.module-bar button{font-size:16px}.tabs button{font-size:16px}.route dd{font-size:18px}.module-actions>*{width:100%;text-align:left;box-sizing:border-box}} 
-@media print{.hd,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
-[hidden]{display:none!important}.embedded>.hd,.embedded main>.top,.embedded main>.mast,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 12px 30px}.tabs{position:static}.module-bar{position:static}.route{margin-top:12px}
+/* on the design system: the band holds the header and the one heading; below it, ink on paper, ink rules, no boxes */
+.intro{max-width:40em}
+.tabs{position:static;display:flex;flex-wrap:wrap;gap:0 28px;background:var(--fond);border-top:2px solid var(--encre);padding:0;margin-top:8px}
+.tabs button{flex:0 0 auto;background:none;border:0;padding:12px 0 0;min-height:44px;font:500 15px/1.3 var(--sans);color:var(--sourd);cursor:pointer}
+.tabs button::first-letter{text-transform:uppercase}
+.tabs button[aria-selected=true]{color:var(--encre);box-shadow:inset 0 4px 0 var(--accent);margin-top:-2px;padding-top:14px}
+.tabs button[hidden]{display:none}
+.panel[hidden]{display:none}.worksheet-picker{display:none!important}
+.section{border-top:1px solid var(--encre);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}
+.section h2{display:inline;font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0}
+.section .n{display:block;min-width:0;margin-bottom:6px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.section,.field-jump{scroll-margin-top:24px}
+textarea{min-height:86px;resize:vertical}
+.choices{border:0;margin:1.2em 0;padding:0}
+.choices legend{font:500 14px/1.35 var(--sans);letter-spacing:0;color:var(--sourd);margin-bottom:.5em;padding:0}
+.choice{display:flex;gap:12px;align-items:flex-start;margin:0;padding:12px 0;border-top:1px solid var(--encre);font:400 17px/1.4 var(--sans);color:var(--encre);cursor:pointer}
+.choice:last-of-type{border-bottom:1px solid var(--encre)}
+.choice input{-webkit-appearance:none;appearance:none;flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;border:1.5px solid var(--encre);border-radius:0;background:transparent;cursor:pointer}
+.choice input:checked{background:var(--encre);box-shadow:inset 0 0 0 3px var(--fond)}
+.row{display:flex;gap:14px 28px;flex-wrap:wrap;align-items:center}
+#identity .row{align-items:flex-end}#identity .row>div{flex:1 1 220px}
+.source{border-top:1px solid var(--encre);padding:.9em 0}
+.source h3{display:inline;font:500 22px/1.25 var(--sans);letter-spacing:-.01em;margin:0}
+.badge{display:inline-block;margin-left:.6em;color:var(--sourd);font:400 14px/1 var(--sans)}
+.meta{font:400 14px/1.5 var(--sans);color:var(--sourd)}
+.limit{font:400 15px/1.55 var(--sans);color:var(--sourd);max-width:46em}
+.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:500 26px/1.2 var(--sans);letter-spacing:-.015em;margin-bottom:.5em}
+.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--encre);font:600 20px/1.2 var(--sans)}
+.footer{margin-top:2em;border-top:1px solid var(--encre);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* the module that follows the projected lesson: on paper, in ink */
+.module-bar{position:static;display:flex;align-items:center;gap:12px;margin-top:32px;min-height:44px}
+.module-bar button{background:none;border:0;padding:0;min-height:44px;text-align:left;color:var(--encre);font:500 17px/1.35 var(--sans);cursor:pointer}
+.module-bar span{color:var(--encre)}
+.panel>h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:14px 0 10px}
+.route{margin:28px 0 0;padding:0;background:none;color:var(--encre);border:0}
+.route h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0 0 20px}
+.module-controls{display:grid;gap:10px;max-width:40em}
+.module-controls label{margin:0}
+.module-controls select{-webkit-appearance:none;appearance:none;min-height:48px;padding:8px 26px 8px 0;font:500 19px/1.3 var(--sans);cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--encre) 50%),linear-gradient(135deg,var(--encre) 50%,transparent 50%)!important;
+  background-position:calc(100% - 10px) 55%,calc(100% - 5px) 55%!important;background-size:5px 5px!important;background-repeat:no-repeat!important}
+.module-controls select option{background:var(--fond);color:var(--encre)}
+.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}
+.module-buttons button{background:none;border:0;padding:10px 0;min-height:44px;color:var(--encre);font:500 17px/1.3 var(--sans);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer}
+.module-buttons button:disabled{color:var(--sourd);text-decoration:none;cursor:default}
+.route ol{list-style:none;padding:0;margin:28px 0 0}
+.route li{border-top:2px solid var(--encre);padding:18px 0 0}
+.route li[hidden]{display:none}
+.module-number{margin:0 0 10px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.route h3{margin:0;font:500 28px/1.15 var(--sans);letter-spacing:-.015em}
+.route .time{margin:6px 0 0;font:400 14px/1.4 var(--sans);color:var(--sourd)}
+.route .goal{margin:16px 0 0;font:400 19px/1.5 var(--sans);max-width:38em}
+.route .goal strong{font-weight:600}
+.route dl{display:grid;grid-template-columns:1fr;gap:4px;margin:16px 0 0;max-width:40em}
+.route dt{margin-top:12px;font:500 14px/1.4 var(--sans);color:var(--sourd)}
+.route dd{margin:0;font:400 17px/1.5 var(--sans)}
+.module-actions{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;margin-top:28px}
+.module-actions button,.module-actions a{display:inline-block;background:var(--encre);color:var(--fond);border:0;border-radius:0;font:500 17px/1.2 var(--sans);padding:16px 26px;min-height:44px;text-decoration:none;cursor:pointer}
+.module-actions button:hover,.module-actions a:hover{box-shadow:inset 0 -4px 0 var(--accent)}
+@media(max-width:520px){.tabs{gap:0 20px}.source h3{font-size:20px}.route .goal{font-size:18px}.module-actions>*{width:100%;text-align:center}}
+@media print{.ja-bande .outils,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
+[hidden]{display:none!important}.embedded>.ja-bande,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 0 30px}.embedded .module-bar{margin-top:8px}
 </style>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body>
-<div class="hd"><a href="../">judging ai</a><span class="where">· S3 sans papier</span><span class="sp"></span><span id="save" class="save">prêt</span><button id="theme" aria-label="thème">◐</button></div>
+<header class="ja-bande" id="bande"><div class="ja-page">
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S3 sans papier</i></span><span class="outils"><span id="save" class="save">prêt</span><button type="button" id="theme" aria-label="thème">◐</button><button type="button" id="paire"></button></span></div>
+<p class="ja-lab">ESAR · séance 3 · 18 septembre 2026</p>
+<h1 class="ja-question">Ce que notre essai nous permet de dire</h1>
+</div></header>
 <main>
-  <div class="top"><span class="k">ESAR · séance 3 · 18 septembre 2026</span></div>
-  <h1 class="mast">Ce que notre essai nous permet de dire</h1>
   <p class="intro">La fiche de séance est ici. Chaque exercice ouvre seulement les champs nécessaires. Vos réponses restent dans ce navigateur.</p>
   <p class="notice">Un seul appareil par binôme suffit. Exportez à la fin. N’écrivez aucune donnée privée dans un service public.</p>
 
@@ -122,7 +153,7 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
     <div id="source-lock" class="locked">
       <strong>Trois sources communes.</strong>
       <p class="intro">Choisissez d’abord une affirmation dans l’exercice II, puis lisez les trois sources et relevez un passage précis.</p>
-      <button id="unlock" class="act">LIRE LES 3 SOURCES</button>
+      <button id="unlock" class="act">Lire les 3 sources</button>
     </div>
     <div id="source-list" hidden></div>
   </section>
@@ -131,7 +162,7 @@ label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spac
     <div class="top"><span class="k">fin de séance</span></div>
     <h2>Emporter la trace, pas du papier</h2>
     <p class="intro">Le Markdown est lisible partout. Le JSON permet de retrouver les champs dans cette page. Téléchargez les deux si vous changez d’appareil.</p>
-    <div class="row"><button id="md" class="act">TÉLÉCHARGER LE MARKDOWN</button><button id="json" class="txtbtn" style="display:none">sauvegarde JSON</button><button id="copy" class="txtbtn" style="display:none">copier le texte</button></div>
+    <div class="row"><button id="md" class="act">Télécharger le Markdown</button><button id="json" class="txtbtn" style="display:none">sauvegarde JSON</button><button id="copy" class="txtbtn" style="display:none">copier le texte</button></div>
     <p class="notice">Cette page fait partie de l’app Judging AI et fonctionne hors ligne après sa première ouverture. La clé de l’enseignant n’est pas dans l’app.</p>
     <div class="footer row"><a class="txtbtn" href="../atelier/">ouvrir le notebook</a></div>
   </section>
@@ -155,7 +186,7 @@ var sections=[
  {n:"3b",title:"Exercice IV · examiner une affirmation sur notre lieu",note:"Choisissez une phrase précise de la réponse. Ouvrez réellement une source sur votre lieu. Si vous n’en avez pas aujourd’hui, utilisez une des trois sources Saint-Georges pour vous entraîner.",fields:[
   ["place_answer","Réponse et conditions conservées"],["place_claim","Affirmation prioritaire : une phrase précise à examiner"],["place_passage","Source réellement ouverte + passage exact : livre, article, plan, archive, notice ou page institutionnelle"],["place_bound","Ce passage permet de dire… ; il ne permet pas de dire…"],["place_decision","Garder / corriger / suspendre — et conséquence pour notre travail"]]},
  {n:"4",title:"Exercice V · créer et essayer notre Skill",note:"Téléphone ou ordinateur, dans l’application d’IA que vous utilisez déjà. Deux conversations neuves, le même modèle affiché et la même question exacte.",fields:[
-  ["skill_question","1 · QUESTION · La question exacte, copiée une seule fois"],["skill_model","1 · CONDITIONS · Application, modèle affiché, accès web oui/non"],["skill_before","2 · SANS LA SKILL · Un passage exact de la première réponse"],["skill_behavior","3 · PROBLÈME OBSERVÉ · Ce que nous voulons changer ou préserver"],["skill_instruction","4 · SKILL · Une instruction courte et testable"],["skill_expected","5 · PRÉDICTION · Ce qui devrait changer ; ce qui montrerait l’absence d’effet"],["skill_cost","5 · RISQUE · Un résultat utile que la Skill pourrait faire perdre"],["skill_observed","6 · AVEC LA SKILL · Un passage exact de la seconde réponse"],["skill_limit","7 · COMPARAISON · Effet visible, absence d’effet, coût ou limite"]]},
+  ["skill_question","1 · Question · La question exacte, copiée une seule fois"],["skill_model","1 · Conditions · Application, modèle affiché, accès web oui/non"],["skill_before","2 · Sans la Skill · Un passage exact de la première réponse"],["skill_behavior","3 · Problème observé · Ce que nous voulons changer ou préserver"],["skill_instruction","4 · Skill · Une instruction courte et testable"],["skill_expected","5 · Prédiction · Ce qui devrait changer ; ce qui montrerait l’absence d’effet"],["skill_cost","5 · Risque · Un résultat utile que la Skill pourrait faire perdre"],["skill_observed","6 · Avec la Skill · Un passage exact de la seconde réponse"],["skill_limit","7 · Comparaison · Effet visible, absence d’effet, coût ou limite"]]},
  {n:"5",title:"Exercice VI · le hook, reporté à la séance 4",note:"Cette fiche reste ouverte si vous voulez la remplir, mais elle n’est pas demandée aujourd’hui.",fields:[
   ["hook_allowed","Adresse prévue"],["hook_blocked","Adresse hors liste"],["hook_lookalike","Hôte ressemblant"],["hook_error","Erreur sur l’hôte admis"],["hook_testimony","Témoignage utile hors liste"],["hook_missing","URL absente"],["hook_revision","Source utile écartée : quel changement justifions-nous ?"],["hook_false","Quel essai montre que le faux hôte reste bloqué ?"],["hook_limit","Ce mécanisme ne peut toujours pas décider"]]},
  {n:"6",title:"Exercice VIII · sans / avec, mêmes conditions",note:"Une amélioration de formulation n’est pas une vérification. Aucun effet visible est un résultat. Des instructions collées ne prouvent pas un chargement natif de Skill.",fields:[
@@ -193,16 +224,16 @@ function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));document.
 function field(id,label,short){var control=short?h("input",{type:"text",id:id}):h("textarea",{id:id});control.value=state.fields[id]||"";control.addEventListener("input",function(){state.fields[id]=control.value;persist();});return h("div",{class:"field-jump",id:"field-"+id},[h("label",{for:id,text:label}),control]);}
 function choices(id,legend,options){var fs=h("fieldset",{class:"choices",id:"field-"+id});fs.appendChild(h("legend",{text:legend}));options.forEach(function(option){var input=h("input",{type:"radio",name:id,value:option});input.checked=state.fields[id]===option;input.onchange=function(){state.fields[id]=option;persist();};fs.appendChild(h("label",{class:"choice"},[input,h("span",{text:option})]));});return fs;}
 function skillMarkdown(){return ["---","name: skill-"+(state.fields.place||"notre-lieu").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40),"description: À utiliser pour répondre à notre question sur "+(state.fields.place||"notre lieu")+".","---","","# Instruction","",state.fields.skill_instruction||"[Écrivez votre instruction dans l’app]","","# Question d’essai","",state.fields.skill_question||"[Question exacte]","","# Limite à surveiller","",state.fields.skill_cost||"[Résultat utile à ne pas perdre]",""].join("\n");}
-function renderWork(){var ident=document.getElementById("identity");ident.appendChild(h("div",{class:"row"},identity.map(function(f){return field(f[0],f[1],true);})));var box=document.getElementById("sections");sections.forEach(function(s,idx){var d=h("details",{class:"section",id:"worksheet-"+s.n,open:idx<2});d.appendChild(h("summary",null,[h("span",{class:"n",text:"Fiche "+s.n}),h("h2",{text:s.title})]));d.appendChild(h("p",{class:"notice",text:s.note}));if(s.n==="1"){d.appendChild(choices("sg_claim","1 · CHOISISSEZ UNE AFFIRMATION",["A · Le bâtiment de 1931 a été conçu par Poirrier, Lotte et Bordes ; Antoine Tabet était architecte d’opérations sur place.","B · Antoine Tabet a conçu l’extension réalisée en 1946–47.","C · Auguste Perret a conçu l’hôtel avec Antoine Tabet."]));d.appendChild(choices("sg_result","3 · APRÈS LECTURE, CHOISISSEZ UN STATUT",["Étayée","À préciser","Contredite","Non résolue"]));}s.fields.forEach(function(f){d.appendChild(field(f[0],f[1],f[0]==="exit_name"));});if(s.n==="4"){d.appendChild(h("p",{class:"notice",text:"MODÈLE D’INSTRUCTION · Pour chaque affirmation sur notre lieu : 1) indique la source ou écris « sans source » ; 2) distingue fait rapporté, inférence et point non résolu ; 3) ne supprime pas une piste utile : marque-la « à vérifier ». Adaptez ce modèle au problème réellement observé."}));var buttons=h("div",{class:"row"});buttons.appendChild(h("button",{type:"button",class:"act",text:"TÉLÉCHARGER SKILL.md",on:{click:function(){download("SKILL.md",skillMarkdown(),"text/markdown;charset=utf-8");}}}));buttons.appendChild(h("button",{type:"button",class:"txtbtn",text:"COPIER LA SKILL",on:{click:function(){navigator.clipboard.writeText(skillMarkdown());}}}));d.appendChild(buttons);}box.appendChild(d);});}
+function renderWork(){var ident=document.getElementById("identity");ident.appendChild(h("div",{class:"row"},identity.map(function(f){return field(f[0],f[1],true);})));var box=document.getElementById("sections");sections.forEach(function(s,idx){var d=h("details",{class:"section",id:"worksheet-"+s.n,open:idx<2});d.appendChild(h("summary",null,[h("span",{class:"n",text:"Fiche "+s.n}),h("h2",{text:s.title})]));d.appendChild(h("p",{class:"notice",text:s.note}));if(s.n==="1"){d.appendChild(choices("sg_claim","1 · Choisissez une affirmation",["A · Le bâtiment de 1931 a été conçu par Poirrier, Lotte et Bordes ; Antoine Tabet était architecte d’opérations sur place.","B · Antoine Tabet a conçu l’extension réalisée en 1946–47.","C · Auguste Perret a conçu l’hôtel avec Antoine Tabet."]));d.appendChild(choices("sg_result","3 · Après lecture, choisissez un statut",["Étayée","À préciser","Contredite","Non résolue"]));}s.fields.forEach(function(f){d.appendChild(field(f[0],f[1],f[0]==="exit_name"));});if(s.n==="4"){d.appendChild(h("p",{class:"notice",text:"Modèle d’instruction · Pour chaque affirmation sur notre lieu : 1) indique la source ou écris « sans source » ; 2) distingue fait rapporté, inférence et point non résolu ; 3) ne supprime pas une piste utile : marque-la « à vérifier ». Adaptez ce modèle au problème réellement observé."}));var buttons=h("div",{class:"row"});buttons.appendChild(h("button",{type:"button",class:"act",text:"Télécharger SKILL.md",on:{click:function(){download("SKILL.md",skillMarkdown(),"text/markdown;charset=utf-8");}}}));buttons.appendChild(h("button",{type:"button",class:"txtbtn",text:"Copier la Skill",on:{click:function(){navigator.clipboard.writeText(skillMarkdown());}}}));d.appendChild(buttons);}box.appendChild(d);});}
 function appendSource(box,s,i){var d=h("details",{class:"source",open:i<3});var sum=h("summary",null,[h("h3",{text:s.title})]);if(s.common)sum.appendChild(h("span",{class:"badge",text:"commun"}));d.appendChild(sum);d.appendChild(h("p",{class:"meta",text:s.meta}));s.quotes.forEach(function(q){d.appendChild(h("blockquote",{text:q}));});d.appendChild(h("p",{class:"limit",text:"Limite · "+s.limit}));box.appendChild(d);}
 function renderSources(){var box=document.getElementById("source-list");box.appendChild(h("div",{class:"top"},[h("span",{class:"k",text:"Hôtel Saint-Georges · les trois sources communes"})]));box.appendChild(h("p",{class:"intro",text:"Lisez un passage précis. Demandez : qui parle, sur quoi s’appuie-t-il, quel rôle et quelle phase décrit-il, et que ne permet-il pas de conclure ?"}));sources.slice(0,3).forEach(function(s,i){appendSource(box,s,i);});var extra=h("details",{class:"source"});extra.appendChild(h("summary",null,[h("h3",{text:"5 pistes supplémentaires · facultatif"})]));var extraBox=h("div");sources.slice(3).forEach(function(s,i){appendSource(extraBox,s,i+3);});extra.appendChild(extraBox);box.appendChild(extra);box.appendChild(h("div",{class:"notice four"},[h("strong",{text:"Retournez au travail et justifiez"}),h("p",{text:"Choisissez un statut : étayée, à préciser, contredite ou non résolue."}),h("p",{text:"Citez le passage et écrivez ce qu’il permet de dire — et ce qu’il ne permet pas de dire."})]));}
 function updateUnlock(){document.getElementById("unlock").disabled=false;if(state.unlocked){document.getElementById("source-lock").hidden=true;document.getElementById("source-list").hidden=false;}}
 function show(which){document.getElementById("module-route").hidden=which!=="module";document.getElementById("tab-module").setAttribute("aria-selected",String(which==="module"));["work","sources","keep"].forEach(function(id){var on=id===which;document.getElementById(id).hidden=!on;document.getElementById("tab-"+id).setAttribute("aria-selected",String(on));});history.replaceState(null,"","#"+which);window.scrollTo(0,0);}
 function setupModules(){
  var cards=Array.from(document.querySelectorAll(".route li")),select=document.getElementById("module-select"),current=0;
- var actions=[[["COMMENCER L’EXERCICE I","pair"]],[["COMMENCER L’EXERCICE II","sg_claim"]],[["OUVRIR L’ATELIER","atelier"]],[["COMMENCER L’EXERCICE IV","place_answer"]],[["COMMENCER L’EXERCICE V","skill_question"]],[["OUVRIR LA FICHE REPORTÉE","hook_allowed"]],[["COMMENCER L’EXERCICE VII","notice_50"]],[["COMMENCER L’EXERCICE VIII","bench_conditions"]],[["COMMENCER L’EXERCICE IX","exit_name"]]];
+ var actions=[[["Commencer l’exercice I","pair"]],[["Commencer l’exercice II","sg_claim"]],[["Ouvrir l’atelier","atelier"]],[["Commencer l’exercice IV","place_answer"]],[["Commencer l’exercice V","skill_question"]],[["Ouvrir la fiche reportée","hook_allowed"]],[["Commencer l’exercice VII","notice_50"]],[["Commencer l’exercice VIII","bench_conditions"]],[["Commencer l’exercice IX","exit_name"]]];
  function jump(target){if(target==="sources"||target==="keep"){show(target);return;}show("work");if(target==="pair"||target==="place")selectWorksheet("3");if(target==="sg_claim"){selectWorksheet("1");document.getElementById("field-sg_claim").scrollIntoView({block:"start"});return;}var control=document.getElementById(target),details=control.closest("details");if(details){selectWorksheet(details.id.replace("worksheet-",""));details.open=true;}document.getElementById("field-"+target).scrollIntoView({block:"start"});control.focus({preventScroll:true});}
- cards.forEach(function(card,i){var title=card.querySelector("h3").textContent;select.appendChild(h("option",{value:i,text:ROMAN[i]+" · "+title}));card.insertBefore(h("p",{class:"module-number",text:"EXERCICE "+ROMAN[i]+" / IX"}),card.firstChild);var goal=card.querySelector(".goal");goal.insertBefore(h("strong",{text:"Objectif · "}),goal.firstChild);var links=h("div",{class:"module-actions"});actions[i].forEach(function(a){links.appendChild(a[1]==="atelier"?h("a",{href:"https://fsckjournal.github.io/judging-ai/atelier/",target:"_blank",rel:"noopener",text:a[0]}):h("button",{type:"button",text:a[0],on:{click:function(){jump(a[1]);}}}));});card.appendChild(links);});
+ cards.forEach(function(card,i){var title=card.querySelector("h3").textContent;select.appendChild(h("option",{value:i,text:ROMAN[i]+" · "+title}));card.insertBefore(h("p",{class:"module-number",text:"Exercice "+ROMAN[i]+" / IX"}),card.firstChild);var goal=card.querySelector(".goal");goal.insertBefore(h("strong",{text:"Objectif · "}),goal.firstChild);var links=h("div",{class:"module-actions"});actions[i].forEach(function(a){links.appendChild(a[1]==="atelier"?h("a",{href:"https://fsckjournal.github.io/judging-ai/atelier/",target:"_blank",rel:"noopener",text:a[0]}):h("button",{type:"button",text:a[0],on:{click:function(){jump(a[1]);}}}));});card.appendChild(links);});
  cards[1].querySelector("dd").textContent="Lisez les trois affirmations proposées et choisissez-en une.";
  cards.forEach(function(card){card.querySelectorAll("dd").forEach(function(dd){dd.textContent=dd.textContent.replace(/(fiche|section) (\d)/gi,function(_,label,n){return "fiche "+ROMAN[Number(n)-1];}).replace("Sections 7 et 8","Fiches VII et VIII");});});
  function choose(n,save){current=Math.max(0,Math.min(8,n));cards.forEach(function(card,i){card.hidden=i!==current;});select.value=String(current);document.getElementById("module-prev").disabled=current===0;document.getElementById("module-next").disabled=current===8;document.getElementById("module-current").textContent="Exercice "+ROMAN[current]+" / IX";document.getElementById("module-current-title").textContent=cards[current].querySelector("h3").textContent;document.getElementById("tab-sources").hidden=[1,6].indexOf(current)<0;if(save){try{localStorage.setItem("judging-ai-s3-module",String(current));}catch(e){}}}
@@ -227,7 +258,6 @@ if(new URLSearchParams(location.search).has("embedded")){document.body.classList
 var start=location.hash.slice(1);if(["work","sources","keep"].indexOf(start)>=0){show(start);}else{show("module");}
 if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0)navigator.serviceWorker.register("../sw.js").catch(function(){});
 })();
-JA.pied();
 </script>
 </body>
 </html>
