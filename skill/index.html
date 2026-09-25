@@ -64,7 +64,7 @@ var T={
    ["ChatGPT","Plus ou Pro",["Onglet Skills (Plugins · Skills · GPTs) : importez.","Essayez le .zip ; s'il est refusé, SKILL.md seul.","Nouvelle conversation, puis la question exacte. Au banc : « chargée »."]],
    ["Coller","toute app, Gemini compris",["Bouton « copier le texte ».","Nouvelle conversation : collez-le comme premier message, puis la question exacte.","Au banc : « collée ». Ce n'est pas un chargement de Skill."]]],
   tous:"tous les essais",aucunE:"Aucun essai.",sansAvec:"sans puis avec",sans:"Réponse sans SKILL.md",avec:"Réponse avec SKILL.md",suppr:"Supprimer",supprQ:"Supprimer cet essai ?",
-  saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →",versProf:"SKILL.md, à copier →"},
+  saved:"✓ enregistré",notsaved:"non enregistré",langL:"langue",themeL:"thème",etapes:"les étapes",skillV:"SKILL.md · versions",leBanc:"← le banc",ouvrirB:"B · SKILL.md générique : l'essai →"},
  en:{titre:"The SKILL.md workshop",
   eQuestion:"the question",eTrois:"the three",eSkill:"the SKILL.md",eVersions:"versions",eCharger:"load",eDossier:"the dossier",eB:"generic",
   noms:"Names (comma separated)",lieu:"Place",question:"The question, identical in every run",questionVide:"Write the question first.",qModele:"En cinq lignes au plus : Issam Fares Institute, campus de l'AUB, Beyrouth. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?",modifier:"edit the question",copierQ:"copy the question",copierV:"copy v{n}",
@@ -93,7 +93,7 @@ var T={
    ["ChatGPT","Plus or Pro",["Skills tab (Plugins · Skills · GPTs): upload.","Try the .zip; if it is refused, SKILL.md alone.","New conversation, then the exact question. On the bench: “loaded”."]],
    ["Paste","any app, Gemini included",["“copy the text” button.","New conversation: paste it as the first message, then the exact question.","On the bench: “pasted”. This is not loading a Skill."]]],
   tous:"all runs",aucunE:"No runs.",sansAvec:"without then with",sans:"Answer without the SKILL.md",avec:"Answer with the SKILL.md",suppr:"Delete",supprQ:"Delete this run?",
-  saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps",skillV:"the SKILL.md · versions",leBanc:"← the bench",ouvrirB:"B · generic SKILL.md: the run →",versProf:"SKILL.md, to copy →"}
+  saved:"✓ saved",notsaved:"not saved",langL:"language",themeL:"theme",etapes:"steps",skillV:"the SKILL.md · versions",leBanc:"← the bench",ouvrirB:"B · generic SKILL.md: the run →"}
 };
 function t(k){return T[lang][k];}
 function r(s,o){return s.replace(/\{(\w+)\}/g,function(_,k){return o[k];});}
@@ -225,7 +225,6 @@ function vueCond(tete,box,c){
   var s=h("section",{class:"ja-cond",id:"banc","data-c":c});
   s.appendChild(h("div",{class:"tete"},[h("span",{class:"ja-l",text:c,"aria-hidden":"true"}),h("h2",{class:"nom"},[h("span",{class:"vis-cache",text:c+" · "}),document.createTextNode(sansL(c))])]));
   s.appendChild(h("p",{class:"ja-consigne",text:t("consigne")[c]}));
-  if(c==="C")s.appendChild(h("p",{style:"margin:14px 0 0"},[h("a",{class:"ja-lien petit",id:"vers-prof",href:"../prof/",text:t("versProf")})]));
   var i=JA.quatre(D)[c];
   if(i>=0&&(c==="B"||!B.refaire[c]))s.appendChild(blocEssai(i,c));
   else s.appendChild(formulaire(c,i));
