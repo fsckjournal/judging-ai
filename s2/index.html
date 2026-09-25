@@ -11,20 +11,7 @@
 <link rel="icon" href="../icon-192.png">
 <title>Judging AI · S2 · 11 septembre</title>
 <style>
-/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
-
-:root{
-  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
-  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
-  --serif:Georgia,'Times New Roman',serif;
-  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
-  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
-}
-:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+/* Judging AI · the tokens, the faces and the header come from ../ds.css (design system « Juger l'IA » V3); this page keeps only its own layout. */
 
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
@@ -57,34 +44,78 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 .help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
 
 button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{max-width:900px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
-.hd .sp{flex:1}.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none}.save{font-size:11px;opacity:.8}
-main{max-width:900px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
-.mast{font:400 clamp(32px,8vw,58px)/1.04 var(--serif);margin:.2em 0;max-width:16ch}.intro{font:400 clamp(17px,4vw,21px)/1.5 var(--sans);color:var(--encre2);max-width:70ch}
-.top{margin-top:2.2em}.k{font:600 12px/1.3 var(--mono);letter-spacing:.09em;color:var(--orange);text-transform:uppercase}
-.notice{border-left:2px solid var(--orange);background:var(--boite);padding:.8em 1em;margin:1em 0;font:400 14px/1.55 var(--sans);color:var(--encre2)}
-.tabs{position:sticky;top:0;z-index:4;display:flex;gap:8px;background:var(--fond);border-bottom:1px solid var(--trait);padding:8px 0}.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;min-height:48px;font:500 14px/1 var(--mono);color:var(--sourd)}.tabs button[aria-selected=true]{color:var(--encre);border-color:var(--orange)}.tabs button[hidden]{display:none}
-.panel[hidden]{display:none}.worksheet-picker{display:none!important}.section{border-top:1px solid var(--trait);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}.section h2{display:inline;font:400 clamp(23px,5vw,31px)/1.2 var(--serif);margin:0}.n{display:inline-block;min-width:2em;color:var(--orange);font:400 28px/1 var(--serif)}
-label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spacing:.04em;margin:1.1em 0 .35em}input[type=text],textarea{width:100%;box-sizing:border-box;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}textarea{min-height:86px;resize:vertical}input:focus,textarea:focus{outline:0;border-bottom-color:var(--orange)}
-.choices{border:0;margin:1.2em 0;padding:0}.choices legend{font:600 13px/1.4 var(--mono);letter-spacing:.04em;color:var(--orange);margin-bottom:.5em}.choice{display:flex;gap:.7em;align-items:flex-start;margin:.5em 0;padding:.7em;border:1px solid var(--trait);font:400 16px/1.4 var(--sans);color:var(--encre)}.choice input{margin:.25em 0 0;flex:0 0 auto}.step{font:600 12px/1.3 var(--mono);letter-spacing:.08em;color:var(--orange);text-transform:uppercase;margin-top:1.5em}
-.act{display:inline-block;background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 15px/1.2 var(--serif);letter-spacing:.1em;padding:1em 1.2em;min-height:50px}.act:disabled{opacity:.35}.txtbtn{background:none;border:0;border-bottom:2px solid var(--orange);color:var(--encre);font:500 15px/1.3 var(--sans);padding:6px 0;min-height:42px}.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.source{border-top:1px solid var(--trait);padding:.9em 0}.source h3{display:inline;font:400 22px/1.25 var(--serif);margin:0}.badge{display:inline-block;margin-left:.5em;color:var(--orange);font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.meta{font:400 12px/1.55 var(--mono);color:var(--sourd)}blockquote{margin:1em 0;padding:.2em 0 .2em 1em;border-left:2px solid var(--orange);font:400 17px/1.5 var(--serif)}.limit{font:400 14px/1.55 var(--sans);color:var(--sourd)}
-.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:400 26px/1.2 var(--serif);margin-bottom:.5em}.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--orange);font:400 23px/1 var(--serif)}
-.route{border-top:1px solid var(--trait);border-bottom:1px solid var(--trait);padding:1em 0;margin:1.3em 0}.route>summary{list-style:none;cursor:pointer;font:400 25px/1.25 var(--serif)}.route>summary::-webkit-details-marker{display:none}.route>summary:after{content:" +";color:var(--orange)}.route[open]>summary:after{content:" −"}.route ol{list-style:none;padding:0;margin:1em 0 0;counter-reset:module}.route li{counter-increment:module;border-top:1px solid var(--trait);padding:1em 0}.route h3{font:400 22px/1.25 var(--serif);margin:0}.route h3:before{content:counter(module) ". ";color:var(--orange)}.route .time{font:600 11px/1.4 var(--mono);letter-spacing:.07em;color:var(--orange);margin:.35em 0}.route .goal{font:400 16px/1.5 var(--sans);margin:.45em 0}.route dl{display:grid;grid-template-columns:6.5em 1fr;gap:.35em .8em;margin:.75em 0 0}.route dt{font:600 11px/1.4 var(--mono);letter-spacing:.05em;color:var(--sourd)}.route dd{font:400 14px/1.45 var(--sans);margin:0}
-.footer{margin-top:2em;border-top:1px solid var(--trait);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:520px){.tabs button{font-size:12px}.source h3{font-size:20px}.hd .where{display:none}}
-/* The module number follows the projected lesson; worksheet numbers stay separate. */
-.route{background:#08090a;color:#f4f1e8;padding:22px;border:1px solid #555}.route h2{font:400 28px/1.2 var(--serif);margin:0 0 18px}.module-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.module-controls label{color:#f4f1e8;font-size:16px;margin:0}.module-controls select{width:100%;max-width:100%;min-height:54px;background:#171819;color:#fff;border:1px solid #777;padding:10px;font:400 18px/1.4 var(--sans)}.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}.module-buttons button,.module-actions button,.module-actions a{font:500 18px/1.4 var(--sans);min-height:48px;padding:10px 14px;border:1px solid #aaa;background:#171819;color:#fff;text-decoration:none}.module-buttons button:disabled{opacity:.4}.route li[hidden]{display:none}.route h3{font-size:clamp(30px,5vw,44px);line-height:1.15}.route h3:before{content:none}.module-number{font:600 19px/1.4 var(--mono);color:#f09772;margin:0 0 12px}.route .time{font-size:16px}.route .goal{font-size:22px;line-height:1.5}.route dl{grid-template-columns:1fr;gap:5px}.route dt{font-size:16px;color:#f09772;margin-top:12px}.route dd{font-size:19px;line-height:1.55}.module-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.module-bar{position:sticky;top:0;z-index:5;background:#08090a;color:#fff;border-bottom:1px solid #777;display:flex;align-items:center;gap:12px;padding:10px 0;min-height:48px}.module-bar button{background:none;color:#fff;border:0;text-align:left;font:500 17px/1.35 var(--sans);min-height:42px}.module-bar span{color:#f09772}.tabs{top:68px}.tabs button{font-size:17px}.notice,.limit{font-size:18px}label{font:500 18px/1.45 var(--sans);letter-spacing:0}.meta{font-size:16px}blockquote{font-size:21px}.source h3{font-size:26px}.section .n{font:500 16px/1.5 var(--mono);min-width:0;display:block;margin-bottom:6px}.section,.field-jump{scroll-margin-top:160px}.module-actions button:focus-visible,.module-controls select:focus-visible{outline:3px solid #f09772;outline-offset:3px}@media(max-width:520px){.route{padding:18px}.route .goal{font-size:21px}.module-bar button{font-size:16px}.tabs button{font-size:16px}.route dd{font-size:18px}.module-actions>*{width:100%;text-align:left;box-sizing:border-box}} 
-@media print{.hd,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
-[hidden]{display:none!important}.embedded>.hd,.embedded main>.top,.embedded main>.mast,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 12px 30px}.tabs{position:static}.module-bar{position:static}.route{margin-top:12px}
+/* on the design system: the band holds the header and the one heading; below it, ink on paper, ink rules, no boxes */
+.intro{max-width:40em}
+.tabs{position:static;display:flex;flex-wrap:wrap;gap:0 28px;background:var(--fond);border-top:2px solid var(--encre);padding:0;margin-top:8px}
+.tabs button{flex:0 0 auto;background:none;border:0;padding:12px 0 0;min-height:44px;font:500 15px/1.3 var(--sans);color:var(--sourd);cursor:pointer}
+.tabs button::first-letter{text-transform:uppercase}
+.tabs button[aria-selected=true]{color:var(--encre);box-shadow:inset 0 4px 0 var(--accent);margin-top:-2px;padding-top:14px}
+.tabs button[hidden]{display:none}
+.panel[hidden]{display:none}.worksheet-picker{display:none!important}
+.section{border-top:1px solid var(--encre);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}
+.section h2{display:inline;font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0}
+.section .n{display:block;min-width:0;margin-bottom:6px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.section,.field-jump{scroll-margin-top:24px}
+textarea{min-height:86px;resize:vertical}
+.choices{border:0;margin:1.2em 0;padding:0}
+.choices legend{font:500 14px/1.35 var(--sans);letter-spacing:0;color:var(--sourd);margin-bottom:.5em;padding:0}
+.choice{display:flex;gap:12px;align-items:flex-start;margin:0;padding:12px 0;border-top:1px solid var(--encre);font:400 17px/1.4 var(--sans);color:var(--encre);cursor:pointer}
+.choice:last-of-type{border-bottom:1px solid var(--encre)}
+.choice input{-webkit-appearance:none;appearance:none;flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;border:1.5px solid var(--encre);border-radius:0;background:transparent;cursor:pointer}
+.choice input:checked{background:var(--encre);box-shadow:inset 0 0 0 3px var(--fond)}
+.row{display:flex;gap:14px 28px;flex-wrap:wrap;align-items:center}
+#identity .row{align-items:flex-end}#identity .row>div{flex:1 1 220px}
+.source{border-top:1px solid var(--encre);padding:.9em 0}
+.source h3{display:inline;font:500 22px/1.25 var(--sans);letter-spacing:-.01em;margin:0}
+.badge{display:inline-block;margin-left:.6em;color:var(--sourd);font:400 14px/1 var(--sans)}
+.meta{font:400 14px/1.5 var(--sans);color:var(--sourd)}
+.limit{font:400 15px/1.55 var(--sans);color:var(--sourd);max-width:46em}
+.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:500 26px/1.2 var(--sans);letter-spacing:-.015em;margin-bottom:.5em}
+.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--encre);font:600 20px/1.2 var(--sans)}
+.footer{margin-top:2em;border-top:1px solid var(--encre);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* the module that follows the projected lesson: on paper, in ink */
+.module-bar{position:static;display:flex;align-items:center;gap:12px;margin-top:32px;min-height:44px}
+.module-bar button{background:none;border:0;padding:0;min-height:44px;text-align:left;color:var(--encre);font:500 17px/1.35 var(--sans);cursor:pointer}
+.module-bar span{color:var(--encre)}
+.panel>h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:14px 0 10px}
+.route{margin:28px 0 0;padding:0;background:none;color:var(--encre);border:0}
+.route h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0 0 20px}
+.module-controls{display:grid;gap:10px;max-width:40em}
+.module-controls label{margin:0}
+.module-controls select{-webkit-appearance:none;appearance:none;min-height:48px;padding:8px 26px 8px 0;font:500 19px/1.3 var(--sans);cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--encre) 50%),linear-gradient(135deg,var(--encre) 50%,transparent 50%)!important;
+  background-position:calc(100% - 10px) 55%,calc(100% - 5px) 55%!important;background-size:5px 5px!important;background-repeat:no-repeat!important}
+.module-controls select option{background:var(--fond);color:var(--encre)}
+.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}
+.module-buttons button{background:none;border:0;padding:10px 0;min-height:44px;color:var(--encre);font:500 17px/1.3 var(--sans);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer}
+.module-buttons button:disabled{color:var(--sourd);text-decoration:none;cursor:default}
+.route ol{list-style:none;padding:0;margin:28px 0 0}
+.route li{border-top:2px solid var(--encre);padding:18px 0 0}
+.route li[hidden]{display:none}
+.module-number{margin:0 0 10px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.route h3{margin:0;font:500 28px/1.15 var(--sans);letter-spacing:-.015em}
+.route .time{margin:6px 0 0;font:400 14px/1.4 var(--sans);color:var(--sourd)}
+.route .goal{margin:16px 0 0;font:400 19px/1.5 var(--sans);max-width:38em}
+.route .goal strong{font-weight:600}
+.route dl{display:grid;grid-template-columns:1fr;gap:4px;margin:16px 0 0;max-width:40em}
+.route dt{margin-top:12px;font:500 14px/1.4 var(--sans);color:var(--sourd)}
+.route dd{margin:0;font:400 17px/1.5 var(--sans)}
+.module-actions{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;margin-top:28px}
+.module-actions button,.module-actions a{display:inline-block;background:var(--encre);color:var(--fond);border:0;border-radius:0;font:500 17px/1.2 var(--sans);padding:16px 26px;min-height:44px;text-decoration:none;cursor:pointer}
+.module-actions button:hover,.module-actions a:hover{box-shadow:inset 0 -4px 0 var(--accent)}
+@media(max-width:520px){.tabs{gap:0 20px}.source h3{font-size:20px}.route .goal{font-size:18px}.module-actions>*{width:100%;text-align:center}}
+@media print{.ja-bande .outils,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
+[hidden]{display:none!important}.embedded>.ja-bande,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 0 30px}.embedded .module-bar{margin-top:8px}
 </style>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body>
-<div class="hd"><a href="../">judging ai</a><span class="where">· S2 · 11 septembre</span><span class="sp"></span><button id="theme" aria-label="thème">◐</button></div>
+<header class="ja-bande" id="bande"><div class="ja-page">
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S2 · 11 septembre</i></span><span class="outils"><button type="button" id="theme" aria-label="thème">◐</button></span></div>
+<p class="ja-lab">ESAR · séance 2 · 11 septembre 2026</p>
+<h1 class="ja-question">Vérifier I : sources et attribution</h1>
+</div></header>
 <main>
-  <div class="top"><span class="k">ESAR · séance 2 · 11 septembre 2026</span></div>
-  <h1 class="mast">Vérifier I : sources et attribution</h1>
   <p class="intro">Ce qui a été dit et fait ce jour-là, cité des fichiers du cours. Chaque citation porte son repère ; […] marque une coupe.</p>
 <details class="section" open><summary><span class="n">1</span><h2>Ayoub, cartes en main</h2></summary><blockquote>Il y a vingt personnes dans cette salle en ce moment. Levez. Comment je le saurais ? Maintenant c'est O : quelqu'un a compté, à 13h35, ici. Il y a une minute, la même phrase était un X avec un ton d'observation. La phrase n'a pas changé ; son statut, si.</blockquote><p class="meta">S2-05 · Phrase 2 · l. 32–36</p><blockquote>L'immeuble Ayoub a été dessiné par un architecte formé à Rome. Levez. Rien dans B. Et si c'était vrai ? Toujours X. Vrai par hasard reste sans appui. Le seuil d'alerte est de dix millimètres. Levez. Ça a la forme d'une norme. Cherchez la norme dans B — il n'y en a pas. Les inventions les plus dangereuses portent un vocabulaire vrai.</blockquote><p class="meta">S2-07 · Phrase 4 · l. 42–46</p><blockquote>Sortez votre Document A. Clause 3 — je la fais devant vous. Cette ouverture dépassant le seuil d'alerte de 10 mm fixé par les normes en vigueur, la structure est en péril imminent et une consolidation doit intervenir sous 90 jours. Premier réflexe, toujours : combien d'affirmations dans cette phrase ? Je compte trois.</blockquote><p class="meta">S2-09 · Clause 3 · je fais · l. 52–56</p><blockquote>L'ouverture — B-1 : 14 mm. R. Le seuil de 10 mm, les normes — je cherche dans B… rien. X. Le péril, les 90 jours — rien non plus. X.</blockquote><p class="meta">S2-10 · Clause 3 · je fais · l. 57–61</p><blockquote>Regardez ce que fait le texte : il fabrique un seuil pour fabriquer une urgence. Quand un document vous presse, demandez qui a construit le compte à rebours.</blockquote><p class="meta">S2-11 · Clause 3 · je fais · l. 62–66</p><blockquote>Clause 5 — on la fait ensemble. Selon l'avis de la commission du patrimoine rendu en 2019, la façade est classée et toute intervention est soumise à autorisation.</blockquote><p class="meta">S2-12 · Clause 5 · on fait · l. 67–71</p><blockquote>Le règlement d'exercice, B-3, prévoit bien un avis préalable. C'est exactement ce qui rend la clause plausible. Mais B-3 parle d'une intervention à venir ; il n'enregistre aucun avis de 2019, aucun classement.</blockquote><p class="meta">S2-13 · Clause 5 · on fait · l. 72–76</p><blockquote>Retenez la forme de la faute : une invention qui porte les habits d'une institution réelle. Le vocabulaire est vrai ; l'acte cité n'existe pas.</blockquote><p class="meta">S2-14 · Clause 5 · on fait · l. 77–81</p><blockquote>Clause 7 — à vous. Les balcons en pierre, typiques de la production locale des années trente, témoignent du savoir-faire des ateliers de la rue du Levant. Seuls, deux minutes, au crayon : les morceaux, les lettres. Puis vous comparez avec votre voisin, trente secondes.</blockquote><p class="meta">S2-15 · Clause 7 · vous faites · l. 82–86</p><blockquote>Trois morceaux. Balcons en pierre — levez. Typiques des années trente — levez. une généralisation ; aucun corpus dans B — si vous avez levé I, depuis quelles prémisses ? Les ateliers de la rue du Levant — levez. Une clause, trois statuts. C'est le geste : on ne juge jamais une phrase entière.</blockquote><p class="meta">S2-16 · Clause 7 · vous faites · l. 87–91</p><blockquote>La phrase de tout à l'heure, celle qui vous partageait. B-2 dit : architecte : non mentionné. Vrai. […] Une absence est une affirmation sur l'espace cherché. Elle s'écrit avec ce qui a été cherché, ou ne s'écrit pas.</blockquote><p class="meta">S2-17 · La phrase 6 revient · l. 92–96</p><blockquote>Trois règles, elles sont sur votre carte : statut ≠ vérité · scinder · l'absence se borne. La question qui conclut vendredi et aujourd'hui : quand vous n'étiez pas d'accord avec votre voisin, c'était sur la vérité ? Exactement.</blockquote><p class="meta">S2-18 · Trois règles · l. 97–101</p></details>
 <section class="source" aria-label="la carte"><div class="top"><span class="k">la carte</span></div><h2 class="med">O·R·I·X : le statut d&#x27;une affirmation, jamais sa vérité</h2><p class="l"><span class="chip">O</span> <b>Observation</b> · directement vu, mesuré, enregistré, par qui, quand</p><p class="l"><i>qui l&#x27;a constaté, à quelle date ?</i></p><p class="s">une phrase peut imiter la forme d&#x27;un relevé sans relevé</p><hr class="r"><p class="l"><span class="chip">R</span> <b>Retrieval</b> · tiré d&#x27;une source externe identifiable, qui le dit réellement</p><p class="l"><i>quelle source, et dit-elle cela ?</i></p><p class="s">la source existe mais ne dit pas cela : le mal attribué</p><hr class="r"><p class="l"><span class="chip">I</span> <b>Inference</b> · déduit de O et de R, en le disant</p><p class="l"><i>depuis quelles prémisses ?</i></p><p class="s">l&#x27;inférence déguisée en observation</p><hr class="r"><p class="l"><span class="chip x">X</span> <b>Invention</b> · la forme d&#x27;un fait, aucun fondement dans les sources disponibles</p><p class="l"><i>qu&#x27;est-ce qui le porte ? rien</i></p><p class="s">une invention peut être vraie par hasard ; elle reste une invention</p><hr class="r"><p class="l">Statut ≠ vérité. Une affirmation vraie peut être une invention ; une fausse peut être un retrieval correct d&#x27;une source qui se trompe.</p><p class="l">Scinder les clauses composées. « Érigé en 1932, l&#x27;un des mieux conservés » = deux affirmations.</p><p class="l">Une absence est une affirmation sur l&#x27;espace cherché. « Introuvable » s&#x27;écrit avec ce qui a été cherché, ou ne s&#x27;écrit pas.</p><p class="s">Classer · Vérifier · Borner · Décider et défendre</p></section>

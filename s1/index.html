@@ -11,20 +11,7 @@
 <link rel="icon" href="../icon-192.png">
 <title>Judging AI · S1 · 4 septembre</title>
 <style>
-/* Judging AI · identité commune : les composants du mur, en sombre et en clair. */
-
-:root{
-  --fond:#ffffff; --encre:#111111; --encre2:#333333; --sourd:#666666; --trait:#dddddd;
-  --orange:#c8623f; --sur-orange:#ffffff; --boite:#f4f3f0;
-  --serif:Georgia,'Times New Roman',serif;
-  --mono:'SF Mono',Menlo,ui-monospace,Consolas,monospace;
-  --sans:-apple-system,system-ui,'Segoe UI',sans-serif;
-  color-scheme:light;
-}
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
-}
-:root[data-theme="dark"]{--fond:#08090b;--encre:#e8e6e1;--encre2:#cfcac2;--sourd:#8b8f98;--trait:#23272e;--orange:#d97757;--sur-orange:#1a1409;--boite:#101216;color-scheme:dark}
+/* Judging AI · the tokens, the faces and the header come from ../ds.css (design system « Juger l'IA » V3); this page keeps only its own layout. */
 
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--fond);color:var(--encre);font:400 17px/1.5 var(--sans)}
@@ -57,34 +44,78 @@ hr.r{border:0;border-top:1px solid var(--trait);margin:.6em 0;width:100%}
 .help{color:var(--sourd);font:400 12px/1.5 var(--mono);opacity:.7}
 
 button,input,textarea{font-size:16px;color:inherit;-webkit-tap-highlight-color:transparent}
-.hd{max-width:900px;margin:0 auto;padding:10px max(18px,env(safe-area-inset-right,0px)) 0 max(18px,env(safe-area-inset-left,0px));display:flex;gap:14px;align-items:center;font:500 14px/1 var(--mono);letter-spacing:.08em;color:var(--sourd)}
-.hd .sp{flex:1}.hd a,.hd button{background:none;border:0;color:var(--sourd);font:inherit;letter-spacing:inherit;min-height:40px;padding:0 2px;text-decoration:none}.save{font-size:11px;opacity:.8}
-main{max-width:900px;margin:0 auto;padding:0 max(18px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(18px,env(safe-area-inset-left,0px))}
-.mast{font:400 clamp(32px,8vw,58px)/1.04 var(--serif);margin:.2em 0;max-width:16ch}.intro{font:400 clamp(17px,4vw,21px)/1.5 var(--sans);color:var(--encre2);max-width:70ch}
-.top{margin-top:2.2em}.k{font:600 12px/1.3 var(--mono);letter-spacing:.09em;color:var(--orange);text-transform:uppercase}
-.notice{border-left:2px solid var(--orange);background:var(--boite);padding:.8em 1em;margin:1em 0;font:400 14px/1.55 var(--sans);color:var(--encre2)}
-.tabs{position:sticky;top:0;z-index:4;display:flex;gap:8px;background:var(--fond);border-bottom:1px solid var(--trait);padding:8px 0}.tabs button{flex:1;background:none;border:0;border-bottom:2px solid transparent;min-height:48px;font:500 14px/1 var(--mono);color:var(--sourd)}.tabs button[aria-selected=true]{color:var(--encre);border-color:var(--orange)}.tabs button[hidden]{display:none}
-.panel[hidden]{display:none}.worksheet-picker{display:none!important}.section{border-top:1px solid var(--trait);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}.section h2{display:inline;font:400 clamp(23px,5vw,31px)/1.2 var(--serif);margin:0}.n{display:inline-block;min-width:2em;color:var(--orange);font:400 28px/1 var(--serif)}
-label{display:block;color:var(--sourd);font:500 13px/1.4 var(--mono);letter-spacing:.04em;margin:1.1em 0 .35em}input[type=text],textarea{width:100%;box-sizing:border-box;background:var(--fond);color:var(--encre);border:0;border-bottom:1px solid var(--trait);border-radius:0;padding:8px 0;font:400 17px/1.45 var(--sans)}textarea{min-height:86px;resize:vertical}input:focus,textarea:focus{outline:0;border-bottom-color:var(--orange)}
-.choices{border:0;margin:1.2em 0;padding:0}.choices legend{font:600 13px/1.4 var(--mono);letter-spacing:.04em;color:var(--orange);margin-bottom:.5em}.choice{display:flex;gap:.7em;align-items:flex-start;margin:.5em 0;padding:.7em;border:1px solid var(--trait);font:400 16px/1.4 var(--sans);color:var(--encre)}.choice input{margin:.25em 0 0;flex:0 0 auto}.step{font:600 12px/1.3 var(--mono);letter-spacing:.08em;color:var(--orange);text-transform:uppercase;margin-top:1.5em}
-.act{display:inline-block;background:var(--orange);color:var(--sur-orange);border:0;border-radius:0;font:700 15px/1.2 var(--serif);letter-spacing:.1em;padding:1em 1.2em;min-height:50px}.act:disabled{opacity:.35}.txtbtn{background:none;border:0;border-bottom:2px solid var(--orange);color:var(--encre);font:500 15px/1.3 var(--sans);padding:6px 0;min-height:42px}.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
-.source{border-top:1px solid var(--trait);padding:.9em 0}.source h3{display:inline;font:400 22px/1.25 var(--serif);margin:0}.badge{display:inline-block;margin-left:.5em;color:var(--orange);font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase}.meta{font:400 12px/1.55 var(--mono);color:var(--sourd)}blockquote{margin:1em 0;padding:.2em 0 .2em 1em;border-left:2px solid var(--orange);font:400 17px/1.5 var(--serif)}.limit{font:400 14px/1.55 var(--sans);color:var(--sourd)}
-.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:400 26px/1.2 var(--serif);margin-bottom:.5em}.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--orange);font:400 23px/1 var(--serif)}
-.route{border-top:1px solid var(--trait);border-bottom:1px solid var(--trait);padding:1em 0;margin:1.3em 0}.route>summary{list-style:none;cursor:pointer;font:400 25px/1.25 var(--serif)}.route>summary::-webkit-details-marker{display:none}.route>summary:after{content:" +";color:var(--orange)}.route[open]>summary:after{content:" −"}.route ol{list-style:none;padding:0;margin:1em 0 0;counter-reset:module}.route li{counter-increment:module;border-top:1px solid var(--trait);padding:1em 0}.route h3{font:400 22px/1.25 var(--serif);margin:0}.route h3:before{content:counter(module) ". ";color:var(--orange)}.route .time{font:600 11px/1.4 var(--mono);letter-spacing:.07em;color:var(--orange);margin:.35em 0}.route .goal{font:400 16px/1.5 var(--sans);margin:.45em 0}.route dl{display:grid;grid-template-columns:6.5em 1fr;gap:.35em .8em;margin:.75em 0 0}.route dt{font:600 11px/1.4 var(--mono);letter-spacing:.05em;color:var(--sourd)}.route dd{font:400 14px/1.45 var(--sans);margin:0}
-.footer{margin-top:2em;border-top:1px solid var(--trait);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-@media(max-width:520px){.tabs button{font-size:12px}.source h3{font-size:20px}.hd .where{display:none}}
-/* The module number follows the projected lesson; worksheet numbers stay separate. */
-.route{background:#08090a;color:#f4f1e8;padding:22px;border:1px solid #555}.route h2{font:400 28px/1.2 var(--serif);margin:0 0 18px}.module-controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.module-controls label{color:#f4f1e8;font-size:16px;margin:0}.module-controls select{width:100%;max-width:100%;min-height:54px;background:#171819;color:#fff;border:1px solid #777;padding:10px;font:400 18px/1.4 var(--sans)}.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}.module-buttons button,.module-actions button,.module-actions a{font:500 18px/1.4 var(--sans);min-height:48px;padding:10px 14px;border:1px solid #aaa;background:#171819;color:#fff;text-decoration:none}.module-buttons button:disabled{opacity:.4}.route li[hidden]{display:none}.route h3{font-size:clamp(30px,5vw,44px);line-height:1.15}.route h3:before{content:none}.module-number{font:600 19px/1.4 var(--mono);color:#f09772;margin:0 0 12px}.route .time{font-size:16px}.route .goal{font-size:22px;line-height:1.5}.route dl{grid-template-columns:1fr;gap:5px}.route dt{font-size:16px;color:#f09772;margin-top:12px}.route dd{font-size:19px;line-height:1.55}.module-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.module-bar{position:sticky;top:0;z-index:5;background:#08090a;color:#fff;border-bottom:1px solid #777;display:flex;align-items:center;gap:12px;padding:10px 0;min-height:48px}.module-bar button{background:none;color:#fff;border:0;text-align:left;font:500 17px/1.35 var(--sans);min-height:42px}.module-bar span{color:#f09772}.tabs{top:68px}.tabs button{font-size:17px}.notice,.limit{font-size:18px}label{font:500 18px/1.45 var(--sans);letter-spacing:0}.meta{font-size:16px}blockquote{font-size:21px}.source h3{font-size:26px}.section .n{font:500 16px/1.5 var(--mono);min-width:0;display:block;margin-bottom:6px}.section,.field-jump{scroll-margin-top:160px}.module-actions button:focus-visible,.module-controls select:focus-visible{outline:3px solid #f09772;outline-offset:3px}@media(max-width:520px){.route{padding:18px}.route .goal{font-size:21px}.module-bar button{font-size:16px}.tabs button{font-size:16px}.route dd{font-size:18px}.module-actions>*{width:100%;text-align:left;box-sizing:border-box}} 
-@media print{.hd,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
-[hidden]{display:none!important}.embedded>.hd,.embedded main>.top,.embedded main>.mast,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 12px 30px}.tabs{position:static}.module-bar{position:static}.route{margin-top:12px}
+/* on the design system: the band holds the header and the one heading; below it, ink on paper, ink rules, no boxes */
+.intro{max-width:40em}
+.tabs{position:static;display:flex;flex-wrap:wrap;gap:0 28px;background:var(--fond);border-top:2px solid var(--encre);padding:0;margin-top:8px}
+.tabs button{flex:0 0 auto;background:none;border:0;padding:12px 0 0;min-height:44px;font:500 15px/1.3 var(--sans);color:var(--sourd);cursor:pointer}
+.tabs button::first-letter{text-transform:uppercase}
+.tabs button[aria-selected=true]{color:var(--encre);box-shadow:inset 0 4px 0 var(--accent);margin-top:-2px;padding-top:14px}
+.tabs button[hidden]{display:none}
+.panel[hidden]{display:none}.worksheet-picker{display:none!important}
+.section{border-top:1px solid var(--encre);padding:1em 0}.section>summary,.source>summary{list-style:none;cursor:pointer}.section>summary::-webkit-details-marker,.source>summary::-webkit-details-marker{display:none}
+.section h2{display:inline;font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0}
+.section .n{display:block;min-width:0;margin-bottom:6px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.section,.field-jump{scroll-margin-top:24px}
+textarea{min-height:86px;resize:vertical}
+.choices{border:0;margin:1.2em 0;padding:0}
+.choices legend{font:500 14px/1.35 var(--sans);letter-spacing:0;color:var(--sourd);margin-bottom:.5em;padding:0}
+.choice{display:flex;gap:12px;align-items:flex-start;margin:0;padding:12px 0;border-top:1px solid var(--encre);font:400 17px/1.4 var(--sans);color:var(--encre);cursor:pointer}
+.choice:last-of-type{border-bottom:1px solid var(--encre)}
+.choice input{-webkit-appearance:none;appearance:none;flex:0 0 auto;width:20px;height:20px;margin:1px 0 0;border:1.5px solid var(--encre);border-radius:0;background:transparent;cursor:pointer}
+.choice input:checked{background:var(--encre);box-shadow:inset 0 0 0 3px var(--fond)}
+.row{display:flex;gap:14px 28px;flex-wrap:wrap;align-items:center}
+#identity .row{align-items:flex-end}#identity .row>div{flex:1 1 220px}
+.source{border-top:1px solid var(--encre);padding:.9em 0}
+.source h3{display:inline;font:500 22px/1.25 var(--sans);letter-spacing:-.01em;margin:0}
+.badge{display:inline-block;margin-left:.6em;color:var(--sourd);font:400 14px/1 var(--sans)}
+.meta{font:400 14px/1.5 var(--sans);color:var(--sourd)}
+.limit{font:400 15px/1.55 var(--sans);color:var(--sourd);max-width:46em}
+.locked{padding:2em 0;text-align:center}.locked strong{display:block;font:500 26px/1.2 var(--sans);letter-spacing:-.015em;margin-bottom:.5em}
+.four{counter-reset:line}.four p{display:grid;grid-template-columns:2em 1fr;gap:.5em}.four p:before{counter-increment:line;content:counter(line);color:var(--encre);font:600 20px/1.2 var(--sans)}
+.footer{margin-top:2em;border-top:1px solid var(--encre);padding:1.2em 0}.screenreader{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* the module that follows the projected lesson: on paper, in ink */
+.module-bar{position:static;display:flex;align-items:center;gap:12px;margin-top:32px;min-height:44px}
+.module-bar button{background:none;border:0;padding:0;min-height:44px;text-align:left;color:var(--encre);font:500 17px/1.35 var(--sans);cursor:pointer}
+.module-bar span{color:var(--encre)}
+.panel>h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:14px 0 10px}
+.route{margin:28px 0 0;padding:0;background:none;color:var(--encre);border:0}
+.route h2{font:500 clamp(22px,3vw,28px)/1.2 var(--sans);letter-spacing:-.015em;margin:0 0 20px}
+.module-controls{display:grid;gap:10px;max-width:40em}
+.module-controls label{margin:0}
+.module-controls select{-webkit-appearance:none;appearance:none;min-height:48px;padding:8px 26px 8px 0;font:500 19px/1.3 var(--sans);cursor:pointer;
+  background-image:linear-gradient(45deg,transparent 50%,var(--encre) 50%),linear-gradient(135deg,var(--encre) 50%,transparent 50%)!important;
+  background-position:calc(100% - 10px) 55%,calc(100% - 5px) 55%!important;background-size:5px 5px!important;background-repeat:no-repeat!important}
+.module-controls select option{background:var(--fond);color:var(--encre)}
+.module-buttons{display:flex;justify-content:space-between;gap:12px;width:100%}
+.module-buttons button{background:none;border:0;padding:10px 0;min-height:44px;color:var(--encre);font:500 17px/1.3 var(--sans);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;cursor:pointer}
+.module-buttons button:disabled{color:var(--sourd);text-decoration:none;cursor:default}
+.route ol{list-style:none;padding:0;margin:28px 0 0}
+.route li{border-top:2px solid var(--encre);padding:18px 0 0}
+.route li[hidden]{display:none}
+.module-number{margin:0 0 10px;font:500 14px/1.3 var(--sans);color:var(--sourd)}
+.route h3{margin:0;font:500 28px/1.15 var(--sans);letter-spacing:-.015em}
+.route .time{margin:6px 0 0;font:400 14px/1.4 var(--sans);color:var(--sourd)}
+.route .goal{margin:16px 0 0;font:400 19px/1.5 var(--sans);max-width:38em}
+.route .goal strong{font-weight:600}
+.route dl{display:grid;grid-template-columns:1fr;gap:4px;margin:16px 0 0;max-width:40em}
+.route dt{margin-top:12px;font:500 14px/1.4 var(--sans);color:var(--sourd)}
+.route dd{margin:0;font:400 17px/1.5 var(--sans)}
+.module-actions{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;margin-top:28px}
+.module-actions button,.module-actions a{display:inline-block;background:var(--encre);color:var(--fond);border:0;border-radius:0;font:500 17px/1.2 var(--sans);padding:16px 26px;min-height:44px;text-decoration:none;cursor:pointer}
+.module-actions button:hover,.module-actions a:hover{box-shadow:inset 0 -4px 0 var(--accent)}
+@media(max-width:520px){.tabs{gap:0 20px}.source h3{font-size:20px}.route .goal{font-size:18px}.module-actions>*{width:100%;text-align:center}}
+@media print{.ja-bande .outils,.tabs,button{display:none!important}main{padding-bottom:0}.panel[hidden]{display:block}.source>div{display:block!important}}
+[hidden]{display:none!important}.embedded>.ja-bande,.embedded main>.intro,.embedded main>.notice{display:none}.embedded main{padding:0 0 30px}.embedded .module-bar{margin-top:8px}
 </style>
 <link rel="stylesheet" href="../ds.css">
 </head>
 <body>
-<div class="hd"><a href="../">judging ai</a><span class="where">· S1 · 4 septembre</span><span class="sp"></span><button id="theme" aria-label="thème">◐</button></div>
+<header class="ja-bande" id="bande"><div class="ja-page">
+<div class="ja-tete"><span class="ja-mot"><a href="../">judging ai</a><i>S1 · 4 septembre</i></span><span class="outils"><button type="button" id="theme" aria-label="thème">◐</button></span></div>
+<p class="ja-lab">ESAR · séance 1 · 4 septembre 2026</p>
+<h1 class="ja-question">Observer &amp; classer</h1>
+</div></header>
 <main>
-  <div class="top"><span class="k">ESAR · séance 1 · 4 septembre 2026</span></div>
-  <h1 class="mast">Observer &amp; classer</h1>
   <p class="intro">Ce qui a été dit et fait ce jour-là, cité des fichiers du cours. Chaque citation porte son repère ; […] marque une coupe.</p>
 <details class="section" open><summary><span class="n">1</span><h2>Deux intitulés</h2></summary><blockquote>Deux intitulés de cours. A — <i>Judging AI: Evidence and Authority</i>. B — <i>AI Judging Evidence and Authority</i>. Les deux existent. L'un des deux est le nom de ce cours ; l'autre a circulé sur les documents officiels de cette école un temps.</blockquote><p class="meta">S1-02 · Les deux intitulés · l. 15–17</p><blockquote>A est le nom de ce cours. B est ce qui figurait sur l'horaire que l'école a publié. La correction a été demandée le 3 août au matin ; elle a été acceptée le jour même, dans la journée, par le secrétariat, avec la direction en copie. La réponse tient en une phrase : « Je vais ajuster l'intitulé du cours comme c'est écrit dedans. » Voilà la pièce.</blockquote><p class="meta">S1-04 · La révélation · l. 21–23</p><blockquote>Regardez ce que vous venez de faire. Vous avez lu deux phrases. Elles ont les mêmes mots. Elles ont la même longueur, la même typographie, la même allure administrative. Deux choses les séparent : les deux points, et l'ordre. Sans les deux points, et dans cet ordre, la phrase laisse entendre que c'est l'IA qui juge. Or ce cours enseigne exactement l'inverse : c'est vous qui apprenez à juger l'IA, ses preuves et son autorité. C'est toute la proposition du cours — et c'est la première chose que lira un étudiant.</blockquote><p class="meta">S1-05 · Ce que vous venez de faire · l. 24–27</p><blockquote>Et personne, pendant un temps, n'a rien vu. Ni moi au premier passage, ni le secrétariat qui l'a mis en page, ni la direction qui l'a relu. Ce n'est pas une histoire de négligence : c'est que la surface était impeccable. Une phrase fluide, bien mise en page, dans le bon gabarit, ne se signale pas quand elle dit le contraire de ce qu'elle devrait dire.</blockquote><p class="meta">S1-06 · Pourquoi personne n&#x27;a rien vu · l. 28–30</p></details>
 <details class="section"><summary><span class="n">2</span><h2>L&#x27;axiome</h2></summary><blockquote>Voilà pourquoi ce cours existe, et voilà sa phrase. L'autorité suit la provenance. Ce qui vient de se passer, c'est exactement ça à l'envers : un document a eu de l'autorité — il était officiel, il était publié, il était sur l'horaire — sans que personne remonte à ce qui l'avait produit. […] Ce cours s'appelle <i>Judging AI: Evidence and Authority</i> — Juger l'IA : preuves et autorité.</blockquote><p class="meta">S1-09 · L&#x27;axiome, comme conséquence · l. 37–39</p><blockquote>Une seule phrase gouverne les six vendredis, et c'est celle-là. Le poids d'une affirmation dépend de la traçabilité de son origine — pas de son assurance, pas de sa cohérence, pas de sa mise en page. Une deuxième phrase l'accompagne : le jugement ne se délègue pas. Vous signerez des dossiers, des diagnostics, des devis. La signature ne se sous-traite pas à une machine, même très polie. Vous venez d'ailleurs de signer quelque chose.</blockquote><p class="meta">S1-10 · Ce que l&#x27;axiome dit · l. 40–42</p><blockquote>Et cette phrase — qui l'a écrite ? Pas moi. Un agent, le 1er août, dans un fichier de travail ; je l'ai gardée parce qu'elle est utile. Je vous le dis le premier jour parce que c'est le premier objet du cours à classer : une phrase gouvernante, sans auteur, qui passe tous les contrôles — sauf celui de la provenance. Le 25 septembre, à Doha, vous verrez un cas où suivre la provenance à la lettre donne la mauvaise réponse. Gardez la phrase. Retenez qu'elle n'est pas de moi.</blockquote><p class="meta">S1-11 · Qui a écrit cette phrase · l. 43–45</p></details>
