@@ -208,7 +208,7 @@ function vueQuestion(tete,box){
   q.classList.add("question");tete.appendChild(h("h1",{class:"vis-cache",text:cap(t("eQuestion"))}));tete.appendChild(q);
   var ta=q.querySelector("textarea");function ajuster(){ta.style.height="auto";ta.style.height=ta.scrollHeight+"px";}
   var prev=D.essais.length?D.essais[D.essais.length-1].question:"",warn=h("p",{class:"ja-etat erreur alerte",id:"q-diff",text:t("qDiff")});
-  function majQ(){warn.hidden=!prev||D.binome.question.trim()===prev.trim();}
+  function majQ(){var cur=D.binome.question.trim(),RX=/^En cinq lignes au plus : .+\. Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux \?$/;warn.hidden=!prev||cur===prev.trim()||(RX.test(cur)&&RX.test(prev.trim()));}
   tete.appendChild(warn);majQ();
   requestAnimationFrame(ajuster);if(document.fonts)document.fonts.ready.then(ajuster);
   var s=h("section",{id:"ecran-question"});
@@ -295,7 +295,7 @@ function blocEssai(i,c){
 /* ---------- écran : les trois côte à côte, celle à signer (LesTrois) ---------- */
 function vueTrois(tete,box){
   titre(tete,D.binome.question||cap(t("eTrois")),"question-lue");
-  var s=h("section",{id:"quatre"}),q=JA.quatre(D),bc=JA.banc(),qs={};
+  var s=h("section",{id:"quatre"}),q=(function(){var r=JA.quatre(D),o=Object.assign({},r),cur=(D.binome.question||"").trim();if(!cur)return r;["A","B","C","D"].forEach(function(c){for(var i=D.essais.length-1;i>=0;i--){var x=D.essais[i];if(x.condition===c&&(x.question||"").trim()===cur){o[c]=i;return;}}});return o;})(),bc=JA.banc(),qs={};
   s.appendChild(h("h2",{class:"ja-lab",id:"signer-titre",text:bc.signer}));
   s.appendChild(h("p",{class:"ja-etat",id:"signer-aide",style:"margin:4px 0 16px",text:t("signerAide")}));
   var conds=["A","C","D"].concat(q.B>=0?["B"]:[]);
