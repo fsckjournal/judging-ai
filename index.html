@@ -27,6 +27,7 @@ var h=JA.h, lang=JA.lang();
 var T={
  fr:{vSeance:"Séance {n} · aujourd'hui",vCours:"Le cours · calendrier, carte, notes",seance:"séance",lire:"la question",lireGo:"écrire la question →",
   vous:"Travail",seul:"seul",binome:"en binôme",votreNom:"Nom",nom1:"Nom 1",nom2:"Nom 2",entrer:"entrer →",
+  envoiT:"le travail, pour l'enseignant",envoiTxt:"Ce que ce navigateur garde (essais, réponses, SKILL.md), avec les fichiers ajoutés : un seul zip, à envoyer.",ajout:"ajout de fichiers (export, SKILL.md)…",ajoutes:"ajoutés : ",envoiGo:"envoi →",rien:"Rien dans ce navigateur, aucun fichier ajouté.",
   skill:"SKILL.md",skillTxt:"L'écrire avec un agent, la figer en v0.",skillFige:"figée : ",skillGo:"écrire, figer →",
   banc:"le banc",bancTxt:"La même question sans SKILL.md (A), avec SKILL.md (C), avec le SKILL.md du binôme (D). Un autre binôme coche les six cases.",bancGo:"commencer →",
   dossier:"le dossier · 40 %",dossierTxt:"Un fichier par binôme, rendu le 9 octobre (S6), défendu à la présentation orale.",dossierGo:"les critères →",
@@ -34,6 +35,7 @@ var T={
   semaine:"cette semaine",semestre:"le semestre",carte:"la carte",travaux:"les travaux notés",voir:"voir la carte en entier →",langL:"langue",themeL:"thème",version:"version",vuesL:"Vues de l’app"},
  en:{vSeance:"Session {n} · today",vCours:"The course · calendar, card, grades",seance:"session",lire:"the question",lireGo:"write the question →",
   vous:"Working",seul:"alone",binome:"as a pair",votreNom:"Name",nom1:"Name 1",nom2:"Name 2",entrer:"enter →",
+  envoiT:"the work, for the teacher",envoiTxt:"What this browser keeps (runs, answers, SKILL.md), with any added files: one zip, to send.",ajout:"add files (export, SKILL.md)…",ajoutes:"added: ",envoiGo:"send →",rien:"Nothing in this browser, no files added.",
   skill:"the SKILL.md",skillTxt:"Written with an agent, frozen as v0.",skillFige:"frozen: ",skillGo:"write, freeze →",
   banc:"the bench",bancTxt:"The same question with no SKILL.md (A), with SKILL.md (C), with the pair's SKILL.md (D). Another pair ticks the six boxes.",bancGo:"start →",
   dossier:"the dossier · 40 %",dossierTxt:"One file per pair, handed in on 9 October (S6), defended at the oral presentation.",dossierGo:"the criteria →",
@@ -73,8 +75,34 @@ function premier(box){
   s.appendChild(zone);
   s.appendChild(h("button",{type:"button",class:"ja-entrer",text:t("entrer"),on:{click:function(){document.getElementById("bande").scrollIntoView({behavior:"smooth"});}}}));
   s.appendChild(h("button",{type:"button",class:"ja-carre",id:"paire"}));
+  envoi(s);
   pret();
   box.appendChild(s);
+}
+/* l'envoi (25 sept., après la séance) : ce que ce navigateur garde, plus les fichiers ajoutés (un export d'avant la remise à zéro, les SKILL.md enregistrés), en un seul zip ; partage du téléphone si possible, sinon téléchargement */
+function envoi(s){
+  var ajouts=[],w=h("div",{class:"envoi",id:"envoi"}),info=h("p",{class:"ja-s",id:"envoi-info"});
+  var inp=h("input",{type:"file",multiple:"multiple",id:"envoi-fichiers",style:"display:none"});
+  inp.addEventListener("change",function(){Array.prototype.forEach.call(inp.files||[],function(f){var r=new FileReader();r.onload=function(){ajouts.push({nom:f.name,octets:new Uint8Array(r.result)});info.textContent=t("ajoutes")+ajouts.map(function(a){return a.nom;}).join(", ");};r.readAsArrayBuffer(f);});inp.value="";});
+  function travail(){var d=JA.complet(),v=d.skill||{},f=[],ok=(d.essais&&d.essais.length)||(v.versions&&v.versions.length)||(v.brouillon&&v.brouillon.trim())||(d.binome&&d.binome.noms&&d.binome.noms.length);
+    if(!ok)return {d:d,f:f};
+    f.push({nom:"travail/dossier.json",texte:JSON.stringify(d,null,2)},{nom:"travail/dossier.md",texte:JA.markdown(d)});
+    (v.versions||[]).forEach(function(x,i){f.push({nom:"travail/SKILL.md/v"+(typeof x.n==="number"?x.n:i)+"/SKILL.md",texte:JA.skillMd(x.nom,x.description,x.corps)});});
+    if(v.brouillon&&v.brouillon.trim())f.push({nom:"travail/SKILL.md/brouillon.md",texte:v.brouillon});
+    return {d:d,f:f};}
+  function envoyer(){var r=travail(),f=r.f.concat(ajouts.map(function(a){return {nom:"ajouts/"+a.nom,octets:a.octets};}));
+    if(!f.length){info.textContent=t("rien");return;}
+    var noms=(r.d.binome&&r.d.binome.noms||[]).join("-"),nom="travail-"+(JA.slug(noms)||"sans-nom")+"-"+new Date().toISOString().slice(0,10)+".zip";
+    var z=JA.zip(f),file=new File([z],nom,{type:"application/zip"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){navigator.share({files:[file],title:nom}).catch(function(e){if(!e||e.name!=="AbortError")JA.telecharger(z,nom,"application/zip");});}
+    else JA.telecharger(z,nom,"application/zip");}
+  w.appendChild(h("p",{class:"k",text:t("envoiT")}));
+  w.appendChild(h("p",{class:"ja-s",text:t("envoiTxt")}));
+  document.body.appendChild(inp);
+  w.appendChild(h("button",{type:"button",class:"ja-lien",id:"envoi-ajout",text:t("ajout"),on:{click:function(){inp.click();}}}));
+  w.appendChild(h("button",{type:"button",class:"ja-entrer",id:"envoi-go",text:t("envoiGo"),on:{click:envoyer}}));
+  w.appendChild(info);
+  s.appendChild(w);
 }
 /* la bande : l'en-tête, les deux vues (Tab), le titre */
 function bande(box){

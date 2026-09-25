@@ -4,7 +4,7 @@
    Format du fichier : "juger-ia-dossier/1" (PLAN_S4, « The dossier file »). */
 var JA = (function () {
   "use strict";
-  var VERSION = "s4-v3-2026-09-25.13";
+  var VERSION = "s4-v3-2026-09-25.14";
   var FORMAT = "juger-ia-dossier/1";
   var KEY = "judging-ai-dossier", AVANT = "judging-ai-dossier-avant-import", S3KEY = "judging-ai-s3-work", LANGKEY = "judging-ai-journal-lang";
   var APPS = ["Claude", "ChatGPT", "Gemini", "autre"], MODES = ["chargée", "collée"], CONDS = ["A", "B", "C", "D"];
@@ -333,7 +333,7 @@ var JA = (function () {
     var enc = new TextEncoder(), d = new Date(), parts = [], central = [], off = 0;
     var time = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), date = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
     fichiers.forEach(function (f) {
-      var nom = enc.encode(f.nom), data = enc.encode(f.texte || ""), crc = crc32(data), dir = /\/$/.test(f.nom);
+      var nom = enc.encode(f.nom), data = f.octets instanceof Uint8Array ? f.octets : enc.encode(f.texte || ""), crc = crc32(data), dir = /\/$/.test(f.nom);
       var lh = new DataView(new ArrayBuffer(30));
       lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true); lh.setUint16(6, 0x0800, true); lh.setUint16(8, 0, true); lh.setUint16(10, time, true); lh.setUint16(12, date, true);
       lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true); lh.setUint16(26, nom.length, true); lh.setUint16(28, 0, true);
@@ -350,5 +350,5 @@ var JA = (function () {
   }
 
   return { VERSION: VERSION, FORMAT: FORMAT, APPS: APPS, CONDS: CONDS, banc: function () { return t("banc"); }, condLabel: condLabel, score: score, sur: sur, quatre: quatre, h: h, lang: lang, beyrouth: beyrouth, jour: jour, charger: charger, enregistrer: enregistrer, persistant: function () { return persistant; },
-    pied: function () {}, outils: outils, carre: carrePaire, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
+    pied: function () {}, outils: outils, carre: carrePaire, criteres: criteres, skillMd: skillMd, lireSkill: lireSkill, complet: complet, markdown: markdown, zip: zip, telecharger: telecharger, dialogue: dialogue, slug: slug };
 })();
