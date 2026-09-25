@@ -4,7 +4,7 @@
    Two layers. (1) The older pages (lire, journal, s3, entrainement, atelier)
    open on the system's band (header.ja-bande: .ja-tete, then the one heading
    h1.ja-question) and keep their own classes, restyled below on the system's
-   tokens: ink on cold paper, Archivo, ink rules, square corners, no boxes,
+   tokens: ink on cold paper, Instrument Sans, ink rules, square corners, no boxes,
    no colour for states. Rules that would reach home and skill/ are wrapped in
    :where(body:not(.ja)), which adds no specificity. (2) Home and skill/ carry
    body.ja and are built on the design system itself (_build/ds: tokens.css,
@@ -12,20 +12,20 @@
    Load AFTER each page's inline <style>.
    ========================================================================== */
 
-/* ---------- 0 · fonts: Archivo for the course and the machine, Source Serif 4 italic for the pair's own words */
-@font-face{font-family:Archivo;src:url("fonts/archivo-latin-400-700.woff2") format("woff2");font-weight:400 700;font-display:swap}
+/* ---------- 0 · fonts: Instrument Sans for the course and the machine, Source Serif 4 italic for the pair's own words */
+@font-face{font-family:"Instrument Sans";src:url("fonts/instrument-sans-latin-400-700.woff2") format("woff2");font-weight:400 700;font-display:swap}
 @font-face{font-family:"Source Serif 4";src:url("fonts/source-serif-4-latin-italic-400.woff2") format("woff2");font-style:italic;font-weight:400;font-display:swap}
 
 /* ---------- 1 · tokens: the design system's values (tokens.json), light then dark.
    :not(#ds) outranks the older pages' own :root blocks, light and dark. */
 :root:not(#ds){
-  --f-sans:Archivo,"Helvetica Neue",Arial,system-ui,sans-serif;
+  --f-sans:"Instrument Sans","Helvetica Neue",Arial,system-ui,sans-serif;
   --f-voix:"Source Serif 4",Georgia,"Times New Roman",serif;
   --t-texte:17px; --t-petit:15px; --t-etiq:14px;
   --e-1:4px; --e-2:8px; --e-3:12px; --e-4:16px; --e-5:24px; --e-6:32px; --e-7:48px; --e-8:64px;
   --g:max(20px,env(safe-area-inset-left,0px)); --cible:44px;
   --fond:#E9EAE8; --encre:#1C1A17; --encre-2:#484B50;
-  --accent:#E0482A; --bande:#BEC2C5; --rose:#E4418A;
+  --accent:#E0482A; --bande:#C9CAC8; --rose:#E4418A;
   --voile:rgba(28,26,23,.62);
   color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not(#ds){
@@ -168,7 +168,7 @@ html body .ja-compte{font:500 var(--t-etiq)/1 var(--f-sans);color:var(--encre-2)
    Tokens as in _build/ds/tokens.css, read from the app's own (they already follow
    the theme and the pair); then bundle.css as published; then what the app needs
    that the system has no component for (selects, the diff, the list of runs),
-   drawn with the system's own means: ink rules, Archivo, no boxes.
+   drawn with the system's own means: ink rules, Instrument Sans, no boxes.
    ========================================================================== */
 .ja{--papier:var(--fond);--sur-encre:var(--fond);--filet:var(--encre);--nuit:#111213;--sur-nuit:#D9DBD8;--nuit-2:#8E9296;
   --font-sans:var(--f-sans);--font-voix:var(--f-voix);--accent-nuit:#D98468}
