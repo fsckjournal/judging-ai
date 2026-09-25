@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Judging AI · séance 5</title>
+<link rel="icon" href="../icon-192.png">
+<link rel="stylesheet" href="../ds.css">
+<style>
+/* s5 : un seul parcours, un écran à la fois, un seul bouton par écran (25 sept., après la séance 4) */
+body.s5{margin:0;background:var(--fond);color:var(--encre);font-family:var(--f-sans);font-size:17px;line-height:1.45}
+.s5 main{max-width:760px;margin:0 auto;padding:24px var(--g) 64px}
+.s5 .pas{font-size:14px;letter-spacing:.02em;opacity:.7;margin:0 0 6px}
+.s5 h1{font-size:30px;line-height:1.15;margin:0 0 14px;font-weight:600}
+.s5 p.aide{margin:0 0 18px;max-width:40em}
+.s5 label{display:block;font-size:14px;opacity:.75;margin:18px 0 6px}
+.s5 input[type=text],.s5 textarea{width:100%;box-sizing:border-box;font:inherit;color:inherit;background:transparent;border:0;border-bottom:1px solid var(--encre);padding:8px 0}
+.s5 textarea{border:1px solid var(--encre);padding:10px;min-height:10em;font-family:var(--f-voix)}
+.s5 pre.prompt{white-space:pre-wrap;border:1px solid var(--encre);padding:14px;font-family:var(--f-voix);font-size:16px;max-height:40vh;overflow:auto;margin:0 0 10px}
+.s5 .ligne{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.s5 button{font:inherit;cursor:pointer}
+.s5 .petit{background:transparent;color:inherit;border:1px solid var(--encre);padding:8px 14px}
+.s5 .suite{display:block;margin:28px 0 0 auto;background:var(--encre);color:var(--fond);border:0;padding:14px 26px;font-size:18px}
+.s5 .suite:disabled{opacity:.3;cursor:default}
+.s5 .fichiers{border:1px dashed var(--encre);padding:18px;text-align:center}
+.s5 .trouve{margin:14px 0 0;font-size:15px}
+.s5 .etat{font-size:14px;opacity:.75;min-height:1.2em}
+.s5 table{width:100%;border-collapse:collapse;margin:8px 0 18px;font-size:15px}
+.s5 th,.s5 td{border-top:1px solid var(--encre);padding:8px 6px;text-align:left;vertical-align:top}
+.s5 select{font:inherit;width:100%;background:transparent;color:inherit;border:1px solid var(--encre);padding:4px}
+.s5 .deux{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.s5 .deux div{border:1px solid var(--encre);padding:10px;font-family:var(--f-voix);font-size:15px;white-space:pre-wrap;max-height:30vh;overflow:auto}
+@media (max-width:620px){.s5 .deux{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="s5">
+<main id="app"></main>
+<script src="../commun.js"></script>
+<script>
+(function(){
+"use strict";
+var KEY="judging-ai-s5", h=JA.h;
+var QIFI="Issam Fares Institute, campus de l'AUB, Beyrouth";
+var CHIFFRES=["la hauteur","la surface de plancher","le nombre de niveaux"];
+var PORTE=["","une source nommée, ouverte, qui le dit","un constat daté (quelqu'un l'a vu ou mesuré)","un calcul, ses prémisses dites","rien","pas de chiffre"];
+var S; try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
+if(!S)S={etape:0,noms:"",lieu:"",skill:"",fichiers:[],sans:"",avec:"",q:{},change:""};
+function garder(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+var app=document.getElementById("app");
+
+/* ----- les fichiers : SKILL.md, export .json, zip (non compressé ou deflate) ----- */
+function u16(b,o){return b[o]|(b[o+1]<<8);} function u32(b,o){return (b[o]|(b[o+1]<<8)|(b[o+2]<<16)|(b[o+3]<<24))>>>0;}
+function dezip(buf){ /* renvoie une promesse de [{nom, texte}] pour les fichiers texte */
+  var b=new Uint8Array(buf),e=-1;for(var i=b.length-22;i>=0&&i>=b.length-65557;i--){if(u32(b,i)===0x06054b50){e=i;break;}}
+  if(e<0)return Promise.resolve([]);
+  var n=u16(b,e+10),o=u32(b,e+16),out=[],dec=new TextDecoder();
+  for(var k=0;k<n;k++){var meth=u16(b,o+10),csz=u32(b,o+20),nl=u16(b,o+28),xl=u16(b,o+30),cl=u16(b,o+32),lo=u32(b,o+42);
+    var nom=dec.decode(b.subarray(o+46,o+46+nl));o+=46+nl+xl+cl;
+    if(/\/$/.test(nom))continue;
+    var d=lo+30+u16(b,lo+26)+u16(b,lo+28),data=b.subarray(d,d+csz);
+    out.push((function(nom,meth,data){
+      if(meth===0)return Promise.resolve({nom:nom,texte:dec.decode(data)});
+      if(meth===8&&typeof DecompressionStream!=="undefined")return new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text().then(function(t){return {nom:nom,texte:t};});
+      return Promise.resolve(null);})(nom,meth,data));}
+  return Promise.all(out).then(function(a){return a.filter(Boolean);});
+}
+function lireFichier(f){
+  return new Promise(function(ok){var r=new FileReader();
+    if(/\.zip$/i.test(f.name)){r.onload=function(){dezip(r.result).then(ok);};r.readAsArrayBuffer(f);}
+    else{r.onload=function(){ok([{nom:f.name,texte:String(r.result)}]);};r.readAsText(f);}});
+}
+function absorber(fs){ /* le dernier SKILL.md lu l'emporte ; l'export donne noms et lieu */
+  fs.forEach(function(x){
+    if(/\.json$/i.test(x.nom)){try{var d=JSON.parse(x.texte);
+      if(d&&d.binome){if(!S.noms&&d.binome.noms)S.noms=d.binome.noms.join(", ");if(!S.lieu&&d.binome.lieu)S.lieu=d.binome.lieu;}
+      var v=d&&d.skill&&d.skill.versions||[];if(v.length){var z=v[v.length-1];S.skill=JA.skillMd(z.nom,z.description,z.corps);}
+      else if(!S.skill&&d&&d.skill&&d.skill.brouillon&&JA.lireSkill(d.skill.brouillon).corps.trim())S.skill=d.skill.brouillon;
+    }catch(e){}}
+    else if(/(^|\/)SKILL\.md$|\.md$/i.test(x.nom)&&/^---\r?\n[\s\S]*?\r?\n---/.test(x.texte))S.skill=x.texte;
+    S.fichiers.push(x.nom);
+  });
+  garder();
+}
+
+/* ----- les deux textes à coller ----- */
+function questions(){return "Deux questions, chacune en cinq lignes au plus.\n\n1. "+QIFI+". Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?\n\n2. "+(S.lieu||"[le lieu du dossier]")+". Quelles sont sa hauteur, sa surface de plancher et son nombre de niveaux ?";}
+function prompt1(){return questions();}
+function prompt2(){return S.skill.trim()+"\n\n---\n\n"+questions();}
+
+/* ----- l'écran ----- */
+var TITRES=["les fichiers","sans SKILL.md","avec SKILL.md","ce qui porte chaque chiffre","l'envoi"];
+function ecran(){
+  app.innerHTML="";
+  app.appendChild(h("p",{class:"pas",text:"séance 5 · "+(S.etape+1)+" / 5 · "+TITRES[S.etape]}));
+  [charger,sans,avec,questionnaire,envoi][S.etape]();
+  window.scrollTo(0,0);
+}
+function suite(ok){var b=h("button",{type:"button",class:"suite",id:"suite",text:"suite →",on:{click:function(){S.etape++;garder();ecran();}}});b.disabled=!ok;app.appendChild(b);return b;}
+function copie(txt){var b=h("button",{type:"button",class:"petit",text:"copie du texte",on:{click:function(){(navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(function(){b.textContent="copié";},function(){b.textContent="sélection à la main";});}}});return b;}
+
+function charger(){
+  app.appendChild(h("h1",{text:"Le SKILL.md du binôme et son export"}));
+  app.appendChild(h("p",{class:"aide",text:"Les fichiers gardés de la séance 4 : le SKILL.md, l'export du dossier (.json) ou le zip envoyé. L'app y lit le SKILL.md, les noms et le lieu du dossier."}));
+  var inp=h("input",{type:"file",multiple:"multiple",id:"fichiers",accept:".md,.json,.zip,text/markdown,application/json,application/zip",style:"display:none"});
+  var zone=h("div",{class:"fichiers"},[h("button",{type:"button",class:"petit",id:"choix",text:"les fichiers…",on:{click:function(){inp.click();}}}),h("p",{class:"trouve",id:"trouve"})]);
+  app.appendChild(inp);app.appendChild(zone);
+  inp.addEventListener("change",function(){Promise.all(Array.prototype.map.call(inp.files||[],lireFichier)).then(function(a){absorber([].concat.apply([],a));inp.value="";ecran();});});
+  var tr=zone.querySelector("#trouve");
+  var sk=JA.lireSkill(S.skill);
+  tr.textContent=S.fichiers.length?("Lus : "+S.fichiers.join(", ")+". "+(S.skill.trim()?"SKILL.md trouvé : « "+(sk.nom||"sans nom")+" ».":"Aucun SKILL.md dans ces fichiers.")):"";
+  function champ(id,lbl,cle){var i=h("input",{type:"text",id:id});i.value=S[cle]||"";i.addEventListener("input",function(){S[cle]=i.value;garder();maj();});app.appendChild(h("label",{text:lbl,for:id}));app.appendChild(i);}
+  champ("noms","Noms","noms");
+  champ("lieu","Lieu du dossier (nom usuel, rue, Beyrouth)","lieu");
+  app.appendChild(h("label",{text:"Le SKILL.md (lu dans les fichiers, ou collé ici)",for:"skill"}));
+  var t=h("textarea",{id:"skill"});t.value=S.skill;t.addEventListener("input",function(){S.skill=t.value;garder();maj();});app.appendChild(t);
+  var b=suite(false);function maj(){b.disabled=!(S.lieu.trim()&&S.skill.trim());}maj();
+}
+function colle(cle,titre,aide,txt){
+  app.appendChild(h("h1",{text:titre}));
+  app.appendChild(h("p",{class:"aide",text:aide}));
+  app.appendChild(h("pre",{class:"prompt",id:"prompt",text:txt}));
+  app.appendChild(h("div",{class:"ligne"},[copie(txt)]));
+  app.appendChild(h("label",{text:"La réponse du modèle, entière",for:"reponse"}));
+  var t=h("textarea",{id:"reponse"});t.value=S[cle];app.appendChild(t);
+  var b=suite(!!S[cle].trim());t.addEventListener("input",function(){S[cle]=t.value;garder();b.disabled=!t.value.trim();});
+}
+function sans(){colle("sans","Les deux questions, sans SKILL.md","Une conversation neuve, sans SKILL.md. Ce texte, collé tel quel ; la réponse entière revient ici.",prompt1());}
+function avec(){colle("avec","Les deux questions, avec le SKILL.md","Une autre conversation neuve. Ce texte commence par le SKILL.md du binôme, puis les mêmes deux questions ; la réponse entière revient ici.",prompt2());}
+function questionnaire(){
+  app.appendChild(h("h1",{text:"Qu'est-ce qui porte chaque chiffre ?"}));
+  app.appendChild(h("p",{class:"aide",text:"Les deux réponses côte à côte. Pour chaque chiffre, ce que la réponse donne comme appui : une source nommée qui le dit, un constat daté, un calcul dont les prémisses sont dites, ou rien."}));
+  app.appendChild(h("div",{class:"deux"},[h("div",{text:"Sans SKILL.md\n\n"+S.sans}),h("div",{text:"Avec SKILL.md\n\n"+S.avec})]));
+  [["ifi",QIFI],["lieu",S.lieu]].forEach(function(q){
+    app.appendChild(h("label",{text:q[1]}));
+    var tb=h("table",null,[h("tr",null,[h("th",{text:""}),h("th",{text:"sans SKILL.md"}),h("th",{text:"avec SKILL.md"})])]);
+    CHIFFRES.forEach(function(c,ci){var tr=h("tr",null,[h("td",{text:c})]);
+      ["sans","avec"].forEach(function(r){var k=q[0]+"|"+ci+"|"+r,s=h("select",{"data-k":k});PORTE.forEach(function(p){var o=h("option",{text:p||"—"});o.value=p;s.appendChild(o);});s.value=S.q[k]||"";s.addEventListener("change",function(){S.q[k]=s.value;garder();});tr.appendChild(h("td",null,[s]));});
+      tb.appendChild(tr);});
+    app.appendChild(tb);});
+  app.appendChild(h("label",{text:"Ce qui a changé avec le SKILL.md, en une phrase",for:"change"}));
+  var t=h("input",{type:"text",id:"change"});t.value=S.change;t.addEventListener("input",function(){S.change=t.value;garder();});app.appendChild(t);
+  suite(true);
+}
+function lisible(){
+  var L=["# Séance 5 · "+(S.noms||"—"),"","Lieu du dossier : "+(S.lieu||"—"),"","## Sans SKILL.md","",S.sans,"","## Avec SKILL.md","",S.avec,"","## Ce qui porte chaque chiffre",""];
+  [["ifi",QIFI],["lieu",S.lieu]].forEach(function(q){L.push("### "+q[1],"","| | sans | avec |","|---|---|---|");CHIFFRES.forEach(function(c,ci){L.push("| "+c+" | "+(S.q[q[0]+"|"+ci+"|sans"]||"—")+" | "+(S.q[q[0]+"|"+ci+"|avec"]||"—")+" |");});L.push("");});
+  L.push("## Ce qui a changé","",S.change||"—","");return L.join("\n");
+}
+function envoi(){
+  app.appendChild(h("h1",{text:"L'envoi à l'enseignant"}));
+  app.appendChild(h("p",{class:"aide",text:"Un seul zip : le SKILL.md, les deux textes collés, les deux réponses, le questionnaire. Sur téléphone, le partage ; sur ordinateur, un téléchargement."}));
+  var etat=h("p",{class:"etat",id:"etat"});
+  var b=h("button",{type:"button",class:"suite",id:"envoi",text:"envoi →",on:{click:function(){
+    var d={format:"juger-ia-s5/1",noms:S.noms,lieu:S.lieu,skill:S.skill,prompt_sans:prompt1(),prompt_avec:prompt2(),sans:S.sans,avec:S.avec,questionnaire:S.q,change:S.change,fichiers_lus:S.fichiers,le:new Date().toISOString()};
+    var nom="seance5-"+(JA.slug(S.noms)||"sans-nom")+".zip",z=JA.zip([{nom:"seance5/travail.json",texte:JSON.stringify(d,null,2)},{nom:"seance5/travail.md",texte:lisible()},{nom:"seance5/SKILL.md",texte:S.skill}]);
+    var file=new File([z],nom,{type:"application/zip"});
+    if(navigator.canShare&&navigator.canShare({files:[file]}))navigator.share({files:[file],title:nom}).then(function(){etat.textContent="envoyé";},function(e){if(!e||e.name!=="AbortError")JA.telecharger(z,nom,"application/zip");});
+    else{JA.telecharger(z,nom,"application/zip");etat.textContent="zip téléchargé : "+nom;}
+  }}});
+  app.appendChild(b);app.appendChild(etat);
+  app.appendChild(h("button",{type:"button",class:"petit",id:"retour",style:"margin-top:40px",text:"retour au début",on:{click:function(){S.etape=0;garder();ecran();}}}));
+}
+ecran();
+})();
+</script>
+</body>
+</html>
