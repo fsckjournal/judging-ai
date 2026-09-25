@@ -32,7 +32,7 @@ var JA = (function () {
       },
       md: { titre: "Dossier", binome: "Binôme", seul: "Seul", lieu: "Lieu", question: "Question", versions: "Versions", change: "Ce que nous avons changé", pourquoi: "Pourquoi (quel essai)", figee: "figée le",
         brouillon: "Brouillon en cours", essais: "Essais", essai: "Essai", cond: "Conditions", app: "App", modele: "Modèle", date: "Date", web: "Web", mode: "Skill", oui: "oui", non: "non",
-        sans: "Sans la Skill", avec: "Avec la Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
+        sans: "Sans Skill", avec: "Avec Skill", etayees: "étayées", contredites: "contredites", non_resolues: "non résolues", utilisables: "utilisables",
         gagne: "Ce qui a été gagné", perdu: "Ce qui a été perdu", decision: "Décision", lire: "Exercice 1 · Saint-Georges", s3: "Séance 3 (fiches)",
         condition: "Condition", source: "Skill", reponse: "Réponse", score: "Score", quatre: "Les conditions" },
       banc: {
